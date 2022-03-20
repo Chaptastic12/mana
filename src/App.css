@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@200&display=swap');
+
+.App{
+    display: flex;
+    position: relative;
+    height: 100vh;
+    width: 100vw;
+}
+
+.NavBar {
+    background-color: rgb(0,48,143,0.8);
+    height: 100vh;
+    width: 15vw;
+    min-width: 250px;
+}
+
+.Page {
+    width: 85vw;
+}

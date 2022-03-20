@@ -1,6 +1,8 @@
 import React from 'react';
 import { Ticket } from '../../../models/models';
 import TicketCard from '../TicketCard/TicketCard';
+import { Droppable } from 'react-beautiful-dnd';
+import './Columns.css'
 
 interface Props {
     title: String,
@@ -9,10 +11,18 @@ interface Props {
 
 const Columns = ( { title, tickets } : Props ) => {
   return (
-    <div>
-        <h1>{ title }</h1>
-        { tickets.map((ticket, index) => <TicketCard index={index} ticketData={ticket} />) }
-    </div>
+    <Droppable droppableId={title.toString()} > 
+    {
+        (provided, snapshot) => (
+            <div className='Columns' ref={provided.innerRef} { ...provided.droppableProps } >
+                <h2>{ title }</h2>
+                <hr />
+                { tickets.map((ticket, index) => <TicketCard index={index} ticketData={ticket} />) }
+                {provided.placeholder}
+            </div>
+        )
+    }
+    </Droppable>
   )
 }
 

@@ -1,3 +1,7 @@
+export interface AllProjects {
+    projects: Project[]
+}
+
 export interface Project {
     id: string;
     tickets: Ticket[];
@@ -10,7 +14,7 @@ export interface Ticket {
     projectReference: string;
     title: string;
     description: string;
-    comments: Comment[];
+    comments?: Comment[];
     status: String;
     createdDate: string;
     ticketOwner: User;
