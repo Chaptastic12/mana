@@ -3,8 +3,9 @@ import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import { Ticket } from '../../models/models';
 import { findOrigin, findDestination } from './Util';
 import { ALLPROJECTS } from '../../DummyData';
-
 import Columns from './Columns/Columns';
+
+import './ProjectDashBoard.css';
 
 const ProjectDashBoard = () => {
 
@@ -37,9 +38,9 @@ const ProjectDashBoard = () => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-        <div>
-            ProjectDashBoard
-            {/* Input / dropdown to search for the project dashboard to load */}
+        <div className='ProjectDashBoard'>
+            <div className='ProjectDashBoard__Title'> <p> <b>Project:</b> { chosenProject.projectName }</p> </div>
+            {/* Input / dropdown to search for the project dashboard to> load */}
 
             {/* 
                 5 columns for our tasks. Open, In Progress, Quality Check, Finished, Backlog 

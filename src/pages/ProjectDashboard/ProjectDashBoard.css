@@ -1,0 +1,10 @@
+.ProjectDashBoard__Title{
+    display: flex;
+    align-items: center;
+}
+
+.ProjectDashBoard__Title p {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 62px;
+    margin: 15px;
+}

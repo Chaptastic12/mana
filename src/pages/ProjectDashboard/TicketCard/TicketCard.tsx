@@ -1,6 +1,7 @@
 import React from 'react'
 import { Ticket } from '../../../models/models'
 import { Draggable } from 'react-beautiful-dnd';
+
 import './TicketCard.css';
 
 interface Props {
@@ -14,11 +15,10 @@ const TicketCard = ( { index, ticketData } : Props) => {
     {
         (provided, snapshot) => (
             <div className='TicketCard' {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+                <p> <em>{ ticketData.projectReference } </em> </p>
                 <b>{ ticketData.title }</b>
                 <p>{ ticketData.ticketOwner.username }</p>
-                <p>{ ticketData.projectReference }</p>
-                <p>{ ticketData.createdDate }</p>
-                <p>{ ticketData.status }</p>
+                <p><small>Updated: { ticketData.createdDate }</small></p>
             </div>
         )
     }

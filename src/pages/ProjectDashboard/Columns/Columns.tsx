@@ -2,6 +2,8 @@ import React from 'react';
 import { Ticket } from '../../../models/models';
 import TicketCard from '../TicketCard/TicketCard';
 import { Droppable } from 'react-beautiful-dnd';
+import { v4 as uuid } from 'uuid';
+
 import './Columns.css'
 
 interface Props {
@@ -17,7 +19,7 @@ const Columns = ( { title, tickets } : Props ) => {
             <div className='Columns' ref={provided.innerRef} { ...provided.droppableProps } >
                 <h2>{ title }</h2>
                 <hr />
-                { tickets.map((ticket, index) => <TicketCard index={index} ticketData={ticket} />) }
+                { tickets.map((ticket, index) => <TicketCard key={uuid()} index={index} ticketData={ticket} />) }
                 {provided.placeholder}
             </div>
         )

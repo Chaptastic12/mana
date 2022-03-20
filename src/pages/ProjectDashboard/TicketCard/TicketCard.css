@@ -4,3 +4,7 @@
     margin: 25px;
     padding: 15px;
 }
+
+.TicketCard p {
+    margin: 5px 0;
+}
