@@ -20,14 +20,39 @@ const ProjectDashBoard = () => {
         if(!destination){ return }
 
         let movingTicketID: string;
-        let startingResult, ticketIndex, endResult;
+        let startingResult, ticketIndex;
+        let endResult: string;
 
-        startingResult = findOrigin(source.droppableId, openTickets, progressTickets, qualityCheckTickets, finishedTickets, backlogTickets);
-        movingTicketID = startingResult[source.index].id;
-        ticketIndex = copyProjectData.tickets.findIndex( x => x.id === movingTicketID);
-        endResult = findDestination(destination.droppableId); 
-        copyProjectData.tickets[ticketIndex].status = endResult;
-        setChosenProject(copyProjectData);
+        if( source.droppableId !== destination.droppableId){
+            startingResult = findOrigin(source.droppableId, openTickets, progressTickets, qualityCheckTickets, finishedTickets, backlogTickets);
+            movingTicketID = startingResult[source.index].id;
+            ticketIndex = copyProjectData.tickets.findIndex( x => x.id === movingTicketID);
+            endResult = findDestination(destination.droppableId); 
+            copyProjectData.tickets[ticketIndex].status = endResult;
+            setChosenProject(copyProjectData);
+        } else if(source.droppableId === destination.droppableId) {
+            let currentCol = findOrigin(source.droppableId, openTickets, progressTickets, qualityCheckTickets, finishedTickets, backlogTickets);
+            if(currentCol.length === 1){
+                return;
+            }
+            let movingTicketIndex = copyProjectData.tickets.findIndex( x => x.id === currentCol[source.index].id);
+            let destinationTicketIndex = copyProjectData.tickets.findIndex( x => x.id === currentCol[destination.index].id);
+            
+            let movingTicket = { ...chosenProject.tickets[movingTicketIndex] };
+            let newOrder = []
+            for(let i = movingTicketIndex; i > destinationTicketIndex; i--){
+                newOrder[i] = copyProjectData.tickets[i - 1];
+            }
+
+            newOrder[destinationTicketIndex] = movingTicket;
+            endResult = findDestination(destination.droppableId); 
+            //let otherTickets = copyProjectData.tickets.filter( x => x.status !== endResult);
+            let otherTickets = copyProjectData.tickets.filter( x => x.status !== endResult);
+            copyProjectData.tickets = [ ...otherTickets, ...newOrder ];
+            console.log(copyProjectData.tickets)
+            setChosenProject(copyProjectData)
+        }
+
     }
 
     const openTickets: Ticket[] = chosenProject.tickets.filter(project => project.status === 'Open');
@@ -40,8 +65,6 @@ const ProjectDashBoard = () => {
     <DragDropContext onDragEnd={onDragEnd}>
         <div className='ProjectDashBoard'>
             <div className='ProjectDashBoard__Title'> <p> <b>Project:</b> { chosenProject.projectName }</p> </div>
-            {/* Input / dropdown to search for the project dashboard to> load */}
-
             {/* 
                 5 columns for our tasks. Open, In Progress, Quality Check, Finished, Backlog 
                 Tickets can be dragged / dropped from column to columns
