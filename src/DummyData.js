@@ -1,7 +1,9 @@
 export const ALLPROJECTS = [
+    //First project
     {
         id: '12345abcde',
-        tickets: [
+        tickets: 
+        [
             {
                 id: '1',
                 projectReference: 'MANA-0001',
@@ -57,6 +59,7 @@ export const ALLPROJECTS = [
         projectName: 'Manage All New Activities',
         createdDate: 'Today'
     },
+    //Second project
     {
         id: '12345abcde',
         tickets: [

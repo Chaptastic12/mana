@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import { Ticket } from '../../models/models';
 import { findOrigin, findDestination } from './Util';
@@ -9,7 +9,7 @@ import './ProjectDashBoard.css';
 
 const ProjectDashBoard = () => {
 
-    const [ allProjects, setAllProjects ] = useState(ALLPROJECTS);
+    // const [ allProjects, setAllProjects ] = useState(ALLPROJECTS);
     const [ chosenProject, setChosenProject ] = useState(ALLPROJECTS[0]);
 
     const onDragEnd = (result: DropResult) => {
@@ -40,7 +40,7 @@ const ProjectDashBoard = () => {
             
             let movingTicket = { ...chosenProject.tickets[movingTicketIndex] };
             let newOrder = []
-            for(let i = movingTicketIndex; i > destinationTicketIndex; i--){
+            for(let i = movingTicketIndex; i > destinationTicketIndex - 1; i--){
                 newOrder[i] = copyProjectData.tickets[i - 1];
             }
 

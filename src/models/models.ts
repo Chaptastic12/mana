@@ -6,6 +6,7 @@ export interface Project {
     id: string;
     tickets: Ticket[];
     projectShortName: string;
+    projectName: string;
     createdDate: string;
 }
 
