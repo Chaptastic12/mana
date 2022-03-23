@@ -15,3 +15,13 @@
 .Columns hr{
     width: 80%
 }
+/* Used if the user selects a horizontal view*/
+.Columns-Horizontal{
+    height: 250px;
+    min-height: 250px;
+    width: 100%;    
+}
+
+.Columns__Tickets-Horiontal{
+    display: flex;
+}

@@ -19,8 +19,10 @@ const Columns = ( { title, tickets } : Props ) => {
             <div className='Columns' ref={provided.innerRef} { ...provided.droppableProps } >
                 <h2>{ title }</h2>
                 <hr />
-                { tickets.map((ticket, index) => <TicketCard key={uuid()} index={index} ticketData={ticket} />) }
-                {provided.placeholder}
+                <div className='Columns__Tickets'>
+                    { tickets.map((ticket, index) => <TicketCard key={uuid()} index={index} ticketData={ticket} />) }
+                    {provided.placeholder}
+                </div>
             </div>
         )
     }

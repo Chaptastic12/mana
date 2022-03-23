@@ -72,7 +72,7 @@ const ProjectDashBoard = () => {
                 <SearchBar />
             </div>
 
-            <div style={{display: 'flex', justifyContent: 'space-around'}}>
+            <div className='ProjectDashBoard__Sections'>
                 <Columns title='Open Tickets' tickets={openTickets}/>
                 <Columns title='In Progress Tickets' tickets={progressTickets}/>
                 <Columns title='Quality Check Tickets' tickets={qualityCheckTickets}/>
