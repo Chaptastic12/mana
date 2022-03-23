@@ -4,6 +4,7 @@ import { Ticket } from '../../models/models';
 import { findOrigin, findDestination } from './Util';
 import { ALLPROJECTS } from '../../DummyData';
 import Columns from './Columns/Columns';
+import SearchBar from './SearchBar/SearchBar';
 
 import './ProjectDashBoard.css';
 
@@ -64,19 +65,21 @@ const ProjectDashBoard = () => {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
         <div className='ProjectDashBoard'>
+            
             <div className='ProjectDashBoard__Title'> <p> <b>Project:</b> { chosenProject.projectName }</p> </div>
-            {/* 
-                5 columns for our tasks. Open, In Progress, Quality Check, Finished, Backlog 
-                Tickets can be dragged / dropped from column to columns
-            */}
-            <div style={{display: 'flex'}}>
+
+            <div className='ProjectDashBoard_SearchBar'>
+                <SearchBar />
+            </div>
+
+            <div style={{display: 'flex', justifyContent: 'space-around'}}>
                 <Columns title='Open Tickets' tickets={openTickets}/>
                 <Columns title='In Progress Tickets' tickets={progressTickets}/>
                 <Columns title='Quality Check Tickets' tickets={qualityCheckTickets}/>
                 <Columns title='Finished Tickets' tickets={finishedTickets}/>
                 <Columns title='Backlog Tickets' tickets={backlogTickets}/>
             </div>
-            {/* Ticket themselves will show: Ticket Title, ticket number, ticket owner, last update */}
+
         </div>
     </DragDropContext>
   )

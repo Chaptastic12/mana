@@ -8,3 +8,9 @@
     font-size: 62px;
     margin: 15px;
 }
+
+.ProjectDashBoard_SearchBar{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
