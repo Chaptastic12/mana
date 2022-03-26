@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { BsPlusSquare } from 'react-icons/bs'
+import { IoSearchOutline } from 'react-icons/io5'
 
 import './SearchBar.css';
 
@@ -13,7 +14,7 @@ const SearchBar = (props: Props) => {
     <div className='SearchBar'>
         <div className='SearchBar__Input'>
             <input type='text' placeholder='Search...'></input>
-            <button>Search</button>
+            <button><IoSearchOutline /></button>
         </div>
         <div className='SearchBar_Buttons'>
             <div className='Buttons'>
