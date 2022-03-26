@@ -1,13 +1,12 @@
-import React, { createContext, useState, useEffect, FunctionComponent } from 'react';
+import React, { createContext, useState } from 'react';
 
+const UserContext = createContext({});
 
-export const UserContext = createContext({ dashBoardTicketView: 'horizontal'});
+export interface Props {
+    children: React.ReactNode
+}
 
-// type Props = {
-//     children: React.ReactNode
-// }
-
-const UserProvider = () =>{
+const UserProvider = (props: Props) =>{
 
     const [ dashBoardTicketView, setDashBoardTicketView ] = useState<string>('horizontal');
 
@@ -15,7 +14,9 @@ const UserProvider = () =>{
     return <UserContext.Provider value={{
         dashBoardTicketView
     }}>
+        { props.children }
     </UserContext.Provider>
 };
 
+export { UserContext }
 export default UserProvider;

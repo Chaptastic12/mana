@@ -7,11 +7,14 @@ import Columns from './Columns/Columns';
 import SearchBar from './SearchBar/SearchBar';
 
 import './ProjectDashBoard.css';
+import Modal from '../../components/Modal/Modal';
+import AddTicketForm from './AddTicketForm/AddTicketForm';
 
 const ProjectDashBoard = () => {
 
     // const [ allProjects, setAllProjects ] = useState(ALLPROJECTS);
     const [ chosenProject, setChosenProject ] = useState(ALLPROJECTS[0]);
+    const [ showAddTicket, setShowAddTicket ] = useState<boolean>(false);
 
     const onDragEnd = (result: DropResult) => {
         const { source, destination } = result;
@@ -47,10 +50,8 @@ const ProjectDashBoard = () => {
 
             newOrder[destinationTicketIndex] = movingTicket;
             endResult = findDestination(destination.droppableId); 
-            //let otherTickets = copyProjectData.tickets.filter( x => x.status !== endResult);
             let otherTickets = copyProjectData.tickets.filter( x => x.status !== endResult);
             copyProjectData.tickets = [ ...otherTickets, ...newOrder ];
-            console.log(copyProjectData.tickets)
             setChosenProject(copyProjectData)
         }
 
@@ -62,27 +63,31 @@ const ProjectDashBoard = () => {
     const finishedTickets: Ticket[] = chosenProject.tickets.filter(project => project.status === 'Finished');
     const backlogTickets: Ticket[] = chosenProject.tickets.filter(project => project.status === 'Backlog');
 
-  return (
+  return (<>
+
+    { showAddTicket && <Modal closeModal={setShowAddTicket}> <AddTicketForm closeModal={setShowAddTicket}/> </Modal>}
+
     <DragDropContext onDragEnd={onDragEnd}>
         <div className='ProjectDashBoard'>
             
             <div className='ProjectDashBoard__Title'> <p> <b>Project:</b> { chosenProject.projectName }</p> </div>
 
             <div className='ProjectDashBoard_SearchBar'>
-                <SearchBar />
+                <SearchBar openModal={setShowAddTicket} />
             </div>
 
             <div className='ProjectDashBoard__Sections'>
-                <Columns title='Open Tickets' tickets={openTickets}/>
-                <Columns title='In Progress Tickets' tickets={progressTickets}/>
-                <Columns title='Quality Check Tickets' tickets={qualityCheckTickets}/>
-                <Columns title='Finished Tickets' tickets={finishedTickets}/>
-                <Columns title='Backlog Tickets' tickets={backlogTickets}/>
+                <Columns title='Open Items' tickets={openTickets}/>
+                <Columns title='In Progress Items' tickets={progressTickets}/>
+                <Columns title='Quality Check Items' tickets={qualityCheckTickets}/>
+                <Columns title='Finished Items' tickets={finishedTickets}/>
+                <Columns title='Backlog Items' tickets={backlogTickets}/>
             </div>
 
         </div>
     </DragDropContext>
-  )
+
+  </>)
 }
 
 export default ProjectDashBoard

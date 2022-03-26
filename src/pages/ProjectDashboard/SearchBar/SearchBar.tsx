@@ -1,8 +1,14 @@
 import React from 'react'
 
+import { BsPlusSquare } from 'react-icons/bs'
+
 import './SearchBar.css';
 
-const SearchBar = () => {
+export interface Props {
+  openModal: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const SearchBar = (props: Props) => {
   return (
     <div className='SearchBar'>
         <div className='SearchBar__Input'>
@@ -11,7 +17,7 @@ const SearchBar = () => {
         </div>
         <div className='SearchBar_Buttons'>
             <div className='Buttons'>
-            <button>Add Ticket</button>
+            <button onClick={() => props.openModal(true)}> <BsPlusSquare /> Ticket</button>
 
             </div>
         </div>
