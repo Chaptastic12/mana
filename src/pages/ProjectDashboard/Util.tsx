@@ -4,19 +4,19 @@ export  const findDestination = ( goingTo: string ) =>{
     let result: string = '';
 
     switch(goingTo){
-        case('Open Tickets'):
+        case('Open Items'):
             result = 'Open'
             break;
-        case('In Progress Tickets'):
+        case('In Progress Items'):
             result = 'In Progress'
             break;
-        case('Quality Check Tickets'):
+        case('Quality Check Items'):
             result = 'Quality Check'
             break;
-        case('Finished Tickets'):
+        case('Finished Items'):
             result = 'Finished'
             break;
-        case('Backlog Tickets'):
+        case('Backlog Items'):
             result = 'Backlog'
             break;
         default:
@@ -30,19 +30,19 @@ export const findOrigin = ( goingTo: string, openTickets: Ticket[], progressTick
     let array: Ticket[];
 
     switch(goingTo){
-        case('Open Tickets'):
+        case('Open Items'):
             array = [ ...openTickets ];
             break;
-        case('In Progress Tickets'):
+        case('In Progress Items'):
             array = [ ...progressTickets ] 
             break;
-        case('Quality Check Tickets'):
+        case('Quality Check Items'):
             array = [ ...qualityCheckTickets ] 
             break;
-        case('Finished Tickets'):
+        case('Finished Items'):
             array = [ ...finishedTickets ] 
             break;
-        case('Backlog Tickets'):
+        case('Backlog Items'):
             array = [ ...backlogTickets ] 
             break;
         default:

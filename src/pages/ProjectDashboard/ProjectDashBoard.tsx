@@ -77,6 +77,7 @@ const ProjectDashBoard = () => {
             </div>
 
             <div className='ProjectDashBoard__Sections'>
+                {/* Renaming any of these titles means that Util.tsx also needs to be updated */}
                 <Columns title='Open Items' tickets={openTickets}/>
                 <Columns title='In Progress Items' tickets={progressTickets}/>
                 <Columns title='Quality Check Items' tickets={qualityCheckTickets}/>
