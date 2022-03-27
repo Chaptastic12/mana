@@ -17,23 +17,17 @@ const AddTicketForm = (props: Props) => {
     const blankUser = {
         id: '', username: '', email: '', isAdmin: false, isGuest: true, isRegUser: false
     }
-    const blankComment = {
-        id: '',
-        comment: '',
-        createdDate: '',
-        author: blankUser
-    }
 
     const [ formData, setFormData ] = useState<Ticket>({id: '', title: '', description: '', projectReference:'', status: '', ticketOwner: blankUser, ticketCreator: blankUser, comments: [], createdDate: date.toLocaleDateString()});
+    const [ tempCreator, setTempCreator ] = useState('')
+    const [ tempOwner, setTempOwner ] = useState('')
     const [ error, setError ] = useState('');
 
     let formInputs = Object.entries(formData).map(([key, value]) => {
         if(key === 'id' || key === 'comments'){ return }
-        const adjustedKey = key.replace(/([A-Z])/g, ' $1').trim();
-        let disabled = false;
-        let element;
 
-        if(key === 'createdDate' || key === 'ticketCreator'){ disabled = true }
+        const adjustedKey = key.replace(/([A-Z])/g, ' $1').trim();
+        let element;
 
         if(key === 'projectReference'){
             let options = [<option key='StatusDefault' value='default'>Choose...</option>];
@@ -54,14 +48,14 @@ const AddTicketForm = (props: Props) => {
                         </select>
         } else if(key === 'ticketOwner'){
             element = <div>
-                <input list="ticketOwner" name="ticketOwners" id="ticketOwners" value={formData.ticketOwner.username || ''} onChange={(e) => adjustUser(e.target.value, 'ticketOwner')} />
+                <input list="ticketOwner" name="ticketOwners" id="ticketOwners" value={tempOwner} onChange={(e) => { setTempOwner(e.target.value); adjustUser('ticketOwner') } } />
                 <datalist id="ticketOwner">
                     {USERS.map(x => { return <option key={x.username} value={x.username} /> })}
                 </datalist>
             </div>  
         } else if(key === 'ticketCreator'){
             element = <div>
-                <input list="ticketCreator" name="ticketCreators" id="ticketCreators" value={formData.ticketCreator.username || ''} onChange={(e) => adjustUser(e.target.value, 'ticketCreator')} />
+                <input list="ticketCreator" name="ticketCreators" id="ticketCreators" value={tempCreator} onChange={(e) => { setTempCreator(e.target.value); adjustUser('ticketCreator') } } />
                 <datalist id="ticketCreator">
                     {USERS.map(x => { return <option key={x.username} value={x.username} /> })}
                 </datalist>
@@ -80,12 +74,17 @@ const AddTicketForm = (props: Props) => {
                 </div>
     });
 
-    const adjustUser = (newValue: string, where: string) => {
+    const adjustUser = (where: string) => {
         let copyState = { ...formData };
-        let foundUser = USERS.filter( x => x.username === newValue);
+        let foundUser;
+
         if(where === 'ticketOwner') {
+            foundUser = USERS.filter( x => x.username === tempOwner);
+            if(foundUser.length === 0){ return }
             copyState.ticketOwner = foundUser[0];
         } else {
+            foundUser = USERS.filter( x => x.username === tempCreator);
+            if(foundUser.length === 0){ return }
             copyState.ticketCreator = foundUser[0];
         }
         setFormData(copyState);
