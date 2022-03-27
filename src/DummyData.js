@@ -89,7 +89,7 @@ export const ALLPROJECTS = [
                 }
             }
         ],
-        projectShortName: 'MANA',
+        projectShortName: 'MANA 2',
         projectName: 'Manage All New Activities',
         createdDate: 'Today'
     }

@@ -1,6 +1,7 @@
 .AddTicketForm {
+    position: relative;
     width: 100%;
-    height: 100%;
+    height: 90%;
     box-shadow: 0 3px 25px rgb(0 0 0 / 0.2);
 }
 
@@ -47,7 +48,8 @@
     text-transform: capitalize;
 }
 
-.AddTicketForm__Form .Input input {
+.AddTicketForm__Form .Input input,
+.AddTicketForm__Form .Input select {
     padding: 10px;
     font-size: 17px;
     border: none;
@@ -55,9 +57,23 @@
     background: #f1f1f1;
     height: 30px;
     text-transform: capitalize;
+}
 
+.AddTicketForm__Form .Input select{
+    height: 50px;
+    width: 150px;
 }
 
 .AddTicketForm__Form .Input input[type=text]:focus{
     outline: none;
+}
+
+.AddTicketForm__Button{
+    position: absolute;
+    right: 50px;
+    bottom: 50px;
+}
+
+.AddTicketForm__Button button {
+    margin:5px;
 }

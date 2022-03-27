@@ -12,9 +12,9 @@ import AddTicketForm from './AddTicketForm/AddTicketForm';
 
 const ProjectDashBoard = () => {
 
-    // const [ allProjects, setAllProjects ] = useState(ALLPROJECTS);
     const [ chosenProject, setChosenProject ] = useState(ALLPROJECTS[0]);
     const [ showAddTicket, setShowAddTicket ] = useState<boolean>(false);
+    const [ ticketSearch, setTicketSearch ] = useState<string>('');
 
     const onDragEnd = (result: DropResult) => {
         const { source, destination } = result;
@@ -57,15 +57,24 @@ const ProjectDashBoard = () => {
 
     }
 
-    const openTickets: Ticket[] = chosenProject.tickets.filter(project => project.status === 'Open');
-    const progressTickets: Ticket[] = chosenProject.tickets.filter(project => project.status === 'In Progress');
-    const qualityCheckTickets: Ticket[] = chosenProject.tickets.filter(project => project.status === 'Quality Check');
-    const finishedTickets: Ticket[] = chosenProject.tickets.filter(project => project.status === 'Finished');
-    const backlogTickets: Ticket[] = chosenProject.tickets.filter(project => project.status === 'Backlog');
+    let openTickets: Ticket[] = chosenProject.tickets.filter(project => project.status === 'Open');
+    let progressTickets: Ticket[] = chosenProject.tickets.filter(project => project.status === 'In Progress');
+    let qualityCheckTickets: Ticket[] = chosenProject.tickets.filter(project => project.status === 'Quality Check');
+    let finishedTickets: Ticket[] = chosenProject.tickets.filter(project => project.status === 'Finished');
+    let backlogTickets: Ticket[] = chosenProject.tickets.filter(project => project.status === 'Backlog');
+
+    //If we are seaching for a specific ticket, we need to adjust our array
+    if(ticketSearch){
+        openTickets = openTickets.filter(x => x.title.toLowerCase().includes(ticketSearch.toLowerCase()));
+        progressTickets = progressTickets.filter(x => x.title.toLowerCase().includes(ticketSearch.toLowerCase()));
+        qualityCheckTickets = qualityCheckTickets.filter(x => x.title.toLowerCase().includes(ticketSearch.toLowerCase()));
+        finishedTickets = finishedTickets.filter(x => x.title.toLowerCase().includes(ticketSearch.toLowerCase()));
+        backlogTickets = backlogTickets.filter(x => x.title.toLowerCase().includes(ticketSearch.toLowerCase()));
+    }
 
   return (<>
 
-    { showAddTicket && <Modal closeModal={setShowAddTicket}> <AddTicketForm closeModal={setShowAddTicket}/> </Modal>}
+    { showAddTicket && <Modal closeModal={setShowAddTicket}> <AddTicketForm closeModal={setShowAddTicket} /> </Modal>}
 
     <DragDropContext onDragEnd={onDragEnd}>
         <div className='ProjectDashBoard'>
@@ -73,7 +82,7 @@ const ProjectDashBoard = () => {
             <div className='ProjectDashBoard__Title'> <p> <b>Project:</b> { chosenProject.projectName }</p> </div>
 
             <div className='ProjectDashBoard_SearchBar'>
-                <SearchBar openModal={setShowAddTicket} />
+                <SearchBar openModal={setShowAddTicket} searchHandler={(value) => setTicketSearch(value)} />
             </div>
 
             <div className='ProjectDashBoard__Sections'>
