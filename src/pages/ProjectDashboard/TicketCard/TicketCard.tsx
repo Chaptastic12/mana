@@ -14,7 +14,7 @@ const TicketCard = ( { index, ticketData } : Props) => {
     <Draggable draggableId={ticketData.id.toString()} index={index}>
     {
         (provided, snapshot) => (
-            <div className='TicketCard' {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+            <div className='TicketCard' {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onClick={() => alert('test')}>
                 <p> <em>{ ticketData.projectReference } </em> </p>
                 <b>{ ticketData.title }</b>
                 <p>{ ticketData.ticketOwner.username }</p>

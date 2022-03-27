@@ -18,7 +18,7 @@
     width: 85vw;
 }
 
-button{
+button, .btn-inverted{
     border: none;
     background-color: rgb(0,48,143,0.8);
     color: white;
@@ -28,7 +28,17 @@ button{
     height: 50px;
 }
 
-button:hover{
+button:hover, .btn-inverted:hover{
     cursor: pointer;
     background-color: rgb(0,48,143,1);
 }
+
+.btn-inverted {
+    background-color: white;
+    color: rgb(0,48,143,0.8);
+}
+.btn-inverted:hover {
+    background-color: rgb(209, 208, 208);
+}
+
+

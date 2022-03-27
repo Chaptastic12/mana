@@ -1,4 +1,4 @@
-export const ALLPROJECTS = [
+export let ALLPROJECTS = [
     //First project
     {
         id: '12345abcde',
@@ -6,7 +6,7 @@ export const ALLPROJECTS = [
         [
             {
                 id: '1',
-                projectReference: 'MANA-0001',
+                projectReference: 'MANA-1',
                 title: 'Mana - Project Tracker App',
                 description: 'App used for project tracking purposes',
                 comments: [],
@@ -31,7 +31,7 @@ export const ALLPROJECTS = [
             },
             {
                 id: '2',
-                projectReference: 'MANA-0002',
+                projectReference: 'MANA-2',
                 title: 'Test columns',
                 description: 'App used for project tracking purposes',
                 comments: [],
@@ -93,4 +93,22 @@ export const ALLPROJECTS = [
         projectName: 'Manage All New Activities',
         createdDate: 'Today'
     }
+]
+
+export let USERS = [
+    {
+    id: '1',
+    username: 'Chaps',
+    email:'chaps@test.com',
+    isAdmin: true,
+    isGuest: false,
+    isRegUser: false
+}, {
+    id: '2',
+    username: 'Chaps 2',
+    email:'chaps@test.com',
+    isAdmin: true,
+    isGuest: false,
+    isRegUser: false
+},
 ]

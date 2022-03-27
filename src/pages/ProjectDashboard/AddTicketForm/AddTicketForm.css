@@ -77,3 +77,9 @@
 .AddTicketForm__Button button {
     margin:5px;
 }
+
+.AddTicketForm__Error{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

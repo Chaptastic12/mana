@@ -12,7 +12,7 @@ const UserProvider = (props: Props) =>{
 
 
     return <UserContext.Provider value={{
-        dashBoardTicketView
+        dashBoardTicketView, setDashBoardTicketView
     }}>
         { props.children }
     </UserContext.Provider>
