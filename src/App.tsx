@@ -6,6 +6,7 @@ import ProjectDashBoard from './pages/ProjectDashboard/ProjectDashBoard';
 import NavBar from './components/NavBar/NavBar';
 
 import UserProvider from './Context/User-Context';
+import HeaderBar from './components/HeaderBar/HeaderBar';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <NavBar />
       </div>
       <div className='Page'>
+        <HeaderBar />
         <ProjectDashBoard />
       </div>
     </div>
