@@ -18,8 +18,8 @@
 
 .HeaderBar__Right{
     justify-content: end;
-    padding-right: 50px;
+    padding-right: 75px;
 }
 .HeaderBar__Left{
-    padding-left: 50px;
+    padding-left: 75px;
 }

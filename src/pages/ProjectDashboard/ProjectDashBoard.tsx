@@ -1,5 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
+import { useParams } from 'react-router-dom';
+
 import { Ticket } from '../../models/models';
 import { findOrigin, findDestination } from './Util';
 import { ALLPROJECTS } from '../../DummyData';
@@ -10,11 +12,31 @@ import './ProjectDashBoard.css';
 import Modal from '../../components/Modal/Modal';
 import AddTicketForm from './AddTicketForm/AddTicketForm';
 
+const date = new Date();
+const blankUser = {
+    id: '', username: '', email: '', isAdmin: false, isGuest: true, isRegUser: false
+}
+
+const EMPTY_PROJECT = { 
+    id: '0',
+    tickets: [{id: '', title: '', description: '', projectReference:'', status: '', ticketOwner: blankUser, ticketCreator: blankUser, comments: [], createdDate: date.toLocaleDateString()}],
+    projectReference: '',
+    projectName: '',
+    createdDate: ''
+}
 const ProjectDashBoard = () => {
 
-    const [ chosenProject, setChosenProject ] = useState(ALLPROJECTS[0]);
+    const [ chosenProject, setChosenProject ] = useState(EMPTY_PROJECT);
     const [ showAddTicket, setShowAddTicket ] = useState<boolean>(false);
     const [ ticketSearch, setTicketSearch ] = useState<string>('');
+    const { projectReference } = useParams();
+
+    useEffect(() => {
+        //Since we are just using dummy data, we dont need to make an API call yet; Instead, find a match for the projectReference
+        const foundProject = ALLPROJECTS.filter(x => x.projectReference === projectReference);
+        console.log(foundProject)
+        if(foundProject) {setChosenProject(foundProject[0]) }
+    }, []);
 
     const onDragEnd = (result: DropResult) => {
         const { source, destination } = result;
@@ -75,28 +97,26 @@ const ProjectDashBoard = () => {
   return (<>
 
     { showAddTicket && <Modal closeModal={setShowAddTicket}> <AddTicketForm closeModal={setShowAddTicket} /> </Modal>}
+        <DragDropContext onDragEnd={onDragEnd}>
+            <div className='ProjectDashBoard'>
+                
+                <div className='ProjectDashBoard__Title'> <p> <b>Project:</b> { chosenProject.projectName }</p> </div>
 
-    <DragDropContext onDragEnd={onDragEnd}>
-        <div className='ProjectDashBoard'>
-            
-            <div className='ProjectDashBoard__Title'> <p> <b>Project:</b> { chosenProject.projectName }</p> </div>
+                <div className='ProjectDashBoard_SearchBar'>
+                    <SearchBar openModal={setShowAddTicket} searchHandler={(value) => setTicketSearch(value)} />
+                </div>
 
-            <div className='ProjectDashBoard_SearchBar'>
-                <SearchBar openModal={setShowAddTicket} searchHandler={(value) => setTicketSearch(value)} />
+                <div className='ProjectDashBoard__Sections'>
+                    {/* Renaming any of these titles means that Util.tsx also needs to be updated */}
+                    <Columns title='Open Items' tickets={openTickets}/>
+                    <Columns title='In Progress Items' tickets={progressTickets}/>
+                    <Columns title='Quality Check Items' tickets={qualityCheckTickets}/>
+                    <Columns title='Finished Items' tickets={finishedTickets}/>
+                    <Columns title='Backlog Items' tickets={backlogTickets}/>
+                </div>
+
             </div>
-
-            <div className='ProjectDashBoard__Sections'>
-                {/* Renaming any of these titles means that Util.tsx also needs to be updated */}
-                <Columns title='Open Items' tickets={openTickets}/>
-                <Columns title='In Progress Items' tickets={progressTickets}/>
-                <Columns title='Quality Check Items' tickets={qualityCheckTickets}/>
-                <Columns title='Finished Items' tickets={finishedTickets}/>
-                <Columns title='Backlog Items' tickets={backlogTickets}/>
-            </div>
-
-        </div>
-    </DragDropContext>
-
+        </DragDropContext>
   </>)
 }
 

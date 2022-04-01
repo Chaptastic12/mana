@@ -1,4 +1,5 @@
 import React from 'react';
+import { Routes, Route, BrowserRouter } from 'react-router-dom';
 
 import './App.css';
 
@@ -10,17 +11,21 @@ import HeaderBar from './components/HeaderBar/HeaderBar';
 
 function App() {
   return (
-    <UserProvider>
-    <div className='App'>
-      <div className='NavBar'>
-        <NavBar />
-      </div>
-      <div className='Page'>
-        <HeaderBar />
-        <ProjectDashBoard />
-      </div>
-    </div>
-    </UserProvider>
+    <BrowserRouter>
+      <UserProvider>
+        <div className='App'>
+          <div className='NavBar'>
+            <NavBar />
+          </div>
+          <div className='Page'>
+            <HeaderBar />
+            <Routes>
+              <Route path='/dashboard/:projectReference' element={ <ProjectDashBoard /> } />
+            </Routes>
+          </div>
+        </div>
+      </UserProvider>
+    </BrowserRouter>
   )
 }
 

@@ -14,7 +14,7 @@ const SearchBar = (props: Props) => {
   return (
     <div className='SearchBar'>
         <div className='SearchBar__Input'>
-            <input type='text' placeholder='Search...' onChange={(e) => props.searchHandler(e.target.value) }></input>
+            <input type='text' placeholder='Search Current Project Tickets' onChange={(e) => props.searchHandler(e.target.value) }></input>
             <button><IoSearchOutline /></button>
         </div>
         <div className='SearchBar_Buttons'>

@@ -4,7 +4,7 @@ export interface AllProjects {
 
 export interface Project {
     id: string;
-    tickets: Ticket[];
+    tickets?: Ticket[];
     projectShortName: string;
     projectName: string;
     createdDate: string;
