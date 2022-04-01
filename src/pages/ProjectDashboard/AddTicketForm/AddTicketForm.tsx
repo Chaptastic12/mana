@@ -24,7 +24,7 @@ const AddTicketForm = (props: Props) => {
     const [ error, setError ] = useState('');
 
     let formInputs = Object.entries(formData).map(([key, value]) => {
-        if(key === 'id' || key === 'comments'){ return }
+        if(key === 'id' || key === 'comments'){ return ''}
 
         const adjustedKey = key.replace(/([A-Z])/g, ' $1').trim();
         let element;
@@ -32,7 +32,7 @@ const AddTicketForm = (props: Props) => {
         if(key === 'projectReference'){
             let options = [<option key='StatusDefault' value='default'>Choose...</option>];
             for(let x=0; x < ALLPROJECTS.length; x++){
-                options.push(<option key={ALLPROJECTS[x].projectShortName} value={ALLPROJECTS[x].projectShortName}>{ ALLPROJECTS[x].projectShortName }</option>)
+                options.push(<option key={ALLPROJECTS[x].projectReference} value={ALLPROJECTS[x].projectReference}>{ ALLPROJECTS[x].projectReference }</option>)
             }
             element = <select value={formData.projectReference} onChange={(e) => setFormData({...formData, projectReference: e.target.value})}>
                             { options }
@@ -96,9 +96,9 @@ const AddTicketForm = (props: Props) => {
             setError('Please ensure all fields are filled out.');
         } else {
             let copyState = { ...formData }
-            let chosenProject = ALLPROJECTS.filter(x => x.projectShortName === formData.projectReference);
+            let chosenProject = ALLPROJECTS.filter(x => x.projectReference === formData.projectReference);
             const ticketID = (chosenProject[0].tickets.length + 1).toString();
-            const ticketNumber = chosenProject[0].projectShortName + '-' + ticketID;
+            const ticketNumber = chosenProject[0].projectReference + '-' + ticketID;
             copyState.id = ticketID;
             copyState.projectReference = ticketNumber;
             chosenProject[0].tickets.push({ ...copyState,  comments: [] });
