@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import { ALLPROJECTS, TICKETS } from '../../DummyData';
+
 import DataList from '../UI Elements/DataList/DataList';
 import DropDown from '../UI Elements/DropDown/DropDown';
 
@@ -21,7 +22,7 @@ const HeaderBar = () => {
         <div className='HeaderBar__Right'>
             <DataList value={selectedTicket} setValue={setSelectedTicket} placeholder='Ticket Search...' id='tickets' name='tickets' listName='ticketSearch' data={TICKETS} useInDropDown='title' link='/dashboard/'/>
 
-            <DropDown data={USER_OPTIONS} title='User Profile'/>
+            <DropDown data={USER_OPTIONS} title='User'/>
         </div>
     </div>
   )

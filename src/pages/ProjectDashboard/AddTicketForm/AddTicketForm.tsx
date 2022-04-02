@@ -18,7 +18,7 @@ const AddTicketForm = (props: Props) => {
         id: '', username: '', email: '', isAdmin: false, isGuest: true, isRegUser: false
     }
 
-    const [ formData, setFormData ] = useState<Ticket>({id: '', title: '', description: '', projectReference:'', status: '', ticketOwner: blankUser, ticketCreator: blankUser, comments: [], createdDate: date.toLocaleDateString()});
+    const [ formData, setFormData ] = useState<Ticket>({id: '', title: '', projectReference:'', status: '', description: '', ticketOwner: blankUser, ticketCreator: blankUser, comments: [], createdDate: date.toLocaleDateString()});
     const [ tempCreator, setTempCreator ] = useState('')
     const [ tempOwner, setTempOwner ] = useState('')
     const [ error, setError ] = useState('');
@@ -48,14 +48,14 @@ const AddTicketForm = (props: Props) => {
                         </select>
         } else if(key === 'ticketOwner'){
             element = <div>
-                <input list="ticketOwner" name="ticketOwners" id="ticketOwners" value={tempOwner} onChange={(e) => { setTempOwner(e.target.value); adjustUser('ticketOwner') } } />
+                <input list="ticketOwner" name="ticketOwners" id="ticketOwners" placeholder='Ticket Owner' value={tempOwner} onChange={(e) => { setTempOwner(e.target.value); adjustUser('ticketOwner') } } />
                 <datalist id="ticketOwner">
                     {USERS.map(x => { return <option key={x.username} value={x.username} /> })}
                 </datalist>
             </div>  
         } else if(key === 'ticketCreator'){
             element = <div>
-                <input list="ticketCreator" name="ticketCreators" id="ticketCreators" value={tempCreator} onChange={(e) => { setTempCreator(e.target.value); adjustUser('ticketCreator') } } />
+                <input list="ticketCreator" name="ticketCreators" id="ticketCreators" placeholder='Ticket Creator' value={tempCreator} onChange={(e) => { setTempCreator(e.target.value); adjustUser('ticketCreator') } } />
                 <datalist id="ticketCreator">
                     {USERS.map(x => { return <option key={x.username} value={x.username} /> })}
                 </datalist>
@@ -63,7 +63,7 @@ const AddTicketForm = (props: Props) => {
         } else if(key === 'title'){
             element = <input type='text' placeholder={adjustedKey} value={formData.title} onChange={(e) => setFormData({ ...formData, title: e.target.value }) }  /> 
         } else if(key === 'description'){
-            element = <input type='text' placeholder={adjustedKey} value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value }) }  /> 
+            element = <textarea cols={100} rows={10} placeholder={adjustedKey} value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value }) }  /> 
         } else if(key === 'createdDate'){
             element = <input type='text' placeholder={adjustedKey} value={formData.createdDate} onChange={(e) => setFormData({ ...formData, createdDate: e.target.value }) }  disabled /> 
         }

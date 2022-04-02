@@ -42,3 +42,7 @@
   .dropdown:hover .dropdown-content {
     display: block;
   }
+
+  .dropbtn svg{
+      font-size: 25px;
+  }

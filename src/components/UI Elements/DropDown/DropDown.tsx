@@ -1,4 +1,5 @@
 import React from 'react'
+import { FaUserCircle } from 'react-icons/fa'
 
 import './DropDown.css'
 
@@ -13,9 +14,11 @@ export interface DATA {
 }
 
 const DropDown = (props: PROPS) => {
+    let title;
+    if(props.title === 'User'){title = <FaUserCircle /> }
   return (
     <div className="dropdown">
-        <button className="dropbtn">{props.title}
+        <button className="dropbtn">{title ? title : props.title}
             <i className="fa fa-caret-down"></i>
         </button>
         <div className="dropdown-content">

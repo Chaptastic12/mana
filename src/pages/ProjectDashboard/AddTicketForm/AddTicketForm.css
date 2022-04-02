@@ -36,6 +36,10 @@
     color: rgb(0,48,143,1);
 }
 
+.AddTicketForm__Form {
+    padding-top: 10px;
+}
+
 .AddTicketForm__Form .Input{
     display: inline-block;
     padding: 12px 25px;
@@ -49,6 +53,7 @@
 }
 
 .AddTicketForm__Form .Input input,
+.AddTicketForm__Form .Input textarea,
 .AddTicketForm__Form .Input select {
     padding: 10px;
     font-size: 17px;
@@ -59,12 +64,18 @@
     text-transform: capitalize;
 }
 
-.AddTicketForm__Form .Input select{
-    height: 50px;
-    width: 150px;
+.AddTicketForm__Form .Input textarea{
+    height: 170px;
+    width: 95%;
 }
 
-.AddTicketForm__Form .Input input[type=text]:focus{
+.AddTicketForm__Form .Input select{
+    height: 50px;
+    width: 250px;
+}
+
+.AddTicketForm__Form .Input input[type=text]:focus,
+.AddTicketForm__Form .Input textarea:focus{
     outline: none;
 }
 

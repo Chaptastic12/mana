@@ -12,7 +12,8 @@
 .ProjectDashBoard_SearchBar{
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    margin-left: 15px;
 }
 
 .ProjectDashBoard__Sections{
