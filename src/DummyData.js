@@ -65,7 +65,7 @@ export let ALLPROJECTS = [
         tickets: [
             {
                 id: '3',
-                projectReference: 'MANA 2',
+                projectReference: 'MANA2',
                 title: 'Mana 2 - Project Tracker App',
                 description: 'App used for project tracking purposes 2',
                 comments: [],
@@ -89,7 +89,7 @@ export let ALLPROJECTS = [
                 }
             }
         ],
-        projectReference: 'MANA 2',
+        projectReference: 'MANA2',
         projectName: 'Manage All New Activities 2',
         createdDate: 'Today'
     }

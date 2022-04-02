@@ -16,10 +16,10 @@ const HeaderBar = () => {
   return (
     <div className='HeaderBar'>
         <div className='HeaderBar__Left'>
-            <DataList value={selectedProject} setValue={setSelectedProejct} placeholder='Project Search...' id='projects' name='projects' listName='projectSearch' data={ALLPROJECTS} useInDropDown='projectName'/>
+            <DataList value={selectedProject} setValue={setSelectedProejct} placeholder='Project Search...' id='projects' name='projects' listName='projectSearch' data={ALLPROJECTS} useInDropDown='projectName' link='/dashboard/'/>
         </div>
         <div className='HeaderBar__Right'>
-            <DataList value={selectedTicket} setValue={setSelectedTicket} placeholder='Ticket Search...' id='tickets' name='tickets' listName='ticketSearch' data={TICKETS} useInDropDown='title'/>
+            <DataList value={selectedTicket} setValue={setSelectedTicket} placeholder='Ticket Search...' id='tickets' name='tickets' listName='ticketSearch' data={TICKETS} useInDropDown='title' link='/dashboard/'/>
 
             <DropDown data={USER_OPTIONS} title='User Profile'/>
         </div>

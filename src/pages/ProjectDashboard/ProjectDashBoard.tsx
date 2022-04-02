@@ -34,9 +34,8 @@ const ProjectDashBoard = () => {
     useEffect(() => {
         //Since we are just using dummy data, we dont need to make an API call yet; Instead, find a match for the projectReference
         const foundProject = ALLPROJECTS.filter(x => x.projectReference === projectReference);
-        console.log(foundProject)
-        if(foundProject) {setChosenProject(foundProject[0]) }
-    }, []);
+        if(foundProject[0]) { setChosenProject(foundProject[0]) } else { setChosenProject(EMPTY_PROJECT)}
+    }, [projectReference]);
 
     const onDragEnd = (result: DropResult) => {
         const { source, destination } = result;

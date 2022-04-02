@@ -1,4 +1,5 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom';
 
 import './DataList.css';
 
@@ -11,15 +12,17 @@ export interface PROPS {
     listName: string;
     data: any[];
     useInDropDown: string;
+    link: string;
 }
 
 const DataList = (props: PROPS) => {
+    const navigate = useNavigate();
 
   return (
     <div className='DataList'>
-        <input list={props.listName} name={props.name} id={props.id} placeholder={props.placeholder} value={props.value} onChange={(e) => props.setValue(e.target.value) } onBlur={() => props.setValue('')} />
+        <input list={props.listName} name={props.name} id={props.id} placeholder={props.placeholder} value={props.value} onChange={(e) => { props.setValue(e.target.value); navigate(props.link + e.target.value) } } onBlur={() => props.setValue('')} />
         <datalist id={props.listName}>
-            {props.data.map(x => { return <option key={x.id} value={x[props.useInDropDown]}>{x.projectReference} </option> })}
+            {props.data.map(x => { return <option key={x.id} value={x.projectReference} > {x[props.useInDropDown]} </option> })}
         </datalist>
     </div>
   )
