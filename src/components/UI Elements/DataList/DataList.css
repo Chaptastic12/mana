@@ -1,4 +1,23 @@
+.DataList {
+    display: flex;
+    align-items: center;
+}
+
 .DataList input {
-    width: 200px;
+    width: 180px;
     height: 30px;
+}
+
+.DataList .DataList__Icon {
+    font-size: 18px;
+    width: 27px;
+    height: 35px;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    margin-right: 0;
+    padding-right: 5px;
+    background-color: rgb(0,48,143,0.8);
+    color: white;
+    border-radius: 5px 0 0 5px;
 }

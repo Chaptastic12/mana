@@ -265,3 +265,21 @@ export let USERS = [
         isRegUser: false
     },
 ]
+
+const date = new Date();
+const blankUser = {
+    id: '', username: '', email: '', isAdmin: false, isGuest: true, isRegUser: false
+}
+
+export const DUMMY_TICKET =  {
+    id: '', 
+    title: '', 
+    projectReference:'', 
+    status: '', 
+    description: '', 
+    ticketOwner: blankUser, 
+    ticketCreator: blankUser, 
+    comments: [], 
+    createdDate: date.toLocaleDateString() 
+}
+ 

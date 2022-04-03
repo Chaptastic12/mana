@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { Ticket } from '../../models/models';
 import { findOrigin, findDestination } from './Util';
-import { ALLPROJECTS } from '../../DummyData';
+import { ALLPROJECTS, DUMMY_TICKET } from '../../DummyData';
 import Columns from './Columns/Columns';
 import SearchBar from './SearchBar/SearchBar';
 
@@ -12,14 +12,9 @@ import './ProjectDashBoard.css';
 import Modal from '../../components/Modal/Modal';
 import AddTicketForm from './AddTicketForm/AddTicketForm';
 
-const date = new Date();
-const blankUser = {
-    id: '', username: '', email: '', isAdmin: false, isGuest: true, isRegUser: false
-}
-
 const EMPTY_PROJECT = { 
     id: '0',
-    tickets: [{id: '', title: '', description: '', projectReference:'', status: '', ticketOwner: blankUser, ticketCreator: blankUser, comments: [], createdDate: date.toLocaleDateString()}],
+    tickets: [DUMMY_TICKET],
     projectReference: '',
     projectName: '',
     createdDate: ''

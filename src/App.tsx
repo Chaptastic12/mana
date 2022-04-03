@@ -8,6 +8,7 @@ import NavBar from './components/NavBar/NavBar';
 
 import UserProvider from './Context/User-Context';
 import HeaderBar from './components/HeaderBar/HeaderBar';
+import TicketDetails from './pages/TicketDetails/TicketDetails';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <HeaderBar />
             <Routes>
               <Route path='/dashboard/:projectReference' element={ <ProjectDashBoard /> } />
+              <Route path='/ticket/:projectReference' element={ <TicketDetails /> } />
             </Routes>
           </div>
         </div>

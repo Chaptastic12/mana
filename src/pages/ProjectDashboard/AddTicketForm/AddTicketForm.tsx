@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { IoIosCloseCircleOutline } from 'react-icons/io'
 import ErrorBar from '../../../components/ErrorBar/ErrorBar'
-import { ALLPROJECTS, USERS } from '../../../DummyData'
+import { ALLPROJECTS, USERS, DUMMY_TICKET } from '../../../DummyData'
 import { Ticket } from '../../../models/models'
 
 import './AddTicketForm.css'
@@ -13,12 +13,7 @@ export interface Props {
 
 const AddTicketForm = (props: Props) => {
 
-    const date = new Date();
-    const blankUser = {
-        id: '', username: '', email: '', isAdmin: false, isGuest: true, isRegUser: false
-    }
-
-    const [ formData, setFormData ] = useState<Ticket>({id: '', title: '', projectReference:'', status: '', description: '', ticketOwner: blankUser, ticketCreator: blankUser, comments: [], createdDate: date.toLocaleDateString()});
+    const [ formData, setFormData ] = useState<Ticket>(DUMMY_TICKET);
     const [ tempCreator, setTempCreator ] = useState('')
     const [ tempOwner, setTempOwner ] = useState('')
     const [ error, setError ] = useState('');

@@ -20,7 +20,7 @@ const HeaderBar = () => {
             <DataList value={selectedProject} setValue={setSelectedProejct} placeholder='Project Search...' id='projects' name='projects' listName='projectSearch' data={ALLPROJECTS} useInDropDown='projectName' link='/dashboard/'/>
         </div>
         <div className='HeaderBar__Right'>
-            <DataList value={selectedTicket} setValue={setSelectedTicket} placeholder='Ticket Search...' id='tickets' name='tickets' listName='ticketSearch' data={TICKETS} useInDropDown='title' link='/dashboard/'/>
+            <DataList value={selectedTicket} setValue={setSelectedTicket} placeholder='Ticket Search...' id='tickets' name='tickets' listName='ticketSearch' data={TICKETS} useInDropDown='title' link='/ticket/'/>
 
             <DropDown data={USER_OPTIONS} title='User'/>
         </div>
