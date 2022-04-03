@@ -15,6 +15,12 @@
     margin-top: 25px;
 }
 
+.TicketDetails__Header input {
+    font-family: var(--SpecialFont);
+    height: 82px;
+    font-size: 75px;
+}
+
 .TicketDetails__Ticket{
     display: flex;
     align-items: center;

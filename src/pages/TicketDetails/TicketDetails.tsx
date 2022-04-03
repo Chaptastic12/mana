@@ -5,6 +5,7 @@ import { BsPlusSquare } from 'react-icons/bs'
 import { Comment, Ticket } from '../../models/models';
 
 import CommentDiv from '../../components/Comment/Comment';
+import EditableInput from '../../components/EditableInput/EditableInput';
 import { TICKETS, DUMMY_TICKET, BLANKUSER } from '../../DummyData';
 
 import './TicketDetails.css'
@@ -42,10 +43,20 @@ const TicketDetails = () => {
         setRefresh(prevState => !prevState)
     }
 
+    const editTicketField = (newValue: string, field: string) => {
+        console.log(newValue, field)
+        //Update our new value
+        if(field === 'title'){ ticket.title = newValue }
+        //Save our updated ticket
+        const ticketIndex = TICKETS.findIndex( x => x.projectReference === projectReference);
+        TICKETS[ticketIndex] = ticket;
+        setRefresh(prevState => !prevState)
+    }
+
   return (
     <div className='TicketDetails'>
         <div className='TicketDetails__Header'>
-            <span className='bold'>[{ ticket.projectReference }]</span> <span> { ticket.title} </span>
+            <span className='bold'>[{ ticket.projectReference }]</span> <EditableInput hasLabel={false} text={ticket.title} field='title' ediTicketField={(newValue: string, field: string) => editTicketField(newValue, field)}/>
             <hr />
         </div>
         <div className='TicketDetails__Ticket'>
