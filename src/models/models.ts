@@ -15,7 +15,7 @@ export interface Ticket {
     projectReference: string;
     title: string;
     description: string;
-    comments?: Comment[];
+    comments: Comment[];
     status: string;
     createdDate: string;
     ticketOwner: User;

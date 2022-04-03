@@ -1,3 +1,5 @@
+import { Ticket, Comment } from "./models/models";
+
 export let ALLPROJECTS = [
     //First project
     {
@@ -95,7 +97,7 @@ export let ALLPROJECTS = [
     }
 ]
 
-export let TICKETS = [
+export let TICKETS: Ticket[] = [
     {
         id: '3',
         projectReference: 'MANA 2',
@@ -267,19 +269,26 @@ export let USERS = [
 ]
 
 const date = new Date();
-const blankUser = {
+export const BLANKUSER = {
     id: '', username: '', email: '', isAdmin: false, isGuest: true, isRegUser: false
 }
 
-export const DUMMY_TICKET =  {
+const DUMMYCOMMENT: Comment = {     
+    id: '0',
+    comment: 'test',
+    createdDate: date.toLocaleDateString(),
+    author: BLANKUSER
+}
+
+export const DUMMY_TICKET: Ticket =  {
     id: '', 
     title: '', 
     projectReference:'', 
     status: '', 
     description: '', 
-    ticketOwner: blankUser, 
-    ticketCreator: blankUser, 
-    comments: [], 
+    ticketOwner: BLANKUSER, 
+    ticketCreator: BLANKUSER, 
+    comments: [DUMMYCOMMENT], 
     createdDate: date.toLocaleDateString() 
 }
  

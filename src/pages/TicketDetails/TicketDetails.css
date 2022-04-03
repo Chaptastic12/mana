@@ -1,0 +1,49 @@
+.TicketDetails {
+    --ColOneWidth: 65%;
+}
+
+.TicketDetails__Header{
+    font-family: var(--SpecialFont);
+    font-size: 75px;
+    padding-left: 25px;
+    padding-top: 25px;
+}
+
+.TicketDetails__Header hr {
+    width: 90%;
+    margin-left: 0;
+    margin-top: 25px;
+}
+
+.TicketDetails__Ticket{
+    display: flex;
+    align-items: center;
+    width: 105%;
+    height: 100%;
+    padding: 20px;
+    /* background-color: rgb(238, 238, 238); */
+}
+
+.TicketDetails_Comments{
+    width: 100%;
+}
+
+.TicketDetails_NoComments{
+    height: 30px;
+    font-size: 18px;
+    font-style: italic;
+}
+
+.TicketDetails_Comments textarea {
+    max-width: var(--ColOneWidth);
+    min-width: var(--ColOneWidth);
+    font-family: var(--SpecialFont);
+    font-weight: bolder;
+    font-size: 18px;
+}
+.TicketDetails_CommentsButton{
+    display: flex;
+    justify-content: end;
+    width: var(--ColOneWidth);
+    padding-top: 10px;
+}
