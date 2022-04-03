@@ -34,19 +34,22 @@ const TicketDetails = () => {
             author: BLANKUSER
         }
 
+        //Update our comments with the new payload
         const length = ticket.comments.length;
         ticket.comments[length] = payload;
 
+        //Update our ticket in the general Array
         const ticketIndex = TICKETS.findIndex( x => x.projectReference === projectReference);
         TICKETS[ticketIndex] = ticket;
         setCommentText('')
         setRefresh(prevState => !prevState)
     }
 
-    const editTicketField = (newValue: string, field: string) => {
-        console.log(newValue, field)
+    const editTicketInputField = (newValue: string, field: string) => {
         //Update our new value
         if(field === 'title'){ ticket.title = newValue }
+        if(field === 'description'){ ticket.description = newValue }
+        if(field === 'status'){ ticket.status = newValue }
         //Save our updated ticket
         const ticketIndex = TICKETS.findIndex( x => x.projectReference === projectReference);
         TICKETS[ticketIndex] = ticket;
@@ -56,7 +59,7 @@ const TicketDetails = () => {
   return (
     <div className='TicketDetails'>
         <div className='TicketDetails__Header'>
-            <span className='bold'>[{ ticket.projectReference }]</span> <EditableInput hasLabel={false} text={ticket.title} field='title' ediTicketField={(newValue: string, field: string) => editTicketField(newValue, field)}/>
+            <span className='bold'>[{ ticket.projectReference }]</span> <EditableInput hasLabel={false} text={ticket.title} field='title' editTicketField={(newValue: string, field: string) => editTicketInputField(newValue, field)}/>
             <hr />
         </div>
         <div className='TicketDetails__Ticket'>

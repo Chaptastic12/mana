@@ -7,7 +7,7 @@ export interface PROPS {
     label?: string;
     field: string;
     text: string;
-    ediTicketField: Function;
+    editTicketField: Function;
 }
 const EditableInput = (props: PROPS) => {
 
@@ -18,7 +18,7 @@ const EditableInput = (props: PROPS) => {
 
     const handleBlur = () => {
         setClicked(false);
-        props.ediTicketField(fieldText, props.field);
+        props.editTicketField(fieldText, props.field);
     }
 
     return (
