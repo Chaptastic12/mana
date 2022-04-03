@@ -9,12 +9,14 @@ import EditableInput from '../../components/EditableInput/EditableInput';
 import { TICKETS, DUMMY_TICKET, BLANKUSER } from '../../DummyData';
 
 import './TicketDetails.css'
+import ErrorBar from '../../components/ErrorBar/ErrorBar';
 const TicketDetails = () => {
 
     const { projectReference} = useParams();
     const [ ticket, setTicket ] = useState(DUMMY_TICKET);
     const [ commentText, setCommentText ] = useState('');
     const [ refresh, setRefresh ] = useState(false);
+    const [ error, setError ] = useState('');
 
     useEffect(() => {
         const paramTicket: Ticket[] = TICKETS.filter(x => x.projectReference === projectReference);
@@ -46,6 +48,13 @@ const TicketDetails = () => {
     }
 
     const editTicketInputField = (newValue: string, field: string) => {
+        setError('');
+
+        if(newValue.length === 0){ 
+            setError('Error: Field cannot be empty');
+            return;
+        }
+
         //Update our new value
         if(field === 'title'){ ticket.title = newValue }
         if(field === 'description'){ ticket.description = newValue }
@@ -59,12 +68,13 @@ const TicketDetails = () => {
   return (
     <div className='TicketDetails'>
         <div className='TicketDetails__Header'>
-            <span className='bold'>[{ ticket.projectReference }]</span> <EditableInput hasLabel={false} text={ticket.title} field='title' editTicketField={(newValue: string, field: string) => editTicketInputField(newValue, field)}/>
+            { error && <div className='TicketDetails__Error'><ErrorBar errorMsg={error} /></div> }
+            <span className='bold'>[{ ticket.projectReference }]</span> <EditableInput type='input' hasLabel={false} text={ticket.title} field='title' editTicketField={(newValue: string, field: string) => editTicketInputField(newValue, field)}/>
             <hr />
         </div>
         <div className='TicketDetails__Ticket'>
-            <div className='TicketDetails_Info'>
-
+            <div className='TicketDetails_Description'>
+                <EditableInput type='textarea' hasLabel={true} label='Description' text={ticket.description} field='description' editTicketField={(newValue: string, field: string) => editTicketInputField(newValue, field)} />
             </div>
             <div className='TicketDetails_Comments'>
                 { ticketComments.length !== 0 ? ticketComments : <div className='TicketDetails_NoComments'>No Comments / Changes for this ticket</div> }

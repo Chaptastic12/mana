@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react'
+import { StringMappingType } from 'typescript';
 
 import './EditableInput.css'
 
@@ -7,6 +8,7 @@ export interface PROPS {
     label?: string;
     field: string;
     text: string;
+    type: String;
     editTicketField: Function;
 }
 const EditableInput = (props: PROPS) => {
@@ -15,16 +17,27 @@ const EditableInput = (props: PROPS) => {
     const [ clicked, setClicked ] = useState(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
+    const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
     const handleBlur = () => {
         setClicked(false);
         props.editTicketField(fieldText, props.field);
     }
 
+    const spanClickHandler = () => {
+        setClicked(true);
+        if(props.type === 'input') { setTimeout(() => inputRef.current?.focus(), 100 ) } else
+        if(props.type === 'textarea') { setTimeout(() => textAreaRef.current?.focus(), 100 ) }
+    }
+
+    let fieldToUse;
+    if(props.type === 'input'){ fieldToUse = <input className='EditableInput__Input' ref={inputRef} value={ fieldText } onChange={(e) => setFieldText(e.target.value)} onBlur={() => handleBlur()} /> } else
+    if(props.type === 'textarea') { fieldToUse = <textarea rows={1}cols={100} className='EditableInput__Input' ref={textAreaRef} value={ fieldText } onChange={(e) => setFieldText(e.target.value)} onBlur={() => handleBlur()} /> }
+
     return (
         <div className='EditableInput'>
-            { props.hasLabel && <label> { props.label } </label> }
-            { !clicked ? <span onClick={() => { setClicked(true); setTimeout(() => inputRef.current?.focus(), 100 ) } }>{ props.text }</span> : <input className='EditableInput__Input' ref={inputRef} value={ fieldText } onChange={(e) => setFieldText(e.target.value)} onBlur={() => handleBlur()} /> }
+            { props.hasLabel && <label> { props.label } </label>}
+            { !clicked ? <span onClick={() => spanClickHandler() }>{ props.text }</span> : fieldToUse }
         </div>
         )
 }

@@ -1,3 +1,7 @@
 .EditableInput{
     display: inline-block;
 }
+
+.EditableInput label {
+    display: block;
+}
