@@ -1,0 +1,40 @@
+.CommentDiv{
+    position: relative;
+    min-height: 150px; 
+    width: 65%;
+    box-shadow: 0 3px 12px rgb(0 0 0 / 0.2);
+    border-radius: 10px;
+
+}
+
+.CommentDiv__Author {
+    width: 98.5%;
+    border-radius: 10px 10px 0 0;
+    padding-top: 10px;
+    padding-bottom:  5px;
+    padding-left: 15px;
+    background-color: rgb(247, 247, 247);
+}
+
+.CommentDiv__Comment {
+    position: absolute;
+    top: 45px;
+    left: 15px;
+}
+
+.CommentDiv hr {
+    position: absolute;
+    bottom: 28px;
+    width: 95%;
+    margin-left: 2.5%;
+    height: 1px;
+    background-color: rgb(233, 233, 233);
+    border: none;
+}
+
+.CommentDiv__Date {
+    position: absolute;
+    font-style: italic;
+    bottom: 10px;
+    right: 15px;
+}

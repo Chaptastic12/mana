@@ -21,7 +21,7 @@ const TicketDetails = () => {
 
     }, [ projectReference, refresh ])
 
-    const ticketComments = ticket.comments.map( x => { return <CommentDiv /> } );
+    const ticketComments = ticket.comments.map( x => { return <CommentDiv comment={x} /> } );
 
     //Will eventually need to be reworked once we are on a server
     const addCommentToTicket = () => {

@@ -270,7 +270,7 @@ export let USERS = [
 
 const date = new Date();
 export const BLANKUSER = {
-    id: '', username: '', email: '', isAdmin: false, isGuest: true, isRegUser: false
+    id: '', username: 'DUMMY_USERNAME', email: '', isAdmin: false, isGuest: true, isRegUser: false
 }
 
 const DUMMYCOMMENT: Comment = {     
