@@ -5,6 +5,9 @@
 .TicketDetails__Right{
     width: 35%;
 }
+.TicketDetails__Container{
+    display: flex;
+}
 
 .TicketDetails__Left{
     width: 65%;
@@ -59,13 +62,12 @@
     padding-bottom: 10px;
 }
 
-.TicketDetails_Description span {
+.TicketDetails_Description div {
     padding-left: 5px;
-    white-space: pre-line;
 }
 
 .TicketDetails_Description textarea {
-    width: 150%;
+    width: 100%;
     height: 100%;
     min-height: 130px;
     font-family: inherit;
@@ -84,9 +86,9 @@
 .TicketDetails_Comments textarea {
     max-width: var(--ColOneWidth);
     min-width: var(--ColOneWidth);
-    font-family: var(--SpecialFont);
-    font-weight: bolder;
-    font-size: 18px;
+    font-family: inherit;
+    font-size: 14px;
+    height: 40px;
 }
 .TicketDetails_CommentsButton{
     display: flex;

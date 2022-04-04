@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { StringMappingType } from 'typescript';
 
 import './EditableInput.css'
 
@@ -21,7 +20,7 @@ const EditableInput = (props: PROPS) => {
 
     useEffect(() => {
         setFieldText(props.text);
-    }, [])
+    }, [props.text])
 
     const handleBlur = () => {
         setClicked(false);
@@ -33,7 +32,7 @@ const EditableInput = (props: PROPS) => {
         if(props.type === 'input') { setTimeout(() => inputRef.current?.focus(), 100 ) } else
         if(props.type === 'textarea') { setTimeout(() => textAreaRef.current?.focus(), 100 ) }
     }
-
+    
     let fieldToUse;
     if(props.type === 'input'){ fieldToUse = <input className='EditableInput__Input' ref={inputRef} value={ fieldText } onChange={(e) => setFieldText(e.target.value)} onBlur={() => handleBlur()} /> } else
     if(props.type === 'textarea') { fieldToUse = <textarea rows={1}cols={100} className='EditableInput__Input' ref={textAreaRef} value={ fieldText }  onChange={(e) => setFieldText(e.target.value)} onBlur={() => handleBlur()} /> }
@@ -41,7 +40,7 @@ const EditableInput = (props: PROPS) => {
     return (
         <div className='EditableInput'>
             { props.hasLabel && <label> { props.label } </label>}
-            { !clicked ? <span onClick={() => spanClickHandler() }>{ props.text }</span> : fieldToUse }
+            { !clicked ? <div className='EditableInput__Text' style={{ whiteSpace: 'pre-line' }} onClick={() => spanClickHandler() }>{ props.text }</div> : fieldToUse }
         </div>
         )
 }

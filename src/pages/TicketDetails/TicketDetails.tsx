@@ -24,13 +24,13 @@ const TicketDetails = () => {
 
     }, [ projectReference, refresh ])
 
-    const ticketComments = ticket.comments.map( x => { return <CommentDiv comment={x} /> } );
+    const ticketComments = ticket.comments.map( x => { return <CommentDiv key={x.id}comment={x} /> } );
 
     //Will eventually need to be reworked once we are on a server
     const addCommentToTicket = () => {
         const date = new Date();
         let payload: Comment = {
-            id: '1',
+            id: (Math.random() * Math.random() * 100 ).toString(),
             comment: commentText,
             createdDate: date.toLocaleDateString(),
             author: BLANKUSER
@@ -79,7 +79,7 @@ const TicketDetails = () => {
                             <EditableInput type='textarea' hasLabel={true} label='Description' text={ticket.description} field='description' editTicketField={(newValue: string, field: string) => editTicketInputField(newValue, field)} />
                         </div>
                         <div className='TicketDetails_Comments'>
-                            <label>Comments</label>
+                            <div style={{paddingBottom: '5px'}}><label>Comments</label></div>
                             { ticketComments.length !== 0 ? ticketComments : <div className='TicketDetails_NoComments'>No Comments / Changes for this ticket</div> }
                             <textarea placeholder='Enter Comment' value={commentText} onChange={(e) => setCommentText(e.target.value)} />
                             <div className='TicketDetails_CommentsButton'>
