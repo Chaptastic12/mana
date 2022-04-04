@@ -67,22 +67,27 @@ const TicketDetails = () => {
 
   return (
     <div className='TicketDetails'>
-        <div className='TicketDetails__Header'>
-            { error && <div className='TicketDetails__Error'><ErrorBar errorMsg={error} /></div> }
-            <span className='bold'>[{ ticket.projectReference }]</span> <EditableInput type='input' hasLabel={false} text={ticket.title} field='title' editTicketField={(newValue: string, field: string) => editTicketInputField(newValue, field)}/>
-            <hr />
-        </div>
-        <div className='TicketDetails__Ticket'>
-            <div className='TicketDetails_Description'>
-                <EditableInput type='textarea' hasLabel={true} label='Description' text={ticket.description} field='description' editTicketField={(newValue: string, field: string) => editTicketInputField(newValue, field)} />
+        <div>
+            <div className='TicketDetails__Header'>
+                { error && <div className='TicketDetails__Error'><ErrorBar errorMsg={error} /></div> }
+                <span className='bold'>[{ ticket.projectReference }]</span> <EditableInput type='input' hasLabel={false} text={ticket.title} field='title' editTicketField={(newValue: string, field: string) => editTicketInputField(newValue, field)}/>
+                <hr />
             </div>
-            <div className='TicketDetails_Comments'>
-                { ticketComments.length !== 0 ? ticketComments : <div className='TicketDetails_NoComments'>No Comments / Changes for this ticket</div> }
-                <textarea placeholder='Enter Comment' value={commentText} onChange={(e) => setCommentText(e.target.value)} />
-                <div className='TicketDetails_CommentsButton'>
-                    <button onClick={() => addCommentToTicket()}> <BsPlusSquare /> Comment</button>
+            <div className='TicketDetails__Ticket'>
+                <div className='TicketDetails_Description'>
+                    <EditableInput type='textarea' hasLabel={true} label='Description' text={ticket.description} field='description' editTicketField={(newValue: string, field: string) => editTicketInputField(newValue, field)} />
+                </div>
+                <div className='TicketDetails_Comments'>
+                    { ticketComments.length !== 0 ? ticketComments : <div className='TicketDetails_NoComments'>No Comments / Changes for this ticket</div> }
+                    <textarea placeholder='Enter Comment' value={commentText} onChange={(e) => setCommentText(e.target.value)} />
+                    <div className='TicketDetails_CommentsButton'>
+                        <button onClick={() => addCommentToTicket()}> <BsPlusSquare /> Comment</button>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div>
+            
         </div>
     </div>
   )
