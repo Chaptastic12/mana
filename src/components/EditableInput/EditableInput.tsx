@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { StringMappingType } from 'typescript';
 
 import './EditableInput.css'
@@ -17,7 +17,11 @@ const EditableInput = (props: PROPS) => {
     const [ clicked, setClicked ] = useState(false);
 
     const inputRef = useRef<HTMLInputElement>(null);
-    const textAreaRef = useRef<HTMLTextAreaElement>(null)
+    const textAreaRef = useRef<HTMLTextAreaElement>(null);
+
+    useEffect(() => {
+        setFieldText(props.text);
+    }, [])
 
     const handleBlur = () => {
         setClicked(false);
@@ -32,7 +36,7 @@ const EditableInput = (props: PROPS) => {
 
     let fieldToUse;
     if(props.type === 'input'){ fieldToUse = <input className='EditableInput__Input' ref={inputRef} value={ fieldText } onChange={(e) => setFieldText(e.target.value)} onBlur={() => handleBlur()} /> } else
-    if(props.type === 'textarea') { fieldToUse = <textarea rows={1}cols={100} className='EditableInput__Input' ref={textAreaRef} value={ fieldText } onChange={(e) => setFieldText(e.target.value)} onBlur={() => handleBlur()} /> }
+    if(props.type === 'textarea') { fieldToUse = <textarea rows={1}cols={100} className='EditableInput__Input' ref={textAreaRef} value={ fieldText }  onChange={(e) => setFieldText(e.target.value)} onBlur={() => handleBlur()} /> }
 
     return (
         <div className='EditableInput'>

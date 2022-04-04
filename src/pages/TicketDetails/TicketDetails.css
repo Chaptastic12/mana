@@ -36,7 +36,7 @@
 
 .TicketDetails_Description {
     width: var(--ColOneWidth);
-    min-height: 500px;
+    min-height: 200px;
     background-color: rgb(245, 245, 245);
     margin-bottom: 15px;
     border-radius: 5px;
@@ -53,11 +53,14 @@
 
 .TicketDetails_Description span {
     padding-left: 5px;
+    white-space: pre-line;
 }
 
 .TicketDetails_Description textarea {
-    max-width: var(--ColOneWidth);
-    min-width: var(--ColOneWidth);
+    width: 150%;
+    height: 100%;
+    min-height: 130px;
+    font-family: inherit;
 }
 
 .TicketDetails_Comments{

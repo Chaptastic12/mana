@@ -87,7 +87,7 @@ const TicketDetails = () => {
             </div>
         </div>
         <div>
-            
+
         </div>
     </div>
   )
