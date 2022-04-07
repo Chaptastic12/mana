@@ -6,10 +6,11 @@ import { Comment, Ticket } from '../../models/models';
 
 import CommentDiv from '../../components/Comment/Comment';
 import EditableInput from '../../components/EditableInput/EditableInput';
-import { TICKETS, DUMMY_TICKET, BLANKUSER } from '../../DummyData';
+import { TICKETS, DUMMY_TICKET, BLANKUSER, USERS } from '../../DummyData';
 
 import './TicketDetails.css'
 import ErrorBar from '../../components/ErrorBar/ErrorBar';
+import DataListEdit from '../../components/UI Elements/DataList/DataListEdit';
 const TicketDetails = () => {
 
     const { projectReference} = useParams();
@@ -59,11 +60,17 @@ const TicketDetails = () => {
         if(field === 'title'){ ticket.title = newValue }
         if(field === 'description'){ ticket.description = newValue }
         if(field === 'status'){ ticket.status = newValue }
+        if(field === 'ownerUsername'){
+            const newUser = USERS.filter(x => x.username === newValue);
+            ticket.ticketOwner = newUser[0];
+        }
         //Save our updated ticket
         const ticketIndex = TICKETS.findIndex( x => x.projectReference === projectReference);
         TICKETS[ticketIndex] = ticket;
         setRefresh(prevState => !prevState)
     }
+    
+    const status = [ { val: 'Open' }, { val: 'In Progress' }, {val: 'Quality Check' }, { val: 'Finished' }, { val: 'Backlog' } ]
 
   return (
     <div className='TicketDetails'>
@@ -90,6 +97,8 @@ const TicketDetails = () => {
                 </div>
                 <div className='TicketDetails__Right'>
                     <div>Please look nice</div>
+                    <DataListEdit title='Status' value={ticket.status} setValue={(val: string) => editTicketInputField(val, 'status')} id='status' listName='ticketStatus' data={status} name='status' placeholder={'Pick a Status'}/>
+                    <DataListEdit title='Ticket Owner' value={ticket.ticketOwner.username} setValue={(val: string) => editTicketInputField(val, 'ownerUsername')} id='ownerUsername' listName='ticketOwnerUsername' data={USERS} name='userName' placeholder={'Pick a User'}/>
                 </div>
             </div>
     </div>
