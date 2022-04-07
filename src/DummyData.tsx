@@ -1,102 +1,5 @@
 import { Ticket, Comment } from "./models/models";
 
-export let ALLPROJECTS = [
-    //First project
-    {
-        id: '12345abcde',
-        tickets: 
-        [
-            {
-                id: '1',
-                projectReference: 'MANA-1',
-                title: 'Mana - Project Tracker App',
-                description: 'App used for project tracking purposes',
-                comments: [],
-                status: 'Open',
-                createdDate: 'Today',
-                ticketOwner: {
-                    id: '1',
-                    username: 'Chaps',
-                    email: 'chaps@test.com',
-                    isAdmin: true,
-                    isGuest: false,
-                    isRegUser: false
-                },
-                ticketCreator: {
-                    id: '1',
-                    username: 'Chaps',
-                    email: 'chaps@test.com',
-                    isAdmin: true,
-                    isGuest: false,
-                    isRegUser: false
-                }
-            },
-            {
-                id: '2',
-                projectReference: 'MANA-2',
-                title: 'Test columns',
-                description: 'App used for project tracking purposes',
-                comments: [],
-                status: 'Finished',
-                createdDate: 'Today',
-                ticketOwner: {
-                    id: '1',
-                    username: 'Chaps',
-                    email: 'chaps@test.com',
-                    isAdmin: true,
-                    isGuest: false,
-                    isRegUser: false
-                },
-                ticketCreator: {
-                    id: '1',
-                    username: 'Chaps',
-                    email: 'chaps@test.com',
-                    isAdmin: true,
-                    isGuest: false,
-                    isRegUser: false
-                }
-            }
-        ],
-        projectReference: 'MANA',
-        projectName: 'Manage All New Activities',
-        createdDate: 'Today'
-    },
-    //Second project
-    {
-        id: '123456abcdef',
-        tickets: [
-            {
-                id: '3',
-                projectReference: 'MANA2-1',
-                title: 'Mana 2 - Project Tracker App',
-                description: 'App used for project tracking purposes 2',
-                comments: [],
-                status: 'Finished',
-                createdDate: 'Today',
-                ticketOwner: {
-                    id: '1',
-                    username: 'Chaps',
-                    email: 'chaps@test.com',
-                    isAdmin: true,
-                    isGuest: false,
-                    isRegUser: false
-                },
-                ticketCreator: {
-                    id: '1',
-                    username: 'Chaps',
-                    email: 'chaps@test.com',
-                    isAdmin: true,
-                    isGuest: false,
-                    isRegUser: false
-                }
-            }
-        ],
-        projectReference: 'MANA2',
-        projectName: 'Manage All New Activities 2',
-        createdDate: 'Today'
-    }
-]
-
 export let TICKETS: Ticket[] = [
     {
         id: '3',
@@ -174,6 +77,33 @@ export let TICKETS: Ticket[] = [
         }
     },
 ]
+
+export let ALLPROJECTS = [
+    //First project
+    {
+        id: '12345abcde',
+        tickets: 
+        [
+            TICKETS[1],
+            TICKETS[2]
+        ],
+        projectReference: 'MANA',
+        projectName: 'Manage All New Activities',
+        createdDate: 'Today'
+    },
+    //Second project
+    {
+        id: '123456abcdef',
+        tickets: [
+            TICKETS[0]
+        ],
+        projectReference: 'MANA2',
+        projectName: 'Manage All New Activities 2',
+        createdDate: 'Today'
+    }
+]
+
+
 
 export let USERS = [
     {
