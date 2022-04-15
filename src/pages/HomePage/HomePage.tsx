@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import AddTicketForm from '../ProjectDashboard/AddTicketForm/AddTicketForm';
+import AddProjectForm from '../ProjectDashboard/AddProjectForm/AddProjectForm';
 import Modal from '../../components/Modal/Modal';
 import { BsPlusSquare } from 'react-icons/bs'
 
@@ -11,6 +12,7 @@ const HomePage = () => {
 
   return (<>
     { showAddTicket && <Modal closeModal={setShowAddTicket}> <AddTicketForm closeModal={setShowAddTicket} /> </Modal>}
+    { showAddProject && <Modal closeModal={setShowAddProject}> <AddProjectForm closeModal={setShowAddProject} /> </Modal>}
 
     <div className='HomePage'>
 

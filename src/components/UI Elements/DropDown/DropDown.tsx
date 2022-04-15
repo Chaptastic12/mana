@@ -1,5 +1,6 @@
 import React from 'react'
 import { FaUserCircle } from 'react-icons/fa'
+import { AiOutlineDown } from 'react-icons/ai'
 
 import './DropDown.css'
 
@@ -15,7 +16,7 @@ export interface DATA {
 
 const DropDown = (props: PROPS) => {
     let title;
-    if(props.title === 'User'){title = <FaUserCircle /> }
+    if(props.title === 'User'){title = <><FaUserCircle /><AiOutlineDown /></> }
   return (
     <div className="dropdown">
         <button className="dropbtn">{title ? title : props.title}
