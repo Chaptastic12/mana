@@ -96,7 +96,7 @@ const TicketDetails = () => {
                     </div>
                 </div>
                 <div className='TicketDetails__Right'>
-                    <div>Please look nice</div>
+                    <div>Ticket Information</div>
                     <DataListEdit title='Status' value={ticket.status} setValue={(val: string) => editTicketInputField(val, 'status')} id='status' listName='ticketStatus' data={status} name='status' placeholder={'Pick a Status'}/>
                     <DataListEdit title='Ticket Owner' value={ticket.ticketOwner.username} setValue={(val: string) => editTicketInputField(val, 'ownerUsername')} id='ownerUsername' listName='ticketOwnerUsername' data={USERS} name='userName' placeholder={'Pick a User'}/>
                 </div>

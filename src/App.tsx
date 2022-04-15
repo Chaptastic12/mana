@@ -9,6 +9,7 @@ import NavBar from './components/NavBar/NavBar';
 import UserProvider from './Context/User-Context';
 import HeaderBar from './components/HeaderBar/HeaderBar';
 import TicketDetails from './pages/TicketDetails/TicketDetails';
+import HomePage from './pages/HomePage/HomePage';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <div className='Page'>
             <HeaderBar />
             <Routes>
+              <Route path='/' element={ <HomePage /> } />
               <Route path='/dashboard/:projectReference' element={ <ProjectDashBoard /> } />
               <Route path='/ticket/:projectReference' element={ <TicketDetails /> } />
             </Routes>
