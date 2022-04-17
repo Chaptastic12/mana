@@ -5,7 +5,6 @@ const bodyParser      = require('body-parser');
 const passport        = require('passport');
 const passportlocal   = require('passport-local').Strategy;
 const cookieParser    = require('cookie-parser');
-const bcrypt          = require('bcryptjs');
 const session  = require('express-session');
 
 const projectRoutes = require('./routes/projectRoutes');
@@ -59,7 +58,14 @@ const corOptions = {
 }
 app.use(cors(corOptions));
 app.use(cookieParser(process.env.SESSION_SECRET));
-
+app.use(passport.initialize());
+app.use(passport.session());
+require('./utils/passportConfig')(passport);
+///////////
+//
+// END MIDDLEWARE
+//
+///////////w
 
 ///////////
 //
