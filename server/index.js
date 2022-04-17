@@ -1,11 +1,11 @@
 const express    = require('express');
-const mongoose = require('mongoose');
+const mongoose   = require('mongoose');
 const cors       = require('cors');
 const bodyParser = require('body-parser');
 
 const projectRoutes = require('./routes/projectRoutes');
-const ticketRoutes = require('./routes/ticketRoutes');
-const userRoutes = require('./routes/userRoutes');
+const ticketRoutes  = require('./routes/ticketRoutes');
+const userRoutes    = require('./routes/userRoutes');
 
 //Checkif production or not
 if(process.env.NODE_ENV !== 'production'){
@@ -40,8 +40,8 @@ app.use(cors(corOptions));
 
 //Routes
 app.use('/api/projects', projectRoutes);
-app.use('/api/tickets', ticketRoutes);
-app.use('/api/auth', userRoutes)
+app.use('/api/tickets',  ticketRoutes);
+app.use('/api/auth',     userRoutes)
 
 
 const server = app.listen(process.env.PORT || 8081, ()=>{
