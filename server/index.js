@@ -7,6 +7,12 @@ const projectRoutes = require('./routes/projectRoutes');
 const ticketRoutes = require('./routes/ticketRoutes');
 const userRoutes = require('./routes/userRoutes');
 
+//Checkif production or not
+if(process.env.NODE_ENV !== 'production'){
+    //Load  our .env variables
+    require('dotenv').config();
+}
+
 const url = process.env.MONGO_DB_CONNECTION_STRING;
 const connect = mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true });
 
