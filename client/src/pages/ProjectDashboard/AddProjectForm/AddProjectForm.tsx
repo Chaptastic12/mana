@@ -18,7 +18,6 @@ const AddProjectForm = (props: Props) => {
     let formatdate = date.toLocaleDateString();
     const [ error, setError ] = useState<string>('');
     const [ projectData, setProjectData ] = useState({ id: uuid().toString(), projectReference: '', projectName: '', tickets: [], createdDate: formatdate });
-    let formInputs;
 
     const fieldsAreValidated = () => {
         //Verify projectName and projectReference do not already exist;
