@@ -1,8 +1,12 @@
 import React from 'react'
 
+import './LoginPage.css';
+
 const LoginPage = () => {
   return (
-    <div>LoginPage</div>
+    <div className='LoginPage'>
+        LoginPage
+    </div>
   )
 }
 
