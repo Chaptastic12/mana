@@ -27,7 +27,7 @@ function App() {
   return (
     <BrowserRouter>
         <div className='App'>
-          { user ? <>
+          { user.username !== '' ? <>
             <div className='NavBar'>
               <NavBar />
             </div>

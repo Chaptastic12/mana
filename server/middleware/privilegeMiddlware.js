@@ -1,7 +1,9 @@
 const User = require('../models/user');
 
+const authMiddleware = {};
+
 // Middleware that checks if the user is an administrator or not
-const isUserAnAdminUser = (req, res, next) => {
+authMiddleware.isUserAnAdminUser = (req, res, next) => {
     const user = req.user;
 
     if(user) {
@@ -19,4 +21,4 @@ const isUserAnAdminUser = (req, res, next) => {
     }
 }
 
-module.exports = isUserAnAdminUser;
+module.exports = authMiddleware;

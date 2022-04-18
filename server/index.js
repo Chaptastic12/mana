@@ -3,9 +3,10 @@ const mongoose        = require('mongoose');
 const cors            = require('cors');
 const bodyParser      = require('body-parser');
 const passport        = require('passport');
-const passportlocal   = require('passport-local').Strategy;
+const LocalStrategy   = require('passport-local');
 const cookieParser    = require('cookie-parser');
 const session  = require('express-session');
+const User = require('./models/user');
 
 const projectRoutes = require('./routes/projectRoutes');
 const ticketRoutes  = require('./routes/ticketRoutes');
@@ -60,7 +61,10 @@ app.use(cors(corOptions));
 app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(passport.initialize());
 app.use(passport.session());
-require('./utils/passportConfig')(passport);
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+// require('./utils/passportConfig')(passport);
 ///////////
 //
 // END MIDDLEWARE

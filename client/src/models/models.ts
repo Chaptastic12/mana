@@ -37,3 +37,10 @@ export interface User {
     isGuest: boolean;
     isRegUser: boolean;
 }
+
+export interface UserContextInterface {
+    user: { username: string };
+    loginUser: (username: string, password: string) => void;
+    registerUser: (username: string, email: string, password: string) => void;
+    logoutUser: () => void
+}

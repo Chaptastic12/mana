@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
-const bcrypt = require('bcryptjs');
-const passport = require('passport');
 const { isUserAnAdminUser } = require('../middleware/privilegeMiddlware');
 
 router.get('/getUserInformation', ( req, res ) => {
@@ -11,39 +9,48 @@ router.get('/getUserInformation', ( req, res ) => {
 
 });
 
-router.post('/registerUser', (req, res) => {
-    User.findOne({ username: req.body.username }, async (err, foundUser) => {
+router.post('/registerUser', async (req, res) => {
+    User.findOne({ username: req.body.data.username }, async (err, foundUser) => {
         if (err) throw err;
         if (foundUser) res.send('User already exists');
+        let newUser = new User({
+            username: req.body.data.username,
+            email: req.body.data.email,
+            isGuest: false,
+            isRegUser: true,
+            isAdmin: false
+        })
         if (!foundUser) {
-            const hashedPassword = await bcrypt.hash(req.body.passord, 10);
-            const newUser = new User({
-                username: req.body.username,
-                password: hashedPassword,
-                isGuest: false,
-                isRegUser: true,
-                isAdmin: false
-            });
-            await newUser.save();
-            res.send('User has been registered.')
+            User.register(newUser, req.body.data.password, (err, user) => {
+                if (err) throw err;
+                else {
+                   const authenticate = User.authenticate();
+                   authenticate(req.body.data.username, req.body.data.password, (err, result) => {
+                       if (err) throw err;
+                       if ( result === false ){
+                           res.send('Login Failed, please try again.')
+                       } else {
+                           res.send('Welcome, ' + result.username)
+                       }
+                   })
+                }
+            })
+      
         }
     })
 
 })
 
 router.post('/loginUser', (req, res, next) => {
-    passport.authenticate('local', (err, user, info) => {
+    const authenticate = User.authenticate();
+    authenticate(req.body.data.username, req.body.data.password, (err, result) => {
         if (err) throw err;
-        if (!user) res.send('No user exists.');
-        else {
-            req.logIn(user, err => {
-                if(err) throw err;
-                res.send('Successfully Authenticated.');
-                console.log(req.user);
-            });
+        if ( result === false ){
+            res.send('Login Failed, please try again.')
+        } else {
+            res.send('Welcome, ' + result.username)
         }
-    })(req, res, next);
-
+    })
 })
 
 router.post('/logoutUser', (req, res) => {

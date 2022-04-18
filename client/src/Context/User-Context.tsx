@@ -1,7 +1,9 @@
 import React, { createContext, useState } from 'react';
 import Axios, { AxiosResponse } from 'axios';
 
-const UserContext = createContext({});
+import { UserContextInterface } from '../models/models';
+
+const UserContext = createContext<UserContextInterface | null>(null);
 
 export interface Props {
     children: React.ReactNode
@@ -9,33 +11,37 @@ export interface Props {
 
 const UserProvider = (props: Props) =>{
 
-    const [ dashBoardTicketView, setDashBoardTicketView ] = useState<string>('horizontal');
-    const [ user, setUser ] = useState();
+    const [ user, setUser ] = useState({username: ''});
 
-    const loginUser = (username: string, password: string) => {
-        Axios.get('http://localhost:8081/api/auth/loginUser', {
-            params: {
-                username: username,
-                password: password
-            }
-        })
-        .then( (res: AxiosResponse) => {
-            setUser(res.data);
-            return { msg: 'Welcome, ' + res.data.username }
-        })
+    const loginUser = async (username: string, password: string) => {
+        try {
+            const response = await Axios.post('http://localhost:8081/api/auth/loginUser', {
+                data: {
+                    username: username,
+                    password: password
+                },
+                withCredentials: true
+            });
+            console.log(response);
+        } catch (err) {
+            return err;
+        }
     }
 
-    const registerUser = (username: string, email: string, password: string) => {
-        Axios.post('http://localhost:8081/api/auth/registerUser', {
-            params: {
-                username: username,
-                email: email,
-                password: password
-            }
-        })
-        .then( (res: AxiosResponse) => {
-            return { msg: 'User registered successfully' }
-        })
+    const registerUser = async (username: string, email: string, password: string) => {
+        try {
+            const response = await Axios.post('http://localhost:8081/api/auth/registerUser', {
+                data: {
+                    username: username,
+                    email: email,
+                    password: password
+                }
+            })
+            console.log(response.data)
+            return response.data;
+        } catch (err) {
+            return err;
+        }        
     }
 
     const logoutUser = () => {
@@ -47,7 +53,6 @@ const UserProvider = (props: Props) =>{
 
 
     return <UserContext.Provider value={{
-        dashBoardTicketView, setDashBoardTicketView,
         loginUser, registerUser, logoutUser,
         user
     }}>
