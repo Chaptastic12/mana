@@ -4,7 +4,7 @@ const localStrategy = require('passport-local').Strategy;
 
 module.exports = function(passport) {
     passport.use(
-        new localStrategy(( username, passwordField, done ) => {
+        new localStrategy(( username, password, done ) => {
             User.findOne({ username: username }, (err, foundUser) => {
                 if (err) throw err;
                 //No user found
@@ -30,7 +30,10 @@ module.exports = function(passport) {
 
     passport.deserializeUser((id, cb) => {
         User.findOne({_id: id}, (err, foundUser) => {
-            cb(err, foundUser);
+            const userInfo = {
+                username: foundUser.username
+            }
+            cb(err, userInfo);
         })
     })
 }
