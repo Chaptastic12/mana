@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { FaUserCircle } from 'react-icons/fa'
 import { AiOutlineDown } from 'react-icons/ai'
 
@@ -27,9 +28,9 @@ const DropDown = (props: PROPS) => {
         <div className="dropdown-content">
             {props.data.map(x => { 
                 if(x.useButton){
-                    return <button onClick={() => x.onClick()}> {x.name} </button>
+                    return <button key={x.name} onClick={() => x.onClick()}> {x.name} </button>
                 } else {
-                    return <a key={x.name} href={x.link}>{x.name}</a> 
+                    return <Link key={x.name} to={x.link}>{x.name}</Link> 
                 }
             } ) }
         </div>

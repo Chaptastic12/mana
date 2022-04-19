@@ -1,0 +1,36 @@
+.LoginPage {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.LoginPage .LoginPage-Form{
+    padding: 25px;
+    box-shadow: 0 3px 25px rgb(0 0 0 / 0.2);
+    border-radius: 15px;
+}
+
+.LoginPage h1{
+    font-family: 'Work Sans', sans-serif;
+    font-size: 72px;
+    margin-bottom: 0;
+}
+
+.LoginPage .LoginPage-FormButtons{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.LoginPage .LoginPage-FormButtons button{
+    padding: 0 10px;
+    height: 45px;
+}
+
+.LoginPage .LoginPage-ToggleAuth {
+    font-size: 14px;
+}
+.LoginPage .LoginPage-ToggleAuth:hover {
+    cursor: pointer;
+}

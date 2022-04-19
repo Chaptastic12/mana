@@ -1,5 +1,5 @@
 import React, { createContext, useState } from 'react';
-import Axios, { AxiosResponse } from 'axios';
+import Axios from 'axios';
 
 import { UserContextInterface } from '../models/models';
 

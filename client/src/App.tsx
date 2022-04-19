@@ -10,6 +10,7 @@ import HeaderBar from './components/HeaderBar/HeaderBar';
 import TicketDetails from './pages/TicketDetails/TicketDetails';
 import HomePage from './pages/HomePage/HomePage';
 import LoginPage from './pages/Auth/LoginPage';
+import UserProfile from './pages/UserProfile/UserProfile';
 
 export interface Context {
     user: {
@@ -37,6 +38,7 @@ function App() {
                 <Route path='/' element={ <HomePage /> } />
                 <Route path='/dashboard/:projectReference' element={ <ProjectDashBoard /> } />
                 <Route path='/ticket/:projectReference' element={ <TicketDetails /> } />
+                <Route path='/user/profile' element={ <UserProfile /> } />
               </Routes>
             </div>
           </> : <>

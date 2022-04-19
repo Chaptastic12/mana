@@ -15,7 +15,7 @@ const HeaderBar = () => {
     const [ selectedTicket, setSelectedTicket ] = useState('');
     const { logoutUser } = useContext(UserContext) as UserContextInterface;
 
-    const USER_OPTIONS = [ { name: 'Profile', link: '/users/profile', useButton: false, onClick: () => { return } }, { name: 'Settings', link: '/users/settings', useButton: false, onClick: () => { return }  }, { name: 'Logout', link: '/auth/logout', useButton: true, onClick: () => logoutUser() }  ]
+    const USER_OPTIONS = [ { name: 'Profile', link: '/user/profile', useButton: false, onClick: () => { return } }, { name: 'Settings', link: '/users/settings', useButton: false, onClick: () => { return }  }, { name: 'Logout', link: '/auth/logout', useButton: true, onClick: () => logoutUser() }  ]
 
   return (
     <div className='HeaderBar'>

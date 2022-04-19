@@ -11,7 +11,7 @@ export interface Props {
 }
 const InputField = (props: Props) => {
   return (
-    <div>
+    <div className='InputField'>
         <label> { props.label} </label><br/>
         <input type={props.as} 
             placeholder={props.placeholder} 

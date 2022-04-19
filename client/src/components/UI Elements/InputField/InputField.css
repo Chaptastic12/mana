@@ -1,0 +1,20 @@
+.InputField {
+    padding: 12px 25px;
+}
+
+.InputField input {
+    padding: 10px;
+    font-size: 17px;
+    border: none;
+    border-radius: 5px;
+    background: #f1f1f1;
+    height: 30px;
+    text-transform: capitalize;
+}
+
+.InputField label {
+    font-family: 'Work Sans', sans-serif;
+    font-size: 20px;
+    font-weight: bolder;
+    text-transform: capitalize;
+}

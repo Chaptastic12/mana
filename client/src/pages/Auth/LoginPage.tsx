@@ -41,22 +41,24 @@ const LoginPage = () => {
 
   return (
     <div className='LoginPage'>
-        <h1>{ login ? 'Login' : 'Register' }</h1>
-        {error && <ErrorBar errorMsg={error} />}
-        <div className='LoginPage-Form'>
-            <InputField label='Username' as='text' placeholder='Enter your username' value={username} updateValue={(val) => setUsername(val)} />
-            { !login && <InputField label='Email' as='text' placeholder='Enter your email' value={email} updateValue={(val) => setEmail(val)} /> }
-            <InputField label='Password' as='password' placeholder='Enter your password' value={password} updateValue={(val) => setPassword(val)} />
-            <div className='LoginPage-FormButtons'>
-                <button onClick={() => handleLoginOrRegister() }>
-                    { login ? 'Login' : 'Register' }
-                </button>
+        <div>
+            <h1>{ login ? 'Login' : 'Register' }</h1>
+            {error && <ErrorBar errorMsg={error} />}
+            <div className='LoginPage-Form'>
+                <InputField label='Username' as='text' placeholder='Enter your username' value={username} updateValue={(val) => setUsername(val)} />
+                { !login && <InputField label='Email' as='text' placeholder='Enter your email' value={email} updateValue={(val) => setEmail(val)} /> }
+                <InputField label='Password' as='password' placeholder='Enter your password' value={password} updateValue={(val) => setPassword(val)} />
+                <div className='LoginPage-FormButtons'>
+                    <button onClick={() => handleLoginOrRegister() }>
+                        { login ? 'Login' : 'Register' }
+                    </button>
+                </div>
             </div>
-        </div>
-        <div className='LoginPage-ToggleAuth'>
-            <p onClick={() => setLogin(prevState => !prevState)}> 
-                { login ? 'New user? Click here to register!' : 'Already a user? Click here to login!'} 
-            </p>
+            <div className='LoginPage-ToggleAuth'>
+                <p onClick={() => setLogin(prevState => !prevState)}> 
+                    { login ? 'New user? Click here to register!' : 'Already a user? Click here to login!'} 
+                </p>
+            </div>
         </div>
     </div>
   )
