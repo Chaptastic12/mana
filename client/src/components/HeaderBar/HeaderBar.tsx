@@ -1,18 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 
 import { ALLPROJECTS, TICKETS } from '../../DummyData';
+import { UserContext } from '../../Context/User-Context';
 
 import DataList from '../UI Elements/DataList/DataList';
 import DropDown from '../UI Elements/DropDown/DropDown';
 
 import './HeaderBar.css';
+import { UserContextInterface } from '../../models/models';
 
 const HeaderBar = () => {
 
     const [ selectedProject, setSelectedProejct ] = useState('');
     const [ selectedTicket, setSelectedTicket ] = useState('');
+    const { logoutUser } = useContext(UserContext) as UserContextInterface;
 
-    const USER_OPTIONS = [ { name: 'Profile', link: '/users/profile' }, { name: 'Settings', link: '/users/settings' }, { name: 'Logout', link: '/auth/logout' }  ]
+    const USER_OPTIONS = [ { name: 'Profile', link: '/users/profile', useButton: false, onClick: () => { return } }, { name: 'Settings', link: '/users/settings', useButton: false, onClick: () => { return }  }, { name: 'Logout', link: '/auth/logout', useButton: true, onClick: () => logoutUser() }  ]
 
   return (
     <div className='HeaderBar'>

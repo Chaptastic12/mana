@@ -12,6 +12,8 @@ export interface PROPS {
 export interface DATA {
     name: string;
     link: string;
+    useButton: boolean;
+    onClick: () => void;
 }
 
 const DropDown = (props: PROPS) => {
@@ -23,7 +25,13 @@ const DropDown = (props: PROPS) => {
             <i className="fa fa-caret-down"></i>
         </button>
         <div className="dropdown-content">
-            {props.data.map(x => { return <a key={x.name} href={x.link}>{x.name}</a> } ) }
+            {props.data.map(x => { 
+                if(x.useButton){
+                    return <button onClick={() => x.onClick()}> {x.name} </button>
+                } else {
+                    return <a key={x.name} href={x.link}>{x.name}</a> 
+                }
+            } ) }
         </div>
     </div>
   )

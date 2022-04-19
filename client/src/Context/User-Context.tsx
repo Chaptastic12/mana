@@ -22,7 +22,10 @@ const UserProvider = (props: Props) =>{
                 },
                 withCredentials: true
             });
-            console.log(response);
+            if(response.data.success){
+                setUser({ username: response.data.userInfo.username });
+            } 
+            return { msg: response.data.msg, success: response.data.success };
         } catch (err) {
             return err;
         }
@@ -37,18 +40,25 @@ const UserProvider = (props: Props) =>{
                     password: password
                 }
             })
-            console.log(response.data)
-            return response.data;
+            if(response.data.success){
+                setUser({ username: response.data.userInfo.username });
+            } 
+            return { msg: response.data.msg, success: response.data.success };
         } catch (err) {
             return err;
         }        
     }
 
-    const logoutUser = () => {
-        Axios.get('http://localhost:8081/api/auth/logoutUser')
-        .then( (res: AxiosResponse) => {
-            return { msg: 'Successfully logged out' }
-        })
+    const logoutUser = async () => {
+        try {
+            const response = await Axios.post('http://localhost:8081/api/auth/logoutUser');
+            if(response.data.success){
+                setUser({ username: '' });
+            } 
+            return { msg: response.data.msg, success: response.data.success };
+        } catch (err) {
+            return err;
+        }      
     }
 
 

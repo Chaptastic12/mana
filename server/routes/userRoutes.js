@@ -28,9 +28,15 @@ router.post('/registerUser', async (req, res) => {
                    authenticate(req.body.data.username, req.body.data.password, (err, result) => {
                        if (err) throw err;
                        if ( result === false ){
-                           res.send('Login Failed, please try again.')
+                           res.send({
+                            msg: 'Login Failed, please try again.',
+                            success: false
+                         })
                        } else {
-                           res.send('Welcome, ' + result.username)
+                           res.send({
+                               msg: 'Welcome, ' + result.username,
+                               success: true
+                            })
                        }
                    })
                 }
@@ -46,16 +52,31 @@ router.post('/loginUser', (req, res, next) => {
     authenticate(req.body.data.username, req.body.data.password, (err, result) => {
         if (err) throw err;
         if ( result === false ){
-            res.send('Login Failed, please try again.')
+            res.send({
+                msg: 'Login Failed, please try again.',
+                success: false
+            });
         } else {
-            res.send('Welcome, ' + result.username)
+            User.findOne({username: req.body.data.username}, (err, foundUser) =>{
+                if (err) throw err;
+                res.send({
+                    msg: 'Welcome, ' + result.username,
+                    success: true,
+                    userInfo: {
+                        username: foundUser.username
+                    }
+                });
+            });
         }
-    })
+    });
 })
 
 router.post('/logoutUser', (req, res) => {
     req.logout();
-    res.send('User logged out.');
+    res.send({
+        msg: 'Logout successfull',
+        success: true
+    });
 })
 
 router.post('/deleteUser', isUserAnAdminUser, async (req, res) => {
