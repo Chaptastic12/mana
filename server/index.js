@@ -28,6 +28,12 @@ connect
 
 const app = express();
 
+///////////
+//
+// MIDDLEWARE
+//
+///////////
+
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(session({
@@ -41,11 +47,6 @@ app.use(passport.session());
 
 require('./utils/passportConfig');
 
-///////////
-//
-// MIDDLEWARE
-//
-///////////
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json()); //support json encoded bodies
 
@@ -72,7 +73,7 @@ app.use(cors(corOptions));
 
 ///////////
 //
-// routes
+// ROUTES
 //
 ///////////
 app.use('/api/projects', projectRoutes);

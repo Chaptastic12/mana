@@ -4,13 +4,11 @@ import Axios from 'axios';
 const UserProfile = () => {
 
     useEffect( () => {
-
         const fetchFromServer = async () =>{
             try {
-                const response = await fetch('http://localhost:8081/api/auth/getUserInformation',
-                    {
-                        method: 'GET',
-                        credentials: 'include',
+                const response = await Axios.get('http://localhost:8081/api/auth/getUserInformation', 
+                    { 
+                        withCredentials: true, 
                         headers: {
                             'Content-Type' : 'application/json',
                             'Accept' : 'application/json',
@@ -18,14 +16,12 @@ const UserProfile = () => {
                         }
                     }
                 );
-                console.log(response);
-            } catch (err){
-                console.log(err);
-            }
+                console.log(response)
+            } catch (err) {
+                return err;
+            } 
         }
-
         fetchFromServer();
-
     })
   return (
     <div>UserProfile</div>

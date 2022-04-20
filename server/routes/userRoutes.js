@@ -7,10 +7,9 @@ const { isUserAnAdminUser } = require('../middleware/privilegeMiddlware');
 
 router.get('/getUserInformation', ( req, res ) => {
     //req.user stores our user information, so just send this back
-    if(req.isAuthenticated()){
-        console.log(true)
-    } else  { console.log(false)}
-    console.log(req.session.passport)
+    if(req.isAuthenticated()) console.log(true)
+    else                      console.log(false)
+
     res.send(req.user)
 
 });
@@ -25,14 +24,13 @@ router.post('/registerUser', async (req, res) => {
       if (err) throw err;
       if (doc) res.send("User Already Exists");
       if (!doc) {
-          console.log(req.body.data.username)
           let user = new User({
             username: req.body.data.username,
             email: req.body.data.email,
             password: bcrypt.hashSync(req.body.data.password, 10)
           });
           user.save().then(user => console.log(user));
-          res.send({ succes: true, msg: 'User successfully logged in', userInfo: { username: user.username } });
+          res.send({ succes: true, msg: 'User successfully logged in', userInfo: { username: user.username, isAdmin: user.isAdmin, isRegUser: user.isRegUser, isGuest: user.isGuest } });
       }
     })
   });
@@ -42,7 +40,10 @@ router.post("/loginUser", passport.authenticate("local"), (req, res) => {
         msg: 'Welcome, ' + req.user.username,
         success: true,
         userInfo: {
-            username: req.user.username
+            username: req.user.username,
+            isAdmin: req.user.isAdmin,
+            isRegUser: req.user.isRegUser,
+            isGuest: req.user.isGuest
         }
     });  
 });

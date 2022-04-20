@@ -11,7 +11,7 @@ export interface Props {
 
 const UserProvider = (props: Props) =>{
 
-    const [ user, setUser ] = useState({username: ''});
+    const [ user, setUser ] = useState({ username: '', isAdmin: false, isRegUser: false, isGuest: false });
 
     const loginUser = async (username: string, password: string) => {
         try {
@@ -31,7 +31,7 @@ const UserProvider = (props: Props) =>{
 
             })
             if(response.data.success){
-                setUser({ username: response.data.userInfo.username });
+                setUser({ username: response.data.userInfo.username, isAdmin: response.data.userInfo.isAdmin, isRegUser: response.data.userInfo.isRegUser, isGuest: response.data.userInfo.isGuest });
             } 
             return { msg: response.data.msg, success: response.data.success };
         } catch (err) {
@@ -50,7 +50,7 @@ const UserProvider = (props: Props) =>{
             })
             console.log(response)
             if(response.data.success){
-                setUser({ username: response.data.userInfo.username });
+                setUser({ username: response.data.userInfo.username, isAdmin: response.data.userInfo.isAdmin, isRegUser: response.data.userInfo.isRegUser, isGuest: response.data.userInfo.isGuest });
             } 
             return { msg: response.data.msg, success: response.data.success };
         } catch (err) {
@@ -62,7 +62,7 @@ const UserProvider = (props: Props) =>{
         try {
             const response = await Axios.post('http://localhost:8081/api/auth/logoutUser');
             if(response.data.success){
-                setUser({ username: '' });
+                setUser({ username: '', isAdmin: false, isRegUser: false, isGuest: false });
             } 
             return { msg: response.data.msg, success: response.data.success };
         } catch (err) {
