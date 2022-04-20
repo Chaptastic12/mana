@@ -7,7 +7,17 @@ const UserProfile = () => {
 
         const fetchFromServer = async () =>{
             try {
-                const response = await Axios.get('http://localhost:8081/api/auth/getUserInformation', { withCredentials: true });
+                const response = await fetch('http://localhost:8081/api/auth/getUserInformation',
+                    {
+                        method: 'GET',
+                        credentials: 'include',
+                        headers: {
+                            'Content-Type' : 'application/json',
+                            'Accept' : 'application/json',
+                            'Cache' : 'no-cache'
+                        }
+                    }
+                );
                 console.log(response);
             } catch (err){
                 console.log(err);

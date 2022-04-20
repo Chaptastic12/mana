@@ -15,13 +15,21 @@ const UserProvider = (props: Props) =>{
 
     const loginUser = async (username: string, password: string) => {
         try {
-            const response = await Axios.post('http://localhost:8081/api/auth/loginUser', {
-                data: {
-                    username: username,
-                    password: password
+            const data = {
+                username,
+                password
+            }
+            const response = await Axios({
+                method: 'POST',
+                url: 'http://localhost:8081/api/auth/loginUser',
+                headers: {
+                    'Content-Type' : 'application/json',
+                    credentials: 'include'
                 },
-                withCredentials: true
-            });
+                withCredentials: true,
+                data: JSON.stringify(data)
+
+            })
             if(response.data.success){
                 setUser({ username: response.data.userInfo.username });
             } 
@@ -40,6 +48,7 @@ const UserProvider = (props: Props) =>{
                     password: password
                 }
             })
+            console.log(response)
             if(response.data.success){
                 setUser({ username: response.data.userInfo.username });
             } 

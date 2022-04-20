@@ -3,13 +3,11 @@ const mongoose        = require('mongoose');
 const cors            = require('cors');
 const bodyParser      = require('body-parser');
 const passport        = require('passport');
-const LocalStrategy   = require('passport-local').Strategy;
 const cookieParser    = require('cookie-parser');
-const User            = require('./models/user');
-
-const projectRoutes = require('./routes/projectRoutes');
-const ticketRoutes  = require('./routes/ticketRoutes');
-const userRoutes    = require('./routes/userRoutes');
+const session         = require('express-session');
+const projectRoutes   = require('./routes/projectRoutes');
+const ticketRoutes    = require('./routes/ticketRoutes');
+const userRoutes      = require('./routes/userRoutes');
 
 //Checkif production or not
 if(process.env.NODE_ENV !== 'production'){
@@ -26,18 +24,30 @@ const connect = mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopolog
 
 connect
     .then( db => { console.log('Connected to MANA server') })
-    .catch( err => { console.log('Error attempting to reach server' + err )})
+    .catch( err => { console.log('Error attempting to reach server' + err )})  
 
 const app = express();
+
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized:true,
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+require('./utils/passportConfig');
 
 ///////////
 //
 // MIDDLEWARE
 //
 ///////////
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json()); //support json encoded bodies
-app.use(cookieParser(process.env.SESSION_SECRET));
 
 //Add our clientside URLs to our whitelist array
 const whitelistedDomains = process.env.WHITELISTED_DOMAINS ? process.env.WHITELISTED_DOMAINS.split(',') : [];
@@ -54,29 +64,11 @@ const corOptions = {
 }
 app.use(cors(corOptions));
 
-//Passport Configuration
-app.use(require("express-session")({
-	secret: process.env.SESSION_SECRET,
-	resave: false,
-	saveUninitialized: false
-}));
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
-
-app.use((req, res, next) =>{
-	res.locals.currentUser = req.user;
-	next();
-})
-
-// require('./utils/passportConfig')(passport);
 ///////////
 //
 // END MIDDLEWARE
 //
-///////////w
+///////////
 
 ///////////
 //
