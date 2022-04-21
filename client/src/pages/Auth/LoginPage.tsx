@@ -35,7 +35,7 @@ const LoginPage = () => {
             response = await registerUser(username, email, password);
         }
         if(!response.success){
-            setError(response.msg);
+            setError(response.message);
         }
     }
 

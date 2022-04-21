@@ -30,22 +30,44 @@ router.post('/registerUser', async (req, res) => {
             password: bcrypt.hashSync(req.body.data.password, 10)
           });
           user.save().then(user => console.log(user));
-          res.send({ succes: true, msg: 'User successfully logged in', userInfo: { username: user.username, isAdmin: user.isAdmin, isRegUser: user.isRegUser, isGuest: user.isGuest } });
+          res.send({ success: true, msg: 'User successfully logged in', userInfo: { username: user.username, isAdmin: user.isAdmin, isRegUser: user.isRegUser, isGuest: user.isGuest } });
       }
     })
   });
 
-router.post("/loginUser", passport.authenticate("local"), (req, res) => {
-    res.send({
-        msg: 'Welcome, ' + req.user.username,
-        success: true,
-        userInfo: {
-            username: req.user.username,
-            isAdmin: req.user.isAdmin,
-            isRegUser: req.user.isRegUser,
-            isGuest: req.user.isGuest
+router.post("/loginUser", (req, res, next) => {
+    passport.authenticate("local", (err, user, failInfo) => {
+        if (err) {
+            res.status(500)
+            res.send( { success: false, msg: 'Error attempting to log you in. '} );
+            return;
         }
-    });  
+        if (!user){
+            // res.status(401);
+            res.send( { success: false, msg: failInfo } );
+            return;
+        }
+
+        req.login(user, (err) => {
+            if (err) {
+                res.status(500);
+                res.send( { success: false, msg: 'Error logging user in.' } );
+                return;
+            }
+
+            res.status(200);
+            res.send({
+                msg: 'Welcome, ' + req.user.username,
+                success: true,
+                userInfo: {
+                    username: req.user.username,
+                    isAdmin: req.user.isAdmin,
+                    isRegUser: req.user.isRegUser,
+                    isGuest: req.user.isGuest
+                }
+            }); 
+        })
+    })(req, res, next);
 });
 
 // router.post('/loginUser', (req, res, next) => {

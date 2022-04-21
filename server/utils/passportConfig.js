@@ -8,10 +8,11 @@ passport.use(
         User.findOne({ username: username }, (err, foundUser) => {
             if (err) return done(err);
             //No user found
-            if (!foundUser) return done(null, false, { message: 'Incorrect Username provided' });
+            if (!foundUser) return done(null, false, { success: false, message: 'Incorrect Username provided' });
+            console.log(foundUser)
             //Passwords don't match
             if (!compareSync(password, foundUser.password)) {
-                return done(null, false, { message: 'Incorrect Password' })
+                return done(null, false, { success: false, message: 'Incorrect Password' })
             }
             //User found
             return done(null, foundUser);

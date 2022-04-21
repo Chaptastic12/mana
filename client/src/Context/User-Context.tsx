@@ -11,20 +11,19 @@ export interface Props {
 
 const UserProvider = (props: Props) =>{
 
-    const [ user, setUser ] = useState({ username: '', isAdmin: false, isRegUser: false, isGuest: false });
+    const [ user, setUser ] = useState({ username: 'LETMEIN', isAdmin: false, isRegUser: false, isGuest: false });
 
     const loginUser = async (username: string, password: string) => {
-        try {
-            const data = {
-                username,
-                password
-            }
+        const data = {
+            username,
+            password
+        }
+        try { 
             const response = await Axios({
                 method: 'POST',
                 url: 'http://localhost:8081/api/auth/loginUser',
                 headers: {
                     'Content-Type' : 'application/json',
-                    credentials: 'include'
                 },
                 withCredentials: true,
                 data: JSON.stringify(data)
@@ -33,7 +32,7 @@ const UserProvider = (props: Props) =>{
             if(response.data.success){
                 setUser({ username: response.data.userInfo.username, isAdmin: response.data.userInfo.isAdmin, isRegUser: response.data.userInfo.isRegUser, isGuest: response.data.userInfo.isGuest });
             } 
-            return { msg: response.data.msg, success: response.data.success };
+            return response.data.msg
         } catch (err) {
             return err;
         }
@@ -41,12 +40,19 @@ const UserProvider = (props: Props) =>{
 
     const registerUser = async (username: string, email: string, password: string) => {
         try {
-            const response = await Axios.post('http://localhost:8081/api/auth/registerUser', {
-                data: {
-                    username: username,
-                    email: email,
-                    password: password
-                }
+            const data = {
+                username: username,
+                email: email,
+                password: password
+            }
+            const response = await Axios({
+                method: 'POST',
+                url: 'http://localhost:8081/api/auth/registerUser',
+                withCredentials: true,
+                headers: {
+                    'Content-Type' : 'application/json',
+                },
+                data: JSON.stringify(data)
             })
             console.log(response)
             if(response.data.success){
@@ -60,16 +66,21 @@ const UserProvider = (props: Props) =>{
 
     const logoutUser = async () => {
         try {
-            const response = await Axios.post('http://localhost:8081/api/auth/logoutUser');
+            const response = await Axios({
+                method: 'POST',
+                url: 'http://localhost:8081/api/auth/logoutUser',  
+                withCredentials: true 
+            });
+
             if(response.data.success){
                 setUser({ username: '', isAdmin: false, isRegUser: false, isGuest: false });
             } 
+
             return { msg: response.data.msg, success: response.data.success };
         } catch (err) {
             return err;
         }      
     }
-
 
     return <UserContext.Provider value={{
         loginUser, registerUser, logoutUser,
