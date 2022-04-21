@@ -60,7 +60,7 @@ const ProjectTicketProvider = (props: Props) =>{
     const addTicketToServer = async(ticket: Ticket) => {
         try {
             const response = await Axios({
-                url: 'http://localhost:8081/api/projects/addNewTicket',
+                url: 'http://localhost:8081/api/tickets/addNewTicket',
                 method: 'POST',
                 withCredentials: true,
                 headers: {

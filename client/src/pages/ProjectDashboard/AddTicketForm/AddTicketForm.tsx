@@ -33,8 +33,8 @@ const AddTicketForm = (props: Props) => {
         getUsers();
     },[])
 
-    const ALLPROJECTS: Project[] = allProjects;
 
+    const ALLPROJECTS: Project[] = allProjects;
 
     let formInputs = Object.entries(formData).map(([key, value]) => {
         if(key === 'id' || key === 'comments'){ return ''}
@@ -63,7 +63,7 @@ const AddTicketForm = (props: Props) => {
             element = <div>
                 <input list="ticketOwner" name="ticketOwners" id="ticketOwners" placeholder='Ticket Owner' value={tempOwner} onChange={(e) => { setTempOwner(e.target.value); adjustUser('ticketOwner') } } />
                 <datalist id="ticketOwner">
-                    {allUsers.map(x => { return <option key={x.username} value={x.username} /> })}
+                    {allUsers.map(x => {return <option key={x.username} value={x.username} /> })}
                 </datalist>
             </div>  
         } else if(key === 'ticketCreator'){
@@ -92,7 +92,7 @@ const AddTicketForm = (props: Props) => {
         let foundUser;
 
         if(where === 'ticketOwner') {
-            foundUser = allUsers.filter( x => x.username === tempOwner);
+            foundUser = allUsers.filter( x =>  x.username === tempOwner );
             if(foundUser.length === 0){ return }
             copyState.ticketOwner = foundUser[0];
         } else {
@@ -114,11 +114,12 @@ const AddTicketForm = (props: Props) => {
             const ticketNumber = chosenProject[0].projectReference + '-' + ticketID;
             copyState.id = ticketID;
             copyState.projectReference = ticketNumber;
+            copyState.ticketOwner.username = tempOwner;
+            copyState.ticketCreator.username = tempCreator;
 
 
-            chosenProject[0]?.tickets?.push({ ...copyState,  comments: [] });
-
-
+            addTicketToServer({...copyState});
+            // chosenProject[0]?.tickets?.push({ ...copyState,  comments: [] });
             props.closeModal(false);
         }
     }
