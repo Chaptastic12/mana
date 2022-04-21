@@ -13,11 +13,11 @@ authMiddleware.isUserAnAdminUser = (req, res, next) => {
                 next();
             }
             else {
-                res.send('You do not have the required priviliges to perform this action.');
+                res.send({ success: false, msg: 'You do not have the required priviliges to perform this action.' });
             }
         })
     } else {
-        res.send('You must first login to perform this action.');
+        res.send({ success: false, msg: 'You must first login to perform this action.' });
     }
 }
 

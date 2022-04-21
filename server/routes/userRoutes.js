@@ -15,19 +15,22 @@ router.get('/getUserInformation', ( req, res ) => {
 });
 
 router.post('/registerUser', async (req, res) => {
-    const { username, password, email } = req.body.data;
+    console.log(req.body)
+    const { username, password, email } = req.body;
+
     if (!username || !password || !email ) {
       res.send("Improper Values");
       return;
     }
-    User.findOne({ username }, async (err, doc) => {
+
+    User.findOne({ username }, async (err, foundUser) => {
       if (err) throw err;
-      if (doc) res.send("User Already Exists");
-      if (!doc) {
+      if (foundUser) res.send({success: false, msg: "User Already Exists" });
+      if (!foundUser) {
           let user = new User({
-            username: req.body.data.username,
-            email: req.body.data.email,
-            password: bcrypt.hashSync(req.body.data.password, 10)
+            username: username,
+            email: email,
+            password: bcrypt.hashSync(password, 10)
           });
           user.save().then(user => console.log(user));
           res.send({ success: true, msg: 'User successfully logged in', userInfo: { username: user.username, isAdmin: user.isAdmin, isRegUser: user.isRegUser, isGuest: user.isGuest } });

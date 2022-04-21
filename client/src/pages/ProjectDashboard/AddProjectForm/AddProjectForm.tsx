@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 
 import { IoIosCloseCircleOutline } from 'react-icons/io'
 import ErrorBar from '../../../components/ErrorBar/ErrorBar'
 import { ALLPROJECTS } from '../../../DummyData';
 import { v4 as uuid } from 'uuid';
 
+import { ProjectTicketContext } from '../../../Context/ProjectTicket-Context'
+
 import './AddProjectForm.css';
+import { ProjectContextInterface } from '../../../models/models';
 
 export interface Props {
     closeModal: React.Dispatch<React.SetStateAction<boolean>>;
@@ -14,12 +17,14 @@ export interface Props {
 
 const AddProjectForm = (props: Props) => {
 
+    const { addProjectToServer } = useContext(ProjectTicketContext) as ProjectContextInterface;
+
     let date = new Date();
     let formatdate = date.toLocaleDateString();
     const [ error, setError ] = useState<string>('');
     const [ projectData, setProjectData ] = useState({ id: uuid().toString(), projectReference: '', projectName: '', tickets: [], createdDate: formatdate });
 
-    const fieldsAreValidated = () => {
+    const fieldsAreValidated = async () => {
         //Verify projectName and projectReference do not already exist;
         //Verify that they are not empty
 
@@ -33,6 +38,13 @@ const AddProjectForm = (props: Props) => {
         if(projectData.projectReference.length < 3 || projectData.projectName.length < 5 ){
             setError('Please enter in a Reference that is 3 characters or longer, or a Name more than 5 characters.');
             return;
+         }
+
+         let response: any = await addProjectToServer({...projectData, tickets: []});
+
+         if(!response.success){
+             setError(response.msg);
+             return;
          }
     
          ALLPROJECTS.push({...projectData, tickets: [] });

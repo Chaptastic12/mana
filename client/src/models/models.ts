@@ -5,7 +5,7 @@ export interface AllProjects {
 export interface Project {
     id: string;
     tickets?: Ticket[];
-    projectShortName: string;
+    projectReference: string;
     projectName: string;
     createdDate: string;
 }
@@ -43,4 +43,7 @@ export interface UserContextInterface {
     loginUser: (username: string, password: string) => void;
     registerUser: (username: string, email: string, password: string) => void;
     logoutUser: () => void
+}
+export interface ProjectContextInterface {
+    addProjectToServer: (project: Project) => void;
 }
