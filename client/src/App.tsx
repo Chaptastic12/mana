@@ -12,6 +12,7 @@ import HomePage from './pages/HomePage/HomePage';
 import LoginPage from './pages/Auth/LoginPage';
 import UserProfile from './pages/UserProfile/UserProfile';
 import ProjectTicketProvider from './Context/ProjectTicket-Context';
+import { UserContextInterface } from './models/models'
 
 export interface Context {
     user: {
@@ -24,7 +25,7 @@ export interface Context {
 
 function App() {
 
-  const { user } = React.useContext(UserContext) as Context;
+  const { user } = React.useContext(UserContext) as UserContextInterface;
 
   return (
     <BrowserRouter>

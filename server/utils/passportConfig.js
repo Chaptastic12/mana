@@ -9,7 +9,6 @@ passport.use(
             if (err) return done(err);
             //No user found
             if (!foundUser) return done(null, false, { success: false, message: 'Incorrect Username provided' });
-            console.log(foundUser)
             //Passwords don't match
             if (!compareSync(password, foundUser.password)) {
                 return done(null, false, { success: false, message: 'Incorrect Password' })
@@ -27,6 +26,6 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser((id, done) => {
     User.findById(id, (err, foundUser) => {
         if (err) throw err;
-        done(null, { name: foundUser.username, id, isGuest: foundUser.isGuest, isAdmin: foundUser.isAdmin, isRegUser: foundUser.isRegUser })
+        done(null, { username: foundUser.username, id, isGuest: foundUser.isGuest, isAdmin: foundUser.isAdmin, isRegUser: foundUser.isRegUser })
     })
 }) 

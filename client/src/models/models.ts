@@ -42,8 +42,11 @@ export interface UserContextInterface {
     user: { username: string };
     loginUser: (username: string, password: string) => void;
     registerUser: (username: string, email: string, password: string) => void;
-    logoutUser: () => void
+    logoutUser: () => void;
+    getAllUserNames: () => any;
 }
 export interface ProjectContextInterface {
-    addProjectToServer: (project: Project) => void;
+    addProjectToServer: (project: Project) => void; 
+    addTicketToServer: (ticket: Ticket) => void; 
+    allProjects: any;
 }

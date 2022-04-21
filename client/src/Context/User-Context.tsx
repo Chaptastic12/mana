@@ -11,7 +11,7 @@ export interface Props {
 
 const UserProvider = (props: Props) =>{
 
-    const [ user, setUser ] = useState({ username: 'LETMEIN', isAdmin: false, isRegUser: false, isGuest: false });
+    const [ user, setUser ] = useState({ username: '', isAdmin: false, isRegUser: false, isGuest: false });
 
     const loginUser = async (username: string, password: string) => {
         const data = {
@@ -32,6 +32,7 @@ const UserProvider = (props: Props) =>{
             if(response.data.success){
                 setUser({ username: response.data.userInfo.username, isAdmin: response.data.userInfo.isAdmin, isRegUser: response.data.userInfo.isRegUser, isGuest: response.data.userInfo.isGuest });
             } 
+            console.log(response)
             return response.data.msg
         } catch (err) {
             return err;
@@ -82,9 +83,25 @@ const UserProvider = (props: Props) =>{
         }      
     }
 
+    const getAllUserNames = async () => {
+        try {
+            const response = await Axios({
+                method: 'GET',
+                url: 'http://localhost:8081/api/auth/getAllUsers',  
+                withCredentials: true 
+            });
+
+            return response.data;
+
+        } catch (err) {
+            return err;
+        }  
+    }
+
     return <UserContext.Provider value={{
         loginUser, registerUser, logoutUser,
-        user
+        user, getAllUserNames
+
     }}>
         { props.children }
     </UserContext.Provider>

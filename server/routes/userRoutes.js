@@ -3,7 +3,7 @@ const router = express.Router();
 const User = require('../models/user');
 const passport = require('passport')
 const bcrypt = require('bcryptjs')
-const { isUserAnAdminUser } = require('../middleware/privilegeMiddlware');
+const { isUserAnAdminUser, isUserRegularUser } = require('../middleware/privilegeMiddlware');
 
 router.get('/getUserInformation', ( req, res ) => {
     //req.user stores our user information, so just send this back
@@ -15,7 +15,6 @@ router.get('/getUserInformation', ( req, res ) => {
 });
 
 router.post('/registerUser', async (req, res) => {
-    console.log(req.body)
     const { username, password, email } = req.body;
 
     if (!username || !password || !email ) {
@@ -73,30 +72,6 @@ router.post("/loginUser", (req, res, next) => {
     })(req, res, next);
 });
 
-// router.post('/loginUser', (req, res, next) => {
-//     const authenticate = User.authenticate();
-//     authenticate(req.body.data.username, req.body.data.password, (err, result) => {
-//         if (err) throw err;
-//         if ( result === false ){
-//             res.send({
-//                 msg: 'Login Failed, please try again.',
-//                 success: false
-//             });
-//         } else {
-//             User.findOne({username: req.body.data.username}, (err, foundUser) =>{
-//                 if (err) throw err;
-//                 res.send({
-//                     msg: 'Welcome, ' + result.username,
-//                     success: true,
-//                     userInfo: {
-//                         username: foundUser.username
-//                     }
-//                 });
-//             });
-//         }
-//     });
-// })
-
 router.post('/logoutUser', (req, res) => {
     req.logOut();
     res.send({
@@ -112,6 +87,14 @@ router.post('/deleteUser', isUserAnAdminUser, async (req, res) => {
         if (err) throw err;
     });
     res.send('User has been deleted.');
+})
+
+router.get('/getAllUsers', isUserRegularUser, (req, res) => {
+    console.log('getting all users')
+    User.find({}).select({'username': 1}).exec((err, foundUsers) => {
+        res.send(foundUsers)
+    })
+
 })
 
 module.exports = router;

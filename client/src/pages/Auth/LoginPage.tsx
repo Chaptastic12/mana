@@ -34,7 +34,6 @@ const LoginPage = () => {
         }  else {
             response = await registerUser(username, email, password);
         }
-        console.log(response.success)
         if(!response.success){
             setError(response.msg);
         }

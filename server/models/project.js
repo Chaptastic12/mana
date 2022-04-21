@@ -6,7 +6,7 @@ const Project = new Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Ticket'
     }],
-    projectShortName: String,
+    projectReference: String,
     projectName: String,
     createdDate: String
 });

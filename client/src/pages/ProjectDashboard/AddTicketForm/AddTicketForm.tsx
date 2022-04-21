@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 
 import { IoIosCloseCircleOutline } from 'react-icons/io'
 import ErrorBar from '../../../components/ErrorBar/ErrorBar'
-import { ALLPROJECTS, USERS, DUMMY_TICKET } from '../../../DummyData'
-import { Ticket } from '../../../models/models'
+import { DUMMY_TICKET } from '../../../DummyData'
+import { ProjectTicketContext } from '../../../Context/ProjectTicket-Context'
+import { UserContext } from '../../../Context/User-Context'
+import { ProjectContextInterface, Project, Ticket, UserContextInterface, User } from '../../../models/models'
 
 import './AddTicketForm.css'
 
@@ -17,6 +19,22 @@ const AddTicketForm = (props: Props) => {
     const [ tempCreator, setTempCreator ] = useState('')
     const [ tempOwner, setTempOwner ] = useState('')
     const [ error, setError ] = useState('');
+    const [ allUsers, setAllUsers ] = useState<User[]>([]);
+
+    const { addTicketToServer, allProjects } = useContext(ProjectTicketContext) as ProjectContextInterface;
+    const { getAllUserNames } = useContext(UserContext) as UserContextInterface;
+
+    useEffect(() =>{
+        const getUsers = async () => {
+            const response = await getAllUserNames();
+            setAllUsers(response)
+        }
+    
+        getUsers();
+    },[])
+
+    const ALLPROJECTS: Project[] = allProjects;
+
 
     let formInputs = Object.entries(formData).map(([key, value]) => {
         if(key === 'id' || key === 'comments'){ return ''}
@@ -45,14 +63,14 @@ const AddTicketForm = (props: Props) => {
             element = <div>
                 <input list="ticketOwner" name="ticketOwners" id="ticketOwners" placeholder='Ticket Owner' value={tempOwner} onChange={(e) => { setTempOwner(e.target.value); adjustUser('ticketOwner') } } />
                 <datalist id="ticketOwner">
-                    {USERS.map(x => { return <option key={x.username} value={x.username} /> })}
+                    {allUsers.map(x => { return <option key={x.username} value={x.username} /> })}
                 </datalist>
             </div>  
         } else if(key === 'ticketCreator'){
             element = <div>
                 <input list="ticketCreator" name="ticketCreators" id="ticketCreators" placeholder='Ticket Creator' value={tempCreator} onChange={(e) => { setTempCreator(e.target.value); adjustUser('ticketCreator') } } />
                 <datalist id="ticketCreator">
-                    {USERS.map(x => { return <option key={x.username} value={x.username} /> })}
+                    {allUsers.map(x => { return <option key={x.username} value={x.username} /> })}
                 </datalist>
             </div>  
         } else if(key === 'title'){
@@ -74,11 +92,11 @@ const AddTicketForm = (props: Props) => {
         let foundUser;
 
         if(where === 'ticketOwner') {
-            foundUser = USERS.filter( x => x.username === tempOwner);
+            foundUser = allUsers.filter( x => x.username === tempOwner);
             if(foundUser.length === 0){ return }
             copyState.ticketOwner = foundUser[0];
         } else {
-            foundUser = USERS.filter( x => x.username === tempCreator);
+            foundUser = allUsers.filter( x => x.username === tempCreator);
             if(foundUser.length === 0){ return }
             copyState.ticketCreator = foundUser[0];
         }
@@ -92,11 +110,15 @@ const AddTicketForm = (props: Props) => {
         } else {
             let copyState = { ...formData }
             let chosenProject = ALLPROJECTS.filter(x => x.projectReference === formData.projectReference);
-            const ticketID = (chosenProject[0].tickets.length + 1).toString();
+            const ticketID = (chosenProject[0]?.tickets?.length? + 1 : 1).toString();
             const ticketNumber = chosenProject[0].projectReference + '-' + ticketID;
             copyState.id = ticketID;
             copyState.projectReference = ticketNumber;
-            chosenProject[0].tickets.push({ ...copyState,  comments: [] });
+
+
+            chosenProject[0]?.tickets?.push({ ...copyState,  comments: [] });
+
+
             props.closeModal(false);
         }
     }

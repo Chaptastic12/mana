@@ -1,9 +1,9 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 
 import { IoIosCloseCircleOutline } from 'react-icons/io'
 import ErrorBar from '../../../components/ErrorBar/ErrorBar'
-import { ALLPROJECTS } from '../../../DummyData';
 import { v4 as uuid } from 'uuid';
+import { Project } from '../../../models/models';
 
 import { ProjectTicketContext } from '../../../Context/ProjectTicket-Context'
 
@@ -17,19 +17,21 @@ export interface Props {
 
 const AddProjectForm = (props: Props) => {
 
-    const { addProjectToServer } = useContext(ProjectTicketContext) as ProjectContextInterface;
+    const { addProjectToServer, allProjects } = useContext(ProjectTicketContext) as ProjectContextInterface;
 
     let date = new Date();
     let formatdate = date.toLocaleDateString();
     const [ error, setError ] = useState<string>('');
     const [ projectData, setProjectData ] = useState({ id: uuid().toString(), projectReference: '', projectName: '', tickets: [], createdDate: formatdate });
 
+    const AllProjects: Project[] = allProjects;
+    
     const fieldsAreValidated = async () => {
         //Verify projectName and projectReference do not already exist;
         //Verify that they are not empty
 
-        const verifyProjectName = ALLPROJECTS.filter(x => x.projectName === projectData.projectName).length > 0;
-        const verifyProjectReference = ALLPROJECTS.filter(x => x.projectReference === projectData.projectReference).length > 0;
+        const verifyProjectName = AllProjects.filter(x => x.projectName === projectData.projectName).length > 0;
+        const verifyProjectReference = AllProjects.filter(x => x.projectReference === projectData.projectReference).length > 0;
 
         if(verifyProjectName || verifyProjectReference === true){
             setError('Entered in Name or Reference in use; Please set a new one.');
@@ -47,7 +49,7 @@ const AddProjectForm = (props: Props) => {
              return;
          }
     
-         ALLPROJECTS.push({...projectData, tickets: [] });
+        //  ALLPROJECTS.push({...projectData, tickets: [] });
          props.closeModal(false);
     }
 

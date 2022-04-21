@@ -21,4 +21,22 @@ authMiddleware.isUserAnAdminUser = (req, res, next) => {
     }
 }
 
+authMiddleware.isUserRegularUser = (req, res, next) => {
+    const user = req.user;
+
+    if(user) {
+        User.findOne({ username: user.username }, (err, foundUser) => {
+            if (err) throw err;
+            if(foundUser.isRegUser) {
+                next();
+            }
+            else {
+                res.send({ success: false, msg: 'You do not have the required priviliges to perform this action.' });
+            }
+        })
+    } else {
+        res.send({ success: false, msg: 'You must first login to perform this action.' });
+    }
+}
+
 module.exports = authMiddleware;
