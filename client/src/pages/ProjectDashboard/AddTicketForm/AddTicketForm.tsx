@@ -32,7 +32,10 @@ const AddTicketForm = (props: Props) => {
     
         getUsers();
     },[])
-
+    console.error(allUsers)
+    if(!allUsers[0]){
+        return <div>ERROR GETTING USERS</div>
+    }
 
     const ALLPROJECTS: Project[] = allProjects;
 
@@ -105,21 +108,24 @@ const AddTicketForm = (props: Props) => {
 
     const fieldsAreValidated = () => {
         setError('');
+        const validCreator = allUsers.filter(x => x.username === tempCreator);
+        const validOwner = allUsers.filter(x => x.username === tempOwner);
+
         if(formData.title.length < 3 || formData.description.length < 3 || formData.projectReference.length < 1 || formData.status.length < 3 || formData.projectReference === 'default' || formData.status === 'default'){
             setError('Please ensure all fields are filled out.');
+        } else if(!validCreator[0] || !validOwner[0]){
+            setError('Please choose a valid Creator or Owner');
         } else {
             let copyState = { ...formData }
             let chosenProject = ALLPROJECTS.filter(x => x.projectReference === formData.projectReference);
-            const ticketID = (chosenProject[0]?.tickets?.length? + 1 : 1).toString();
+            const ticketID = ((chosenProject[0].tickets?.length || 0) + 1).toString();
             const ticketNumber = chosenProject[0].projectReference + '-' + ticketID;
             copyState.id = ticketID;
             copyState.projectReference = ticketNumber;
             copyState.ticketOwner.username = tempOwner;
             copyState.ticketCreator.username = tempCreator;
 
-
             addTicketToServer({...copyState});
-            // chosenProject[0]?.tickets?.push({ ...copyState,  comments: [] });
             props.closeModal(false);
         }
     }

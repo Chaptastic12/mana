@@ -13,7 +13,7 @@ interface Props {
 
 const Columns = ( { title, tickets } : Props ) => {
   return (
-    <Droppable droppableId={title.toString()} > 
+    <Droppable droppableId={title.toString()}  > 
     {
         (provided, snapshot) => (
             <div className='Columns' ref={provided.innerRef} { ...provided.droppableProps } >

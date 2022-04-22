@@ -69,5 +69,18 @@ router.post('/updateTicketInformation', isUserRegularUser, (req, res) => {
     })
 })
 
+router.post('/updateTicketStatus', isUserRegularUser, (req, res) => {
+    console.log('route to update status')
+    console.log(req.body)
+    res.send('hi')
+
+    //Find our ticket
+    //Find our Project based off teh ticket
+    //Update ticket status as well as index
+    //save ticket
+    //save project
+    //return updated project
+})
+
 
 module.exports = router;

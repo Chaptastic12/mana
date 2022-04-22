@@ -2,7 +2,10 @@ const mongoose = require('mongoose');
 const Schema   = mongoose.Schema;
 
 const Ticket = new Schema({
-    projectReference: String,
+    projectReference: {
+        type: String,
+        unique: true
+    },
     title: String,
     description: String,
     comments: [{

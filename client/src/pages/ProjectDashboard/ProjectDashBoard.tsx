@@ -4,7 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { Ticket, ProjectContextInterface } from '../../models/models';
 import { findOrigin, findDestination } from './Util';
-import { ALLPROJECTS, DUMMY_TICKET } from '../../DummyData';
+import { DUMMY_TICKET } from '../../DummyData';
 import { ProjectTicketContext } from '../../Context/ProjectTicket-Context';
 import Columns from './Columns/Columns';
 import SearchBar from './SearchBar/SearchBar';
@@ -26,10 +26,9 @@ const ProjectDashBoard = () => {
     const [ showAddTicket, setShowAddTicket ] = useState<boolean>(false);
     const [ ticketSearch, setTicketSearch ] = useState<string>('');
     const { projectReference } = useParams();
-    const { getChosenproject } = useContext(ProjectTicketContext) as ProjectContextInterface
+    const { getChosenproject, updateTicketStatus } = useContext(ProjectTicketContext) as ProjectContextInterface
 
     useEffect(() => {
-
         const getProject = async () =>{
             const ref: string = projectReference || '';
             const response = await getChosenproject(ref);
@@ -37,18 +36,14 @@ const ProjectDashBoard = () => {
 
         }
         getProject();
-        //Since we are just using dummy data, we dont need to make an API call yet; Instead, find a match for the projectReference
-        // const foundProject = ALLPROJECTS.filter(x => x.projectReference === projectReference);
-        // if(foundProject[0]) { setChosenProject(foundProject[0]) } else { setChosenProject(EMPTY_PROJECT)}
     }, [projectReference]);
 
     if (!chosenProject){
         return <div>ERROR GETTING PROJECT FROM SERVER</div>
     }
 
-    const onDragEnd = (result: DropResult) => {
+    const onDragEnd = async (result: DropResult) => {
         const { source, destination } = result;
-
         let copyProjectData = { ...chosenProject };
 
         if(!destination){ return }
@@ -56,6 +51,21 @@ const ProjectDashBoard = () => {
         let movingTicketID: string;
         let startingResult, ticketIndex;
         let endResult: string;
+
+        //Get our data for our API call
+        const movingTicket = findOrigin(source.droppableId, openTickets, progressTickets, qualityCheckTickets, finishedTickets, backlogTickets)[source.index].projectReference;
+        const startStatus = findOrigin(source.droppableId, openTickets, progressTickets, qualityCheckTickets, finishedTickets, backlogTickets)[source.index].status;
+        const startIndex = chosenProject.tickets.findIndex(x => x.projectReference === movingTicket);
+        const endingStatus = findDestination(destination.droppableId);
+        //In order to find out the ending index, we need to find the index of the ticket with the same status that is 1 index before
+        // where the moving ticket is going to be
+        const recordOfEndTypeLast = chosenProject.tickets.filter(x => x.status === endingStatus);
+        let recordProjRef: string = '';
+        if(recordOfEndTypeLast[destination.index - 1]) {
+            recordProjRef = recordOfEndTypeLast[destination.index - 1].projectReference;
+        }
+        let endIndex = chosenProject.tickets.findIndex(x => x.projectReference === recordProjRef);
+        if(endIndex < 0) { endIndex = 1 }
 
         if( source.droppableId !== destination.droppableId){
             startingResult = findOrigin(source.droppableId, openTickets, progressTickets, qualityCheckTickets, finishedTickets, backlogTickets);
@@ -71,7 +81,6 @@ const ProjectDashBoard = () => {
             }
             let movingTicketIndex = copyProjectData.tickets.findIndex( x => x.id === currentCol[source.index].id);
             let destinationTicketIndex = copyProjectData.tickets.findIndex( x => x.id === currentCol[destination.index].id);
-            
             let movingTicket = { ...chosenProject.tickets[movingTicketIndex] };
             let newOrder = []
             for(let i = movingTicketIndex; i > destinationTicketIndex - 1; i--){
@@ -82,9 +91,9 @@ const ProjectDashBoard = () => {
             endResult = findDestination(destination.droppableId); 
             let otherTickets = copyProjectData.tickets.filter( x => x.status !== endResult);
             copyProjectData.tickets = [ ...otherTickets, ...newOrder ];
-            setChosenProject(copyProjectData)
+            setChosenProject(copyProjectData);
         }
-
+        const response = await updateTicketStatus(movingTicket, endingStatus, endIndex, startStatus, startIndex)
     }
 
     let openTickets: Ticket[] = chosenProject.tickets.filter(project => project.status === 'Open');

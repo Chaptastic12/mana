@@ -20,7 +20,7 @@ const ProjectTicketProvider = (props: Props) =>{
     useEffect(() => {
         //Get all projects and tickets
         getAllProjectsFromServer();
-        getAllTicketsFromServer()
+        getAllTicketsFromServer();
     }, [retrieveNewData])
 
     const addProjectToServer = async (project: Project) => {
@@ -122,11 +122,30 @@ const ProjectTicketProvider = (props: Props) =>{
         } catch (err) { return err }
     }
 
+    const updateTicketStatus = async (projectReference: string, newStatus: string, newIndex: number, oldStatus: string, oldIndex: number) => {
+        console.error(projectReference, newStatus, newIndex, oldIndex)
+        try {
+            const response = await Axios({
+                url: 'http://localhost:8081/api/tickets/updateTicketStatus/',
+                method: 'POST',
+                withCredentials: true,
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                data: JSON.stringify({
+                    projectReference, newStatus, newIndex, oldIndex
+                })
+            })
+            setRetrieveNewData(prev => !prev);
+            return response;
+        } catch (err) { return err }
+    }
+
 
     return <ProjectTicketContext.Provider value={{
         addProjectToServer, addTicketToServer,
         allProjects, getChosenTicket, allTickets,
-        getChosenproject
+        getChosenproject, updateTicketStatus
     }}>
         { props.children }
     </ProjectTicketContext.Provider>
