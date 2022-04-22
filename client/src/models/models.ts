@@ -1,3 +1,5 @@
+import { ProjectReference } from "typescript";
+
 export interface AllProjects {
     projects: Project[]
 }
@@ -12,6 +14,7 @@ export interface Project {
 
 export interface Ticket {
     id: string;
+    _id?: string;
     projectReference: string;
     title: string;
     description: string;
@@ -49,5 +52,7 @@ export interface ProjectContextInterface {
     addProjectToServer: (project: Project) => void; 
     addTicketToServer: (ticket: Ticket) => void; 
     allProjects: any;
+    allTickets: any;
     getChosenTicket: (projectReference: string) => any;
+    getChosenproject: (ProjectReference: string) => any;
 }

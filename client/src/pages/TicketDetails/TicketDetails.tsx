@@ -34,6 +34,10 @@ const TicketDetails = () => {
 
     }, [ projectReference, refresh ])
 
+    if (!ticket){
+        return <div>ERROR: UNABLE TO GET TICKET FROM SERVER</div>
+    }
+
     const ticketComments = ticket.comments.map( x => { return <CommentDiv key={x.id}comment={x} /> } );
 
     //Will eventually need to be reworked once we are on a server

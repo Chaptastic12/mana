@@ -32,7 +32,6 @@ const UserProvider = (props: Props) =>{
             if(response.data.success){
                 setUser({ username: response.data.userInfo.username, isAdmin: response.data.userInfo.isAdmin, isRegUser: response.data.userInfo.isRegUser, isGuest: response.data.userInfo.isGuest });
             } 
-            console.log(response)
             return response.data.msg
         } catch (err) {
             return err;

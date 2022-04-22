@@ -3,12 +3,15 @@ const router = express.Router();
 const Project = require('../models/project')
 const { isUserRegularUser } = require('../middleware/privilegeMiddlware');
 
-router.get('/getProjectById/:id', ( req, res ) => {
-    console.log('reached projectRoutes')
+router.get('/getSpecificProject/:projectReference', ( req, res ) => {
+    Project.findOne({projectReference: req.params.projectReference}).populate('tickets').exec((err, foundProject) =>{
+        if (err) throw err;
+
+        res.send(foundProject)
+    });
 })
 
 router.get('/getAllProjects', ( req, res ) => {
-    console.log('get all projectRoutes');
     Project.find({}, (err, foundProjects) => {
         if (err) throw err;
 
@@ -17,8 +20,6 @@ router.get('/getAllProjects', ( req, res ) => {
 })
 
 router.post('/addNewProject', isUserRegularUser, ( req, res ) => {
-    console.log('reached projectRoutes')
-    console.log(req.body)
     let project = new Project(req.body);
     project.save(req.body);
 

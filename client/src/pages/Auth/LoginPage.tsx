@@ -18,7 +18,7 @@ const LoginPage = () => {
     const [ username, setUsername] = useState<string>('');
     const [ email, setEmail] = useState<string>('');
     const [ error, setError ] = useState<string>('');
-    const { loginUser, registerUser } = useContext(UserContext) as UserContextInterface;
+    const { loginUser, registerUser, user } = useContext(UserContext) as UserContextInterface;
 
     const handleLoginOrRegister = async () => {
         setError('');
@@ -34,7 +34,7 @@ const LoginPage = () => {
         }  else {
             response = await registerUser(username, email, password);
         }
-        if(!response.success){
+        if(!user){
             setError(response.msg);
         }
     }

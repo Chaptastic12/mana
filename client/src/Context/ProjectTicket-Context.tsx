@@ -20,6 +20,7 @@ const ProjectTicketProvider = (props: Props) =>{
     useEffect(() => {
         //Get all projects and tickets
         getAllProjectsFromServer();
+        getAllTicketsFromServer()
     }, [retrieveNewData])
 
     const addProjectToServer = async (project: Project) => {
@@ -72,13 +73,40 @@ const ProjectTicketProvider = (props: Props) =>{
             return { msg: response.data.msg, success: response.data.success };
         } catch (err) { return err }
     }
+    
+    const getAllTicketsFromServer = async () => {
+        try {
+            const response = await Axios({
+                url: 'http://localhost:8081/api/tickets/getAllTickets/',
+                method: 'GET',
+                withCredentials: true,
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+            })
+            if (response.data.success){
+                setAllTickets(response.data.tickets)
+            }
+        } catch (err) { return err }
+    }
 
-    const getChosenProject = () => {
-        
+    const getChosenproject = async (projectReference: string) => {
+        try {
+            const response = await Axios({
+                url: 'http://localhost:8081/api/projects/getSpecificProject/' + projectReference,
+                method: 'GET',
+                withCredentials: true,
+                headers: {
+                    'Content-Type' : 'application/json'
+                }
+            })
+            setRetrieveNewData(prev => !prev);
+
+            return response;
+        } catch (err) { return err }
     }
     
     const getChosenTicket = async (projectReference: string ) => {
-        console.log(projectReference)
         try {
             const response = await Axios({
                 url: 'http://localhost:8081/api/tickets/getSpecificTicket/' + projectReference,
@@ -97,7 +125,8 @@ const ProjectTicketProvider = (props: Props) =>{
 
     return <ProjectTicketContext.Provider value={{
         addProjectToServer, addTicketToServer,
-        allProjects, getChosenTicket
+        allProjects, getChosenTicket, allTickets,
+        getChosenproject
     }}>
         { props.children }
     </ProjectTicketContext.Provider>

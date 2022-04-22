@@ -23,7 +23,7 @@ const DataList = (props: PROPS) => {
     <div className='DataList'>
         <div className='DataList__Icon'><IoSearchOutline /></div><input list={props.listName} name={props.name} id={props.id} placeholder={props.placeholder} value={props.value} onChange={(e) => { props.setValue(e.target.value); navigate(props.link + e.target.value); } } onBlur={() => props.setValue('')} />
         <datalist id={props.listName}>
-            {props.data.map(x => { return <option key={x.id} value={x.projectReference} > {x[props.useInDropDown]} </option> })}
+            {props.data.map(x => {return <option key={x._id} value={x.projectReference} > {x[props.useInDropDown]} </option> })}
         </datalist>
     </div>
   )

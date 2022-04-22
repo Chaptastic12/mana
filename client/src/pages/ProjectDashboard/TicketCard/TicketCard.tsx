@@ -13,8 +13,9 @@ interface Props {
 const TicketCard = ( { index, ticketData } : Props) => {
   const navigate = useNavigate();
 
+  const id: string = ticketData._id || '';
   return (
-    <Draggable draggableId={ticketData.id.toString()} index={index}>
+    <Draggable draggableId={id.toString()} index={index}>
     {
         (provided, snapshot) => (
             <div className='TicketCard' {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef} onClick={() => navigate('/ticket/' + ticketData.projectReference)}>

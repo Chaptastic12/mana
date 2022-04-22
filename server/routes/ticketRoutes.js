@@ -13,6 +13,13 @@ router.get('/getSpecificTicket/:projectReference', ( req, res ) => {
     })
 })
 
+router.get('/getAllTickets', (req, res) => {
+    Ticket.find({}, (err, allTickets) => {
+        if (err) throw err;
+        res.send({ success: true, tickets: allTickets });
+    })
+})
+
 router.post('/addNewTicket', isUserRegularUser, ( req, res ) => {
     //Get our project reference by removing the numbers
     const projRef = req.body.projectReference.split('-')[0];

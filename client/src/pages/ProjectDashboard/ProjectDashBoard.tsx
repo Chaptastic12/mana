@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import { useParams } from 'react-router-dom';
 
-import { Ticket } from '../../models/models';
+import { Ticket, ProjectContextInterface } from '../../models/models';
 import { findOrigin, findDestination } from './Util';
 import { ALLPROJECTS, DUMMY_TICKET } from '../../DummyData';
+import { ProjectTicketContext } from '../../Context/ProjectTicket-Context';
 import Columns from './Columns/Columns';
 import SearchBar from './SearchBar/SearchBar';
 
@@ -25,12 +26,25 @@ const ProjectDashBoard = () => {
     const [ showAddTicket, setShowAddTicket ] = useState<boolean>(false);
     const [ ticketSearch, setTicketSearch ] = useState<string>('');
     const { projectReference } = useParams();
+    const { getChosenproject } = useContext(ProjectTicketContext) as ProjectContextInterface
 
     useEffect(() => {
+
+        const getProject = async () =>{
+            const ref: string = projectReference || '';
+            const response = await getChosenproject(ref);
+            setChosenProject(response.data);
+
+        }
+        getProject();
         //Since we are just using dummy data, we dont need to make an API call yet; Instead, find a match for the projectReference
-        const foundProject = ALLPROJECTS.filter(x => x.projectReference === projectReference);
-        if(foundProject[0]) { setChosenProject(foundProject[0]) } else { setChosenProject(EMPTY_PROJECT)}
+        // const foundProject = ALLPROJECTS.filter(x => x.projectReference === projectReference);
+        // if(foundProject[0]) { setChosenProject(foundProject[0]) } else { setChosenProject(EMPTY_PROJECT)}
     }, [projectReference]);
+
+    if (!chosenProject){
+        return <div>ERROR GETTING PROJECT FROM SERVER</div>
+    }
 
     const onDragEnd = (result: DropResult) => {
         const { source, destination } = result;
