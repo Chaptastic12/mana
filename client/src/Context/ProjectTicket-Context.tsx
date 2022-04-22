@@ -3,6 +3,7 @@ import Axios from 'axios';
 
 import { Project, ProjectContextInterface, Ticket } from '../models/models';
 import { stringify } from 'querystring';
+import { json } from 'stream/consumers';
 
 const ProjectTicketContext = createContext<ProjectContextInterface | null>(null);
 
@@ -12,8 +13,6 @@ export interface Props {
 
 const ProjectTicketProvider = (props: Props) =>{
 
-    const [ chosenProject, setChosenProject ] = useState<string>('');
-    const [ chosenTicket, setChosenTicket ] = useState<string>('');
     const [ allProjects, setAllProjects ] = useState();
     const [ allTickets, setAllTickets ] = useState();
     const [ retrieveNewData, setRetrieveNewData ] = useState(false);
@@ -78,14 +77,27 @@ const ProjectTicketProvider = (props: Props) =>{
         
     }
     
-    const getChosenTicket = () => {
+    const getChosenTicket = async (projectReference: string ) => {
+        console.log(projectReference)
+        try {
+            const response = await Axios({
+                url: 'http://localhost:8081/api/tickets/getSpecificTicket/' + projectReference,
+                method: 'GET',
+                withCredentials: true,
+                headers: {
+                    'Content-Type' : 'application/json'
+                }
+            })
+            setRetrieveNewData(prev => !prev);
 
+            return response;
+        } catch (err) { return err }
     }
 
 
     return <ProjectTicketContext.Provider value={{
         addProjectToServer, addTicketToServer,
-        allProjects
+        allProjects, getChosenTicket
     }}>
         { props.children }
     </ProjectTicketContext.Provider>

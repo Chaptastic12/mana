@@ -5,8 +5,12 @@ const Project = require('../models/project');
 const User = require('../models/user');
 const { isUserRegularUser } = require('../middleware/privilegeMiddlware');
 
-router.get('/', ( req, res ) => {
-    console.log('reached ticketRoutes')
+router.get('/getSpecificTicket/:projectReference', ( req, res ) => {
+    Ticket.findOne({projectReference: req.params.projectReference}).populate('ticketOwner').populate('ticketCreator').exec((err, foundTicket) => {
+        if (err) throw err;
+
+        res.send(foundTicket)
+    })
 })
 
 router.post('/addNewTicket', isUserRegularUser, ( req, res ) => {
@@ -34,6 +38,29 @@ router.post('/addNewTicket', isUserRegularUser, ( req, res ) => {
         });
     });
 });
+
+router.post('/updateTicketInformation', isUserRegularUser, (req, res) => {
+    const id = req.body.id;
+    Ticket.findById(id).populate('ticketOwner').populate('ticketCreator').exec((err, foundTicket) => {
+        //Check if the ticketCreator changed; If it has, update the ID
+        if (req.body.ticketCreator.username !== foundTicket.ticketCreator.username){
+            User.findOne({username: req.body.ticketCreator.username}, (err, foundTicketCreator) => {
+                if (err) throw err;
+                req.body.ticketCreator = foundTicketCreator._id;
+            })
+        }
+        //Check if the ticketOwner changed; If it has, update the ID
+        if (req.body.ticketOwner.username !== foundTicket.ticketOwner.username){
+            User.findOne({username: req.body.ticketOwner.username}, (err, foundTicketOwner) => {
+                if (err) throw err;
+                req.body.ticketOwner = foundTicketOwner._id;
+            })
+        }
+        
+        foundTicket.save();
+        
+    })
+})
 
 
 module.exports = router;

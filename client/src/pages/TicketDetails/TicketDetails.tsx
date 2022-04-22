@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams } from 'react-router-dom';
 import { BsPlusSquare } from 'react-icons/bs'
 
-import { Comment, Ticket } from '../../models/models';
+import { Comment, Ticket, ProjectContextInterface } from '../../models/models';
+import { ProjectTicketContext } from '../../Context/ProjectTicket-Context';
 
 import CommentDiv from '../../components/Comment/Comment';
 import EditableInput from '../../components/EditableInput/EditableInput';
@@ -13,15 +14,23 @@ import ErrorBar from '../../components/ErrorBar/ErrorBar';
 import DataListEdit from '../../components/UI Elements/DataList/DataListEdit';
 const TicketDetails = () => {
 
-    const { projectReference} = useParams();
+    const { projectReference } = useParams();
     const [ ticket, setTicket ] = useState(DUMMY_TICKET);
     const [ commentText, setCommentText ] = useState('');
     const [ refresh, setRefresh ] = useState(false);
     const [ error, setError ] = useState('');
+    const { getChosenTicket } = useContext(ProjectTicketContext) as ProjectContextInterface;
 
     useEffect(() => {
-        const paramTicket: Ticket[] = TICKETS.filter(x => x.projectReference === projectReference);
-        if(paramTicket[0].id !== '0'){ setTicket(paramTicket[0]) }
+        const getTicket = async () => {
+            const ref: string = projectReference || '';
+            const response = await getChosenTicket(ref);
+            setTicket(response.data);
+        }
+       getTicket();
+
+        // const paramTicket: Ticket[] = TICKETS.filter(x => x.projectReference === projectReference);
+        // if(paramTicket[0].id !== '0'){ setTicket(paramTicket[0]) }
 
     }, [ projectReference, refresh ])
 

@@ -49,4 +49,5 @@ export interface ProjectContextInterface {
     addProjectToServer: (project: Project) => void; 
     addTicketToServer: (ticket: Ticket) => void; 
     allProjects: any;
+    getChosenTicket: (projectReference: string) => any;
 }
