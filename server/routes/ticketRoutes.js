@@ -1,7 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const Ticket = require('../models/ticket')
+const Ticket = require('../models/ticket');
 const Project = require('../models/project');
+const User = require('../models/user');
 const { isUserRegularUser } = require('../middleware/privilegeMiddlware');
 
 router.get('/', ( req, res ) => {
@@ -9,27 +10,30 @@ router.get('/', ( req, res ) => {
 })
 
 router.post('/addNewTicket', isUserRegularUser, ( req, res ) => {
-    console.log('reached ticketRoutes')
-    console.log(req.body.projectReference)
-    // let ticket = new Ticket(req.body);
-    // ticket.save(req.body);
+    //Get our project reference by removing the numbers
     const projRef = req.body.projectReference.split('-')[0];
-    Project.find({projectReference: projRef}).populate('tickets').exec((err, foundProject) => {
+    Project.findOne({projectReference: projRef}).populate('tickets').exec((err, foundProject) => {
         if (err) throw err;
-        const ticket = new Ticket(req.body);
-        ticket.save()
-        // Ticket.create(req.body).populate('ticketOwner').populate('ticketCreator').exec((err, newTicket) => {
-        //     if (err) throw err;
-        //     //Find user and add to ticket;
 
-        //     foundProject.ticket.push(newTicket)
-        //     foundProject.save()
-        //     res.send({success: true, msg: 'Succesfully Added Ticket'})
+        //Update our ticket with the info in our database based off the uernames passed in.
+        User.findOne({username: req.body.ticketOwner.username}, (err, foundTicketOwner) => {
+            if (err) throw err;
+            req.body.ticketOwner = foundTicketOwner._id;
+            User.findOne({username: req.body.ticketCreator.username}, (err, foundTicketCreator) => {
+                if (err) throw err;
+                    req.body.ticketCreator = foundTicketCreator._id;
+                    req.body.comments = []; //Clear out the ticket info as there are no comments initially
 
-        // })
-    })
-
-})
+                //Save our ticket, and update the project with the resulting ._id
+                const newTicket = new Ticket(req.body);
+                newTicket.save().then(result =>{
+                    foundProject.tickets.push(result._id);
+                    foundProject.save();
+                });
+            });
+        });
+    });
+});
 
 
 module.exports = router;
