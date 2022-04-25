@@ -93,7 +93,8 @@ const ProjectDashBoard = () => {
             copyProjectData.tickets = [ ...otherTickets, ...newOrder ];
             setChosenProject(copyProjectData);
         }
-        const response = await updateTicketStatus(movingTicket, endingStatus, endIndex, startStatus, startIndex)
+        const response = await updateTicketStatus(movingTicket, endingStatus, endIndex, startStatus, startIndex);
+        console.log(response);
     }
 
     let openTickets: Ticket[] = chosenProject.tickets.filter(project => project.status === 'Open');

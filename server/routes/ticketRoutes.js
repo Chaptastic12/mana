@@ -72,7 +72,17 @@ router.post('/updateTicketInformation', isUserRegularUser, (req, res) => {
 router.post('/updateTicketStatus', isUserRegularUser, (req, res) => {
     console.log('route to update status')
     console.log(req.body)
-    res.send('hi')
+    const { oldIndex, newIndex, projectReference, newStatus } = req.body;
+    const projRef = projectReference.split('-')[0];
+    Project.findOne({projectReference: projRef}).populate('tickets').exec((err, foundProject) => {
+        if (err) throw err;
+        // const copyOfMovingTicket = foundProject.tickets[oldIndex];
+        // console.log(copyOfMovingTicket)
+        res.send('hi')
+        const updatedTicketOrder = moveArrayItemToNewIndex(foundProject.tickets, oldIndex, newIndex);
+        console.log(updateTicketOrder);
+    });
+
 
     //Find our ticket
     //Find our Project based off teh ticket
@@ -82,5 +92,15 @@ router.post('/updateTicketStatus', isUserRegularUser, (req, res) => {
     //return updated project
 })
 
+function moveArrayItemToNewIndex(arr, oldIndex, newIndex) {
+    if (newIndex >= arr.length) {
+        var k = newIndex - arr.length + 1;
+        while (k--) {
+            arr.push(undefined);
+        }
+    }
+    arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
+    return arr; 
+};
 
 module.exports = router;
