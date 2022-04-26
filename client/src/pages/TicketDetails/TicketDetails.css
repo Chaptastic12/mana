@@ -37,6 +37,22 @@
     font-size: 4vw;
 }
 
+.TicketDetails__DashboardLink{
+    padding-left: 25px;
+    padding-top: 10px;
+    font-size: 1.2vw;
+}
+
+.TicketDetails__DashboardLink a:visited,
+.TicketDetails__DashboardLink a{
+    color: black;
+    text-decoration: none;
+}
+
+.TicketDetails__DashboardLink a:hover{
+    color: gray
+}
+
 .TicketDetails__Ticket{
     align-items: center;
     width: 105%;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { useParams } from 'react-router-dom';
-import { BsPlusSquare } from 'react-icons/bs'
+import { Link, useParams } from 'react-router-dom';
+import { BsPlusSquare, BsArrowBarRight } from 'react-icons/bs'
 
 import { Comment, Ticket, ProjectContextInterface } from '../../models/models';
 import { ProjectTicketContext } from '../../Context/ProjectTicket-Context';
@@ -84,7 +84,7 @@ const TicketDetails = () => {
     }
     
     const status = [ { val: 'Open' }, { val: 'In Progress' }, {val: 'Quality Check' }, { val: 'Finished' }, { val: 'Backlog' } ]
-
+    const projRef = ticket.projectReference.split('-')[0];
   return (
     <div className='TicketDetails'>
             <div className='TicketDetails__Header'>
@@ -92,6 +92,13 @@ const TicketDetails = () => {
                 <span className='bold'>[{ ticket.projectReference }]</span> <EditableInput type='input' hasLabel={false} text={ticket.title} field='title' editTicketField={(newValue: string, field: string) => editTicketInputField(newValue, field)}/>
                 <hr />
             </div>
+
+            <div className='TicketDetails__DashboardLink'>
+                ...
+                <Link to={`/dashboard/${ projRef }`}> / { projRef } </Link> 
+                <Link to={`/ticket/${ ticket.projectReference }`}>/ { ticket.projectReference }</Link>
+            </div>
+
             <div className='TicketDetails__Container'>
                 <div className='TicketDetails__Left'>
                     <div className='TicketDetails__Ticket'>
