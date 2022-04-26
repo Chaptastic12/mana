@@ -2,8 +2,6 @@ import React, { createContext, useState, useEffect } from 'react';
 import Axios from 'axios';
 
 import { Project, ProjectContextInterface, Ticket } from '../models/models';
-import { stringify } from 'querystring';
-import { json } from 'stream/consumers';
 
 const ProjectTicketContext = createContext<ProjectContextInterface | null>(null);
 
@@ -123,7 +121,6 @@ const ProjectTicketProvider = (props: Props) =>{
     }
 
     const updateTicketStatus = async (projectReference: string, newStatus: string, newIndex: number, oldStatus: string, oldIndex: number) => {
-        console.error(projectReference, newStatus, newIndex, oldIndex)
         try {
             const response = await Axios({
                 url: 'http://localhost:8081/api/tickets/updateTicketStatus/',

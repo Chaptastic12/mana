@@ -31,8 +31,8 @@ const AddTicketForm = (props: Props) => {
         }
     
         getUsers();
+    //eslint-disable-next-line
     },[])
-    console.error(allUsers)
     if(!allUsers[0]){
         return <div>ERROR GETTING USERS</div>
     }

@@ -3,7 +3,7 @@ import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import { useParams } from 'react-router-dom';
 
 import { Ticket, ProjectContextInterface } from '../../models/models';
-import { findOrigin, findDestination } from './Util';
+import { findOrigin, findDestination, moveArrayItemToNewIndex } from './Util';
 import { DUMMY_TICKET } from '../../DummyData';
 import { ProjectTicketContext } from '../../Context/ProjectTicket-Context';
 import Columns from './Columns/Columns';
@@ -24,6 +24,7 @@ const ProjectDashBoard = () => {
 
     const [ chosenProject, setChosenProject ] = useState(EMPTY_PROJECT);
     const [ showAddTicket, setShowAddTicket ] = useState<boolean>(false);
+    const [ refresh, setRefresh ] = useState<boolean>(false);
     const [ ticketSearch, setTicketSearch ] = useState<string>('');
     const { projectReference } = useParams();
     const { getChosenproject, updateTicketStatus } = useContext(ProjectTicketContext) as ProjectContextInterface
@@ -33,10 +34,10 @@ const ProjectDashBoard = () => {
             const ref: string = projectReference || '';
             const response = await getChosenproject(ref);
             setChosenProject(response.data);
-
         }
         getProject();
-    }, [projectReference]);
+    //eslint-disable-next-line
+    }, [projectReference, refresh]);
 
     if (!chosenProject){
         return <div>ERROR GETTING PROJECT FROM SERVER</div>
@@ -48,25 +49,48 @@ const ProjectDashBoard = () => {
 
         if(!destination){ return }
 
-        let movingTicketID: string;
-        let startingResult, ticketIndex;
-        let endResult: string;
+        // let movingTicketID: string;
+        // let startingResult, ticketIndex;
+        // let endResult: string;
 
         //Get our data for our API call
-        const movingTicket = findOrigin(source.droppableId, openTickets, progressTickets, qualityCheckTickets, finishedTickets, backlogTickets)[source.index].projectReference;
+        const movingTicket = findOrigin(source.droppableId, openTickets, progressTickets, qualityCheckTickets, finishedTickets, backlogTickets)[source.index];
+        const movingTicketProjReference = movingTicket.projectReference;
+        const movingTicketId = movingTicket._id;
         const startStatus = findOrigin(source.droppableId, openTickets, progressTickets, qualityCheckTickets, finishedTickets, backlogTickets)[source.index].status;
-        const startIndex = chosenProject.tickets.findIndex(x => x.projectReference === movingTicket);
+        const startIndex = chosenProject.tickets.findIndex(x => x.projectReference === movingTicketProjReference);
         const endingStatus = findDestination(destination.droppableId);
+        const endIndex = destination.index;
         //In order to find out the ending index, we need to find the index of the ticket with the same status that is 1 index before
         // where the moving ticket is going to be
-        const recordOfEndTypeLast = chosenProject.tickets.filter(x => x.status === endingStatus);
-        let recordProjRef: string = '';
-        if(recordOfEndTypeLast[destination.index - 1]) {
-            recordProjRef = recordOfEndTypeLast[destination.index - 1].projectReference;
-        }
-        let endIndex = chosenProject.tickets.findIndex(x => x.projectReference === recordProjRef);
-        if(endIndex < 0) { endIndex = 1 }
+        // let recordProjRef: string = '';
+        // let endIndex: number = destination.index;
+        
 
+        // if(source.droppableId === destination.droppableId){
+        //     endIndex = destination.index
+        // } else {
+        //     const recordOfEndTypeLast = chosenProject.tickets.filter(x => x.status === endingStatus);
+        //     console.log(recordOfEndTypeLast)
+        //     if(recordOfEndTypeLast[destination.index - 1]) {
+        //         recordProjRef = recordOfEndTypeLast[destination.index - 1].projectReference;
+        //     }
+        //     endIndex = chosenProject.tickets.findIndex(x => x.projectReference === recordProjRef);
+        // }
+      
+        //Adjust the overall order of our tickets
+        let updatedTicketOrder = moveArrayItemToNewIndex(copyProjectData.tickets, startIndex, endIndex);
+        //Adjust the status of the one being moved
+        for( let i =0; i < updatedTicketOrder.length; i ++){
+            if (updatedTicketOrder[i]._id === movingTicketId){
+                updatedTicketOrder[i].status = endingStatus;
+            }
+        }
+        //Assign the new ticket order to the overall project tickets, and update the project
+        copyProjectData.tickets = updatedTicketOrder;
+        //Setting it locally allows the UI to update immediately, while the server takes a second to complete the update
+        setChosenProject(copyProjectData);
+/*
         if( source.droppableId !== destination.droppableId){
             startingResult = findOrigin(source.droppableId, openTickets, progressTickets, qualityCheckTickets, finishedTickets, backlogTickets);
             movingTicketID = startingResult[source.index].id;
@@ -81,6 +105,10 @@ const ProjectDashBoard = () => {
             }
             let movingTicketIndex = copyProjectData.tickets.findIndex( x => x.id === currentCol[source.index].id);
             let destinationTicketIndex = copyProjectData.tickets.findIndex( x => x.id === currentCol[destination.index].id);
+
+            let newOrder2 = moveArrayItemToNewIndex(copyProjectData.tickets, startIndex, endIndex)
+            console.log(newOrder2)
+
             let movingTicket = { ...chosenProject.tickets[movingTicketIndex] };
             let newOrder = []
             for(let i = movingTicketIndex; i > destinationTicketIndex - 1; i--){
@@ -90,11 +118,14 @@ const ProjectDashBoard = () => {
             newOrder[destinationTicketIndex] = movingTicket;
             endResult = findDestination(destination.droppableId); 
             let otherTickets = copyProjectData.tickets.filter( x => x.status !== endResult);
-            copyProjectData.tickets = [ ...otherTickets, ...newOrder ];
+            copyProjectData.tickets = newOrder2
             setChosenProject(copyProjectData);
+        }*/
+
+        const response = await updateTicketStatus(movingTicketProjReference, endingStatus, endIndex, startStatus, startIndex);
+        if(response.data.success){
+            setRefresh(prevState => !prevState);
         }
-        const response = await updateTicketStatus(movingTicket, endingStatus, endIndex, startStatus, startIndex);
-        console.log(response);
     }
 
     let openTickets: Ticket[] = chosenProject.tickets.filter(project => project.status === 'Open');
