@@ -6,10 +6,17 @@
     align-items: center;
 }
 
+.HeaderBar__Left{
+    width: 25%;
+}
+
+.HeaderBar__Right{
+    width: 75%;
+}
+
 .HeaderBar__Left, .HeaderBar__Right{
     display: flex;
     align-items: center;
-    width: 50%;
 }
 
 .HeaderBar__Left div, .HeaderBar__Right div {

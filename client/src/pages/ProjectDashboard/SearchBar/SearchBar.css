@@ -1,16 +1,23 @@
 .SearchBar{
     display: flex;
     align-items: center;
-    width: 95%;
+    width: 77vw;
     height: 65px;
     border-radius: 5px;
     box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);
 }   
 
+.SearchBar__Input{
+    width: 30%;
+}
+
+.SearchBar_Buttons{
+    width: 70%;
+
+}
 .SearchBar__Input,
 .SearchBar_Buttons{
     display: flex;
-    width: 50%;
     padding: 25px
 }
 
@@ -23,9 +30,10 @@
     font-size: 17px;
     border: none;
     border-radius: 5px;
-    width: 40%;
+    width: 80%;
     background: #f1f1f1;
     height: 30px;
+    min-width: 160px;
 }
 
 .SearchBar_Buttons{
@@ -44,3 +52,8 @@
     width: 50px;
 }
 
+@media screen and (max-width: 1200px) {
+    .SearchBar{
+        width: 72vw;
+    }
+}

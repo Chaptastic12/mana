@@ -19,7 +19,7 @@ export interface DATA {
 
 const DropDown = (props: PROPS) => {
     let title;
-    if(props.title === 'User'){title = <><FaUserCircle /><AiOutlineDown /></> }
+    if(props.title === 'User'){title = <><FaUserCircle /><span className='SmIcon'><AiOutlineDown /></span></> }
   return (
     <div className="dropdown">
         <button className="dropbtn">{title ? title : props.title}

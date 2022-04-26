@@ -1,6 +1,7 @@
 .Columns {
-    width: calc(100vw / 6.75);
-    min-width: 250px;
+    /* width: calc(88vw / 6.75); */
+    width: calc(88vw / 6.25);
+    min-width: 200px;
     height: 100%;
     min-height: 450px;
     box-shadow: 0 3px 25px rgb(0 0 0 / 0.2);
@@ -16,6 +17,7 @@
 .Columns hr{
     width: 80%
 }
+
 /* Used if the user selects a horizontal view*/
 .Columns-Horizontal{
     height: 250px;

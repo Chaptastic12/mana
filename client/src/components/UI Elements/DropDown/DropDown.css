@@ -46,3 +46,7 @@
   .dropbtn svg{
       font-size: 25px;
   }
+
+  .SmIcon svg{
+    transform: scale(.75);
+  }
