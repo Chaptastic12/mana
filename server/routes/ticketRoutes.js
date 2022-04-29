@@ -38,7 +38,9 @@ router.post('/addNewTicket', isUserRegularUser, ( req, res ) => {
                 //Save our ticket, and update the project with the resulting ._id
                 const newTicket = new Ticket(req.body);
                 newTicket.save().then(result =>{
-                    foundProject.tickets.push(result._id);
+                    const ticketType = findCorrectArray(result.status);
+                    foundProject.tickets[ticketType].push(result._id);
+                    foundProject.numTickets += 1;
                     foundProject.save();
                 });
             });
@@ -70,40 +72,101 @@ router.post('/updateTicketInformation', isUserRegularUser, (req, res) => {
 })
 
 router.post('/updateTicketStatus', isUserRegularUser, (req, res) => {
-    const { oldIndex, newIndex, projectReference, newStatus } = req.body;
-    const projRef = projectReference.split('-')[0];
-    
-    Project.findOne({projectReference: projRef}).populate('tickets').exec((err, foundProject) => {
+    const { source, destination, projRef } = req.body;
+    const projectReference = projRef.split('-')[0];
+
+    Project.findOne({projectReference: projectReference}).populate('tickets').exec((err, foundProject) => {
         if (err) throw err;
-        const updatedTicketOrder = moveArrayItemToNewIndex(foundProject.tickets, oldIndex, newIndex);
+        const updatedTicketOrder = moveTicketToCorrectArray(source, destination, foundProject);        
+        foundProject = updatedTicketOrder;
         foundProject.save();
 
-        Ticket.findOne({projectReference: projectReference}, (err, foundTicket) => {
+        Ticket.findOne({projectReference: projRef}, (err, foundTicket) => {
             if (err) throw err;
-            foundTicket.status = newStatus;
+            foundTicket.status = findCorrectArray(destination.droppableId);
             foundTicket.save();
             res.send({ success: true, msg: 'Ticket status / Project order updated.' })
         })
+    
     });
-
-
-    //Find our ticket
-    //Find our Project based off teh ticket
-    //Update ticket status as well as index
-    //save ticket
-    //save project
-    //return updated project
 })
 
-function moveArrayItemToNewIndex(arr, oldIndex, newIndex) {
-    if (newIndex >= arr.length) {
-        var k = newIndex - arr.length + 1;
-        while (k--) {
-            arr.push(undefined);
-        }
+const findCorrectArray = ( status ) =>{
+    let result = '';
+
+    switch(status){
+        case('Open Items'):
+            result = 'Open'
+            break;
+        case('In Progress Items'):
+            result = 'In Progress'
+            break;
+        case('Quality Check Items'):
+            result = 'Quality Check'
+            break;
+        case('Finished Items'):
+            result = 'Finished'
+            break;
+        case('Backlog Items'):
+            result = 'Backlog'
+            break;
+        default:
+            result = ''
+            break;
     }
-    arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
-    return arr; 
-};
+    return result;
+}
+
+const moveTicketToCorrectArray = (source, destination, project) => {
+    let movingTicket;
+    switch(source.droppableId){
+        case('Open Items'):
+            movingTicket = project.tickets.openTickets[source.index]
+            project.tickets.openTickets.splice(source.index, 1);
+            break;
+        case('In Progress Items'):
+            movingTicket = project.tickets.inProgress[source.index]
+            project.tickets.inProgress.splice(source.index, 1);
+            break;
+        case('Quality Check Items'):
+            movingTicket = project.tickets.qualityCheck[source.index]
+            project.tickets.qualityCheck.splice(source.index, 1);
+            break;
+        case('Finished Items'):
+            movingTicket = project.tickets.finishedTickets[source.index]
+            project.tickets.finishedTickets.splice(source.index, 1);
+            break;
+        case('Backlog Items'):
+            movingTicket = project.tickets.backlogTickets[source.index]
+            project.tickets.backlogTickets.splice(source.index, 1);
+            break;
+        default:
+            console.log('break')
+            break;
+    }
+
+    switch(destination.droppableId){
+        case('Open Items'):
+            project.tickets.openTickets.splice(destination.index, 0, movingTicket);
+            break;
+        case('In Progress Items'):
+            project.tickets.inProgress.splice(destination.index, 0, movingTicket);
+            break;
+        case('Quality Check Items'):
+            project.tickets.qualityCheck.splice(destination.index, 0, movingTicket);
+            break;
+        case('Finished Items'):
+            project.tickets.finishedTickets.splice(destination.index, 0, movingTicket);
+            break;
+        case('Backlog Items'):
+            project.tickets.backlogTickets.splice(destination.index, 0, movingTicket);
+            break;
+        default:
+            console.log('break')
+            break;
+    }
+
+    return project;
+}
 
 module.exports = router;

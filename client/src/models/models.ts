@@ -6,10 +6,17 @@ export interface AllProjects {
 
 export interface Project {
     id: string;
-    tickets?: Ticket[];
+    tickets: {
+        openTickets: Ticket[] | [],
+        inProgress: Ticket[],
+        qualityCheck: Ticket[],
+        finishedTickets: Ticket[],
+        backlogTickets: Ticket[]
+    };
     projectReference: string;
     projectName: string;
     createdDate: string;
+    numTickets?: number;
 }
 
 export interface Ticket {
@@ -55,5 +62,5 @@ export interface ProjectContextInterface {
     allTickets: any;
     getChosenTicket: (projectReference: string) => any;
     getChosenproject: (ProjectReference: string) => any;
-    updateTicketStatus: (projectReference: string, newStatus: string, newIndex: number, oldStatus: string, oldIndex: number) => any;
+    updateTicketStatus: (source: {}, destination: {}, projRef: string) => any;
 }

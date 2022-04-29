@@ -3,7 +3,7 @@ import React, { useState, useContext, useEffect } from 'react'
 import { IoIosCloseCircleOutline } from 'react-icons/io'
 import ErrorBar from '../../../components/ErrorBar/ErrorBar'
 import { v4 as uuid } from 'uuid';
-import { Project } from '../../../models/models';
+import { Project, Ticket } from '../../../models/models';
 
 import { ProjectTicketContext } from '../../../Context/ProjectTicket-Context'
 
@@ -19,10 +19,18 @@ const AddProjectForm = (props: Props) => {
 
     const { addProjectToServer, allProjects } = useContext(ProjectTicketContext) as ProjectContextInterface;
 
+    const emptyTicket = {
+        openTickets: [],
+        inProgress: [],
+        qualityCheck: [],
+        finishedTickets: [],
+        backlogTickets: []
+    }
+
     let date = new Date();
     let formatdate = date.toLocaleDateString();
     const [ error, setError ] = useState<string>('');
-    const [ projectData, setProjectData ] = useState({ id: uuid().toString(), projectReference: '', projectName: '', tickets: [], createdDate: formatdate });
+    const [ projectData, setProjectData ] = useState({ id: uuid().toString(), projectReference: '', projectName: '', tickets: emptyTicket, createdDate: formatdate, numTickets: 0 });
 
     const AllProjects: Project[] = allProjects;
     
@@ -42,7 +50,7 @@ const AddProjectForm = (props: Props) => {
             return;
          }
 
-         let response: any = await addProjectToServer({...projectData, tickets: []});
+         let response: any = await addProjectToServer({...projectData});
 
          if(!response.success){
              setError(response.msg);

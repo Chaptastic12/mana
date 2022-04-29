@@ -1,23 +1,21 @@
-import { Ticket } from "../../models/models";
-
-export  const findDestination = ( goingTo: string ) =>{
+export const findCorrectArray = ( status: string ) =>{
     let result: string = '';
 
-    switch(goingTo){
+    switch(status){
         case('Open Items'):
-            result = 'Open'
+            result = 'openTickets'
             break;
-        case('In Progress Items'):
-            result = 'In Progress'
+        case('In Progress'):
+            result = 'inProgress'
             break;
         case('Quality Check Items'):
-            result = 'Quality Check'
+            result = 'qualityCheck'
             break;
         case('Finished Items'):
-            result = 'Finished'
+            result = 'finishedTickets'
             break;
         case('Backlog Items'):
-            result = 'Backlog'
+            result = 'backlogTickets'
             break;
         default:
             result = ''
@@ -26,39 +24,54 @@ export  const findDestination = ( goingTo: string ) =>{
     return result;
 }
 
-export const findOrigin = ( goingTo: string, openTickets: Ticket[], progressTickets: Ticket[], qualityCheckTickets: Ticket[], finishedTickets: Ticket[], backlogTickets: Ticket[] ) =>{
-    let array: Ticket[];
-
-    switch(goingTo){
+export const moveTicketToCorrectArray = (source: any, destination: any, project: any) => {
+    let movingTicket;
+    switch(source.droppableId){
         case('Open Items'):
-            array = [ ...openTickets ];
+            movingTicket = project.tickets.openTickets[source.index]
+            project.tickets.openTickets.splice(source.index, 1);
             break;
         case('In Progress Items'):
-            array = [ ...progressTickets ] 
+            movingTicket = project.tickets.inProgress[source.index]
+            project.tickets.inProgress.splice(source.index, 1);
             break;
         case('Quality Check Items'):
-            array = [ ...qualityCheckTickets ] 
+            movingTicket = project.tickets.qualityCheck[source.index]
+            project.tickets.qualityCheck.splice(source.index, 1);
             break;
         case('Finished Items'):
-            array = [ ...finishedTickets ] 
+            movingTicket = project.tickets.finishedTickets[source.index]
+            project.tickets.finishedTickets.splice(source.index, 1);
             break;
         case('Backlog Items'):
-            array = [ ...backlogTickets ] 
+            movingTicket = project.tickets.backlogTickets[source.index]
+            project.tickets.backlogTickets.splice(source.index, 1);
             break;
         default:
-            array = [ ]
+            console.log('break')
             break;
     }
-    return array;
-}
 
-export const moveArrayItemToNewIndex = (arr: any, oldIndex: number, newIndex: number) => {
-    if (newIndex >= arr.length) {
-        var k = newIndex - arr.length + 1;
-        while (k--) {
-            arr.push(undefined);
-        }
+    switch(destination.droppableId){
+        case('Open Items'):
+            project.tickets.openTickets.splice(destination.index, 0, movingTicket);
+            break;
+        case('In Progress Items'):
+            project.tickets.inProgress.splice(destination.index, 0, movingTicket);
+            break;
+        case('Quality Check Items'):
+            project.tickets.qualityCheck.splice(destination.index, 0, movingTicket);
+            break;
+        case('Finished Items'):
+            project.tickets.finishedTickets.splice(destination.index, 0, movingTicket);
+            break;
+        case('Backlog Items'):
+            project.tickets.backlogTickets.splice(destination.index, 0, movingTicket);
+            break;
+        default:
+            console.log('break')
+            break;
     }
-    arr.splice(newIndex, 0, arr.splice(oldIndex, 1)[0]);
-    return arr; 
-};
+
+    return { project, projRef: movingTicket.projectReference };
+}

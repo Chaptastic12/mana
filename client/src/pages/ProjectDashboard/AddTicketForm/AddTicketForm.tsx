@@ -21,7 +21,7 @@ const AddTicketForm = (props: Props) => {
     const [ error, setError ] = useState('');
     const [ allUsers, setAllUsers ] = useState<User[]>([]);
 
-    const { addTicketToServer, allProjects } = useContext(ProjectTicketContext) as ProjectContextInterface;
+    const { addTicketToServer, allProjects, getChosenproject } = useContext(ProjectTicketContext) as ProjectContextInterface;
     const { getAllUserNames } = useContext(UserContext) as UserContextInterface;
 
     useEffect(() =>{
@@ -106,7 +106,7 @@ const AddTicketForm = (props: Props) => {
         setFormData(copyState);
     }
 
-    const fieldsAreValidated = () => {
+    const fieldsAreValidated = async () => {
         setError('');
         const validCreator = allUsers.filter(x => x.username === tempCreator);
         const validOwner = allUsers.filter(x => x.username === tempOwner);
@@ -117,9 +117,9 @@ const AddTicketForm = (props: Props) => {
             setError('Please choose a valid Creator or Owner');
         } else {
             let copyState = { ...formData }
-            let chosenProject = ALLPROJECTS.filter(x => x.projectReference === formData.projectReference);
-            const ticketID = ((chosenProject[0].tickets?.length || 0) + 1).toString();
-            const ticketNumber = chosenProject[0].projectReference + '-' + ticketID;
+            let chosenProject = await getChosenproject(formData.projectReference);
+            const ticketID = ((chosenProject.data.numTickets || 0) + 1).toString();
+            const ticketNumber = chosenProject.data.projectReference + '-' + ticketID;
             copyState.id = ticketID;
             copyState.projectReference = ticketNumber;
             copyState.ticketOwner.username = tempOwner;

@@ -120,7 +120,8 @@ const ProjectTicketProvider = (props: Props) =>{
         } catch (err) { return err }
     }
 
-    const updateTicketStatus = async (projectReference: string, newStatus: string, newIndex: number, oldStatus: string, oldIndex: number) => {
+    const updateTicketStatus = async (source: {}, destination: {}, projRef: string) => {
+        console.log(source, destination, projRef)
         try {
             const response = await Axios({
                 url: 'http://localhost:8081/api/tickets/updateTicketStatus/',
@@ -130,7 +131,7 @@ const ProjectTicketProvider = (props: Props) =>{
                     'Content-Type' : 'application/json'
                 },
                 data: JSON.stringify({
-                    projectReference, newStatus, newIndex, oldIndex
+                    source, destination, projRef
                 })
             })
             setRetrieveNewData(prev => !prev);
