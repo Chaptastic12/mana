@@ -49,24 +49,43 @@ router.post('/addNewTicket', isUserRegularUser, ( req, res ) => {
 });
 
 router.post('/updateTicketInformation', isUserRegularUser, (req, res) => {
-    const id = req.body.id;
+    const id = req.body.ticket._id;
+    const projRef = req.body.ticket.projectReference.split('-')[0];
+
     Ticket.findById(id).populate('ticketOwner').populate('ticketCreator').exec((err, foundTicket) => {
         //Check if the ticketCreator changed; If it has, update the ID
-        if (req.body.ticketCreator.username !== foundTicket.ticketCreator.username){
-            User.findOne({username: req.body.ticketCreator.username}, (err, foundTicketCreator) => {
+        if (req.body.ticket.ticketCreator.username !== foundTicket.ticketCreator.username){
+            User.findById(req.body.ticket.ticketCreator._id, (err, foundTicketCreator) => {
                 if (err) throw err;
-                req.body.ticketCreator = foundTicketCreator._id;
+                req.body.ticket.ticketCreator = foundTicketCreator._id;
             })
         }
         //Check if the ticketOwner changed; If it has, update the ID
-        if (req.body.ticketOwner.username !== foundTicket.ticketOwner.username){
-            User.findOne({username: req.body.ticketOwner.username}, (err, foundTicketOwner) => {
+        if (req.body.ticket.ticketOwner.username !== foundTicket.ticketOwner.username){
+            User.findById(req.body.ticket.ticketOwner._id, (err, foundTicketOwner) => {
                 if (err) throw err;
-                req.body.ticketOwner = foundTicketOwner._id;
+                req.body.ticket.ticketOwner = foundTicketOwner._id;
             })
         }
-        
+
+        //Check if status has changed
+        if(req.body.ticket.status !== foundTicket.status){
+            //Remove from old array, and just push to the end of the new array
+            Project.findOne({projectReference: projRef}).populate('tickets').exec((err, foundProject) => {
+                if (err) throw err;
+                
+                foundProject.save();
+            })
+        }
+
+        foundTicket.description = req.body.ticket.description;
+        foundTicket.status = req.body.ticket.status;
+        foundTicket.title = req.body.ticket.title;
+        foundTicket.ticketOwner = req.body.ticket.ticketOwner;
+        foundTicket.ticketCreator = req.body.ticket.ticketCreator;
+
         foundTicket.save();
+        res.send({success: true, msg: 'Ticket has been updated'})
         
     })
 })
@@ -91,6 +110,7 @@ router.post('/updateTicketStatus', isUserRegularUser, (req, res) => {
     });
 })
 
+//DroppablieId passes us the name of the column, which we need to convert to the status type
 const findCorrectArray = ( status ) =>{
     let result = '';
 

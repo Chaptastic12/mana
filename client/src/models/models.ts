@@ -63,4 +63,5 @@ export interface ProjectContextInterface {
     getChosenTicket: (projectReference: string) => any;
     getChosenproject: (ProjectReference: string) => any;
     updateTicketStatus: (source: {}, destination: {}, projRef: string) => any;
+    updateTicketInformation: (ticket: Ticket) => any;
 }

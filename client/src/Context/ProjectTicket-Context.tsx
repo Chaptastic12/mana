@@ -121,7 +121,6 @@ const ProjectTicketProvider = (props: Props) =>{
     }
 
     const updateTicketStatus = async (source: {}, destination: {}, projRef: string) => {
-        console.log(source, destination, projRef)
         try {
             const response = await Axios({
                 url: 'http://localhost:8081/api/tickets/updateTicketStatus/',
@@ -139,11 +138,30 @@ const ProjectTicketProvider = (props: Props) =>{
         } catch (err) { return err }
     }
 
+    const updateTicketInformation = async ( ticket: Ticket) => {
+        try {
+            const response = await Axios({
+                url: 'http://localhost:8081/api/tickets/updateTicketInformation/',
+                method: 'POST',
+                withCredentials: true,
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                data: JSON.stringify({
+                    ticket
+                })
+            })
+            setRetrieveNewData(prev => !prev);
+            return response;
+        } catch (err) { return err }
+    }
+
 
     return <ProjectTicketContext.Provider value={{
         addProjectToServer, addTicketToServer,
         allProjects, getChosenTicket, allTickets,
-        getChosenproject, updateTicketStatus
+        getChosenproject, updateTicketStatus,
+        updateTicketInformation
     }}>
         { props.children }
     </ProjectTicketContext.Provider>

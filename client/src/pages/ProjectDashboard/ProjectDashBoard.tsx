@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import { useParams } from 'react-router-dom';
 
-import { Ticket, ProjectContextInterface, Project } from '../../models/models';
+import { Ticket, ProjectContextInterface } from '../../models/models';
 import { moveTicketToCorrectArray } from './Util';
 import { ProjectTicketContext } from '../../Context/ProjectTicket-Context';
 import Columns from './Columns/Columns';

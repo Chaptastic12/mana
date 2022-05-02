@@ -2,12 +2,13 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { BsPlusSquare, BsArrowBarRight } from 'react-icons/bs'
 
-import { Comment, Ticket, ProjectContextInterface } from '../../models/models';
+import { Comment, Ticket, ProjectContextInterface, UserContextInterface } from '../../models/models';
 import { ProjectTicketContext } from '../../Context/ProjectTicket-Context';
+import { UserContext } from '../../Context/User-Context';
 
 import CommentDiv from '../../components/Comment/Comment';
 import EditableInput from '../../components/EditableInput/EditableInput';
-import { TICKETS, DUMMY_TICKET, BLANKUSER, USERS } from '../../DummyData';
+import { TICKETS, DUMMY_TICKET, BLANKUSER } from '../../DummyData';
 
 import './TicketDetails.css'
 import ErrorBar from '../../components/ErrorBar/ErrorBar';
@@ -18,8 +19,10 @@ const TicketDetails = () => {
     const [ ticket, setTicket ] = useState(DUMMY_TICKET);
     const [ commentText, setCommentText ] = useState('');
     const [ refresh, setRefresh ] = useState(false);
+    const [ users, setUsers ] = useState([BLANKUSER]);
     const [ error, setError ] = useState('');
-    const { getChosenTicket } = useContext(ProjectTicketContext) as ProjectContextInterface;
+    const { getChosenTicket, updateTicketInformation } = useContext(ProjectTicketContext) as ProjectContextInterface;
+    const { getAllUserNames } = useContext(UserContext) as UserContextInterface;
 
     useEffect(() => {
         const getTicket = async () => {
@@ -27,10 +30,12 @@ const TicketDetails = () => {
             const response = await getChosenTicket(ref);
             setTicket(response.data);
         }
+        const getUsers = async () => {
+            const response = await getAllUserNames();
+            setUsers(response);
+        }
        getTicket();
-
-        // const paramTicket: Ticket[] = TICKETS.filter(x => x.projectReference === projectReference);
-        // if(paramTicket[0].id !== '0'){ setTicket(paramTicket[0]) }
+       getUsers();
 
     }, [ projectReference, refresh ])
 
@@ -61,7 +66,7 @@ const TicketDetails = () => {
         setRefresh(prevState => !prevState)
     }
 
-    const editTicketInputField = (newValue: string, field: string) => {
+    const editTicketInputField = async (newValue: string, field: string) => {
         setError('');
 
         if(newValue.length === 0){ 
@@ -74,13 +79,19 @@ const TicketDetails = () => {
         if(field === 'description'){ ticket.description = newValue }
         if(field === 'status'){ ticket.status = newValue }
         if(field === 'ownerUsername'){
-            const newUser = USERS.filter(x => x.username === newValue);
+            const newUser = users.filter(x => x.username === newValue);
             ticket.ticketOwner = newUser[0];
         }
+
+        const response = await updateTicketInformation(ticket);
+
+        if(response.data.success){
+            setRefresh(prev => !prev);
+        }
         //Save our updated ticket
-        const ticketIndex = TICKETS.findIndex( x => x.projectReference === projectReference);
-        TICKETS[ticketIndex] = ticket;
-        setRefresh(prevState => !prevState)
+        // const ticketIndex = TICKETS.findIndex( x => x.projectReference === projectReference);
+        // TICKETS[ticketIndex] = ticket;
+        // setRefresh(prevState => !prevState)
     }
     
     const status = [ { val: 'Open' }, { val: 'In Progress' }, {val: 'Quality Check' }, { val: 'Finished' }, { val: 'Backlog' } ]
@@ -118,7 +129,7 @@ const TicketDetails = () => {
                 <div className='TicketDetails__Right'>
                     <div>Ticket Information</div>
                     <DataListEdit title='Status' value={ticket.status} setValue={(val: string) => editTicketInputField(val, 'status')} id='status' listName='ticketStatus' data={status} name='status' placeholder={'Pick a Status'}/>
-                    <DataListEdit title='Ticket Owner' value={ticket.ticketOwner.username} setValue={(val: string) => editTicketInputField(val, 'ownerUsername')} id='ownerUsername' listName='ticketOwnerUsername' data={USERS} name='userName' placeholder={'Pick a User'}/>
+                    <DataListEdit title='Ticket Owner' value={ticket.ticketOwner.username} setValue={(val: string) => editTicketInputField(val, 'ownerUsername')} id='ownerUsername' listName='ticketOwnerUsername' data={users} name='userName' placeholder={'Pick a User'}/>
                 </div>
             </div>
     </div>
