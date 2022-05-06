@@ -73,7 +73,16 @@ router.post('/updateTicketInformation', isUserRegularUser, (req, res) => {
             //Remove from old array, and just push to the end of the new array
             Project.findOne({projectReference: projRef}).populate('tickets').exec((err, foundProject) => {
                 if (err) throw err;
-                
+                //Find the correct origin and ending destiantion of our moving ticket
+                const currentTicketType = findCorrectTicketType(foundTicket.status);
+                const newTicketType = findCorrectTicketType(req.body.ticket.status);
+                //Get the index of the ticket in the old array
+                const currentTicketIndex = foundProject.tickets[currentTicketType].findIndexOf(foundTicket._id);
+                //Remove the ticket from the old status array
+                foundProject.tickets[currentTicketType].slice(currentTicketIndex, 1);
+                //Push the ticket into the new status array, at the end
+                foundProject.tickets[newTicketType].push(foundTicket._id)
+                //Save project
                 foundProject.save();
             })
         }
@@ -187,6 +196,32 @@ const moveTicketToCorrectArray = (source, destination, project) => {
     }
 
     return project;
+}
+
+const findCorrectTicketType = ( status ) => {
+    let result = '';
+
+    switch(status){
+        case('Open Items'):
+            result = 'openTickets'
+            break;
+        case('In Progress Items'):
+            result = 'inProgress'
+            break;
+        case('Quality Check Items'):
+            result = 'qualityCheck'
+            break;
+        case('Finished Items'):
+            result = 'finishedTickets'
+            break;
+        case('Backlog Items'):
+            result = 'backlogTickets'
+            break;
+        default:
+            result = ''
+            break;
+    }
+    return result;
 }
 
 module.exports = router;
