@@ -77,27 +77,35 @@ router.post('/updateTicketInformation', isUserRegularUser, (req, res) => {
                 const currentTicketType = findCorrectTicketType(foundTicket.status);
                 const newTicketType = findCorrectTicketType(req.body.ticket.status);
                 //Get the index of the ticket in the old array
-                const currentTicketIndex = foundProject.tickets[currentTicketType].findIndexOf(foundTicket._id);
+                const currentTicketIndex = foundProject.tickets[currentTicketType].indexOf(foundTicket._id);
                 //Remove the ticket from the old status array
-                foundProject.tickets[currentTicketType].slice(currentTicketIndex, 1);
+                foundProject.tickets[currentTicketType].splice(currentTicketIndex, 1);
                 //Push the ticket into the new status array, at the end
                 foundProject.tickets[newTicketType].push(foundTicket._id)
                 //Save project
                 foundProject.save();
-            })
-        }
 
-        foundTicket.description = req.body.ticket.description;
-        foundTicket.status = req.body.ticket.status;
-        foundTicket.title = req.body.ticket.title;
-        foundTicket.ticketOwner = req.body.ticket.ticketOwner;
-        foundTicket.ticketCreator = req.body.ticket.ticketCreator;
-
-        foundTicket.save();
-        res.send({success: true, msg: 'Ticket has been updated'})
+                foundTicket.description = req.body.ticket.description;
+                foundTicket.status = req.body.ticket.status;
+                foundTicket.title = req.body.ticket.title;
+                foundTicket.ticketOwner = req.body.ticket.ticketOwner;
+                foundTicket.ticketCreator = req.body.ticket.ticketCreator;
         
-    })
-})
+                foundTicket.save();
+                res.send({success: true, msg: 'Ticket has been updated'})
+            });
+        } else {
+            foundTicket.description = req.body.ticket.description;
+            foundTicket.status = req.body.ticket.status;
+            foundTicket.title = req.body.ticket.title;
+            foundTicket.ticketOwner = req.body.ticket.ticketOwner;
+            foundTicket.ticketCreator = req.body.ticket.ticketCreator;
+    
+            foundTicket.save();
+            res.send({success: true, msg: 'Ticket has been updated'})
+        }
+    });
+});
 
 router.post('/updateTicketStatus', isUserRegularUser, (req, res) => {
     const { source, destination, projRef } = req.body;
@@ -117,6 +125,10 @@ router.post('/updateTicketStatus', isUserRegularUser, (req, res) => {
         })
     
     });
+})
+
+router.post('/deleteTicket', isUserRegularUser, (req, res) => {
+
 })
 
 //DroppablieId passes us the name of the column, which we need to convert to the status type
@@ -202,19 +214,19 @@ const findCorrectTicketType = ( status ) => {
     let result = '';
 
     switch(status){
-        case('Open Items'):
+        case('Open'):
             result = 'openTickets'
             break;
-        case('In Progress Items'):
+        case('In Progress'):
             result = 'inProgress'
             break;
-        case('Quality Check Items'):
+        case('Quality Check'):
             result = 'qualityCheck'
             break;
-        case('Finished Items'):
+        case('Finished'):
             result = 'finishedTickets'
             break;
-        case('Backlog Items'):
+        case('Backlog'):
             result = 'backlogTickets'
             break;
         default:
