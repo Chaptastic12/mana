@@ -43,8 +43,6 @@ router.get('/getSpecificProject/:projectReference', ( req, res ) => {
         .exec((err, foundProject) =>{
         if (err) throw err;
 
-        console.log(foundProject)
-
         res.send(foundProject)
     });
 })
@@ -58,7 +56,6 @@ router.get('/getAllProjects', ( req, res ) => {
 })
 
 router.post('/addNewProject', isUserRegularUser, ( req, res ) => {
-    console.log(req.body)
     let project = new Project(req.body);
     project.save(req.body);
 

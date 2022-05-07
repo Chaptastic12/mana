@@ -156,12 +156,30 @@ const ProjectTicketProvider = (props: Props) =>{
         } catch (err) { return err }
     }
 
+    const deleteTicket = async ( ticket: Ticket) => {
+        try {
+            const response = await Axios({
+                url: 'http://localhost:8081/api/tickets/deleteTicket/',
+                method: 'POST',
+                withCredentials: true,
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                data : JSON.stringify({
+                    ticket
+                })
+            })
+            setRetrieveNewData(prev => !prev);
+            return response;
+        } catch(err) { return err }
+    }
+
 
     return <ProjectTicketContext.Provider value={{
         addProjectToServer, addTicketToServer,
         allProjects, getChosenTicket, allTickets,
         getChosenproject, updateTicketStatus,
-        updateTicketInformation
+        updateTicketInformation, deleteTicket
     }}>
         { props.children }
     </ProjectTicketContext.Provider>

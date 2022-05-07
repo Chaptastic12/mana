@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link, useParams } from 'react-router-dom';
-import { BsPlusSquare, BsArrowBarRight } from 'react-icons/bs'
+import { Link, useParams, useNavigate } from 'react-router-dom';
+import { BsPlusSquare } from 'react-icons/bs'
 
 import { Comment, Ticket, ProjectContextInterface, UserContextInterface } from '../../models/models';
 import { ProjectTicketContext } from '../../Context/ProjectTicket-Context';
@@ -13,6 +13,7 @@ import { TICKETS, DUMMY_TICKET, BLANKUSER } from '../../DummyData';
 import './TicketDetails.css'
 import ErrorBar from '../../components/ErrorBar/ErrorBar';
 import DataListEdit from '../../components/UI Elements/DataList/DataListEdit';
+import Modal from '../../components/Modal/Modal';
 const TicketDetails = () => {
 
     const { projectReference } = useParams();
@@ -21,8 +22,11 @@ const TicketDetails = () => {
     const [ refresh, setRefresh ] = useState(false);
     const [ users, setUsers ] = useState([BLANKUSER]);
     const [ error, setError ] = useState('');
-    const { getChosenTicket, updateTicketInformation } = useContext(ProjectTicketContext) as ProjectContextInterface;
+    const [ showModal, setShowModal ] = useState(false);
+    const { getChosenTicket, updateTicketInformation, deleteTicket } = useContext(ProjectTicketContext) as ProjectContextInterface;
     const { getAllUserNames } = useContext(UserContext) as UserContextInterface;
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const getTicket = async () => {
@@ -88,16 +92,34 @@ const TicketDetails = () => {
         if(response.data.success){
             setRefresh(prev => !prev);
         }
-        //Save our updated ticket
-        // const ticketIndex = TICKETS.findIndex( x => x.projectReference === projectReference);
-        // TICKETS[ticketIndex] = ticket;
-        // setRefresh(prevState => !prevState)
     }
     
     const status = [ { val: 'Open' }, { val: 'In Progress' }, {val: 'Quality Check' }, { val: 'Finished' }, { val: 'Backlog' } ]
     const projRef = ticket.projectReference.split('-')[0];
+
+    const deleteThisTicket = async () => {
+        const response = await deleteTicket(ticket);
+        
+        if(response.data.success){
+            navigate(`/dashboard/${ projRef }`)
+        } else {
+            setShowModal(false);
+            setError(response.data.msg);
+        }
+    }
+
   return (
     <div className='TicketDetails'>
+        { showModal && <Modal closeModal={setShowModal} width='small'> 
+            <div className='deleteWarning'>
+                <div>
+                    <h1>Confirm ticket deletion?</h1>
+                    <p>This action cannot be undone</p>
+                    <button onClick={()=>setShowModal(false)}>Close</button>
+                    <button className='dangerButton' onClick={() => deleteThisTicket() }>Delete</button>
+                </div>
+            </div>
+        </Modal>}
             <div className='TicketDetails__Header'>
                 { error && <div className='TicketDetails__Error'><ErrorBar errorMsg={error} /></div> }
                 <span className='bold'>[{ ticket.projectReference }]</span> <EditableInput type='input' hasLabel={false} text={ticket.title} field='title' editTicketField={(newValue: string, field: string) => editTicketInputField(newValue, field)}/>
@@ -108,6 +130,7 @@ const TicketDetails = () => {
                 ...
                 <Link to={`/dashboard/${ projRef }`}> / { projRef } </Link> 
                 <Link to={`/ticket/${ ticket.projectReference }`}>/ { ticket.projectReference }</Link>
+                <button className='dangerButton' onClick={() => setShowModal(true) }>Delete</button>
             </div>
 
             <div className='TicketDetails__Container'>

@@ -18,3 +18,10 @@
     border-radius: 15px;
     z-index: 200;
 }
+
+.small {
+    width: 500px;
+    height: 250px;
+    min-width: 500px;
+    min-height: 250px;
+}

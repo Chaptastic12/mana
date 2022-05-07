@@ -113,3 +113,18 @@
     width: var(--ColOneWidth);
     padding-top: 10px;
 }
+
+.deleteWarning{
+    display: flex;
+    justify-content: center;
+    padding-top: 25px;
+    width: 100%;
+}
+
+.deleteWarning h1 {
+    align-items: center;
+}
+
+.deleteWarning button {
+    float: right
+}

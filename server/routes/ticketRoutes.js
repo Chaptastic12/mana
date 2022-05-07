@@ -38,7 +38,7 @@ router.post('/addNewTicket', isUserRegularUser, ( req, res ) => {
                 //Save our ticket, and update the project with the resulting ._id
                 const newTicket = new Ticket(req.body);
                 newTicket.save().then(result =>{
-                    const ticketType = findCorrectArray(result.status);
+                    const ticketType = findCorrectTicketType(result.status);
                     foundProject.tickets[ticketType].push(result._id);
                     foundProject.numTickets += 1;
                     foundProject.save();
@@ -128,7 +128,18 @@ router.post('/updateTicketStatus', isUserRegularUser, (req, res) => {
 })
 
 router.post('/deleteTicket', isUserRegularUser, (req, res) => {
+    const { ticket } = req.body;
+    const projectReference = ticket.projectReference.split('-')[0];
 
+    Project.findOne({projectReference: projectReference}).populate('tickets').exec((err, foundProject) => {
+        if (err) throw err;
+        const currentTicketType = findCorrectTicketType(ticket.status);
+        //Replace the ticket array of that status with all the tickets that don't match the ticket being deleteds id
+        foundProject.tickets[currentTicketType] = foundProject.tickets[currentTicketType].filter(x => x._id.toString() !== ticket._id);
+        foundProject.save();
+        Ticket.findByIdAndDelete(ticket._id);
+        res.send({success: true, msg: 'Ticket has been deleted'})
+    });
 })
 
 //DroppablieId passes us the name of the column, which we need to convert to the status type
