@@ -2,6 +2,7 @@ import React from 'react'
 
 import { BsPlusSquare } from 'react-icons/bs'
 import { IoSearchOutline } from 'react-icons/io5'
+import Button from '../../../components/UI Elements/Button/Button';
 
 import './SearchBar.css';
 
@@ -19,7 +20,7 @@ const SearchBar = (props: Props) => {
         </div>
         <div className='SearchBar_Buttons'>
             <div className='Buttons'>
-              <button onClick={() => props.openModal(true)}> <BsPlusSquare /> Ticket</button>
+              <Button function={() => props.openModal(true)}> <BsPlusSquare /> Ticket</Button>
             </div>
         </div>
     </div>

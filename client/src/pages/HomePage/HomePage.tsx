@@ -5,6 +5,7 @@ import Modal from '../../components/Modal/Modal';
 import { BsPlusSquare } from 'react-icons/bs'
 
 import './HomePage.css';
+import Button from '../../components/UI Elements/Button/Button';
 const HomePage = () => {
 
     const [ showAddTicket, setShowAddTicket ] = useState<boolean>(false);
@@ -28,8 +29,8 @@ const HomePage = () => {
                 Or, create a new Project or Ticket below!
             </div>
             <div className='HomePage-Buttons'>
-                <button onClick={() => setShowAddTicket(true)}> <BsPlusSquare /> Ticket</button>
-                <button onClick={() => setShowAddProject(true)}> <BsPlusSquare /> Project</button>
+                <Button function={() => setShowAddTicket(true)}> <BsPlusSquare /> Ticket</Button>
+                <Button function={() => setShowAddProject(true)}> <BsPlusSquare /> Project</Button>
             </div>
         </div>
 

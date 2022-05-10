@@ -14,6 +14,7 @@ import './TicketDetails.css'
 import ErrorBar from '../../components/ErrorBar/ErrorBar';
 import DataListEdit from '../../components/UI Elements/DataList/DataListEdit';
 import Modal from '../../components/Modal/Modal';
+import Button from '../../components/UI Elements/Button/Button';
 const TicketDetails = () => {
 
     const { projectReference } = useParams();
@@ -99,7 +100,7 @@ const TicketDetails = () => {
 
     const deleteThisTicket = async () => {
         const response = await deleteTicket(ticket);
-        
+
         if(response.data.success){
             navigate(`/dashboard/${ projRef }`)
         } else {
@@ -130,7 +131,7 @@ const TicketDetails = () => {
                 ...
                 <Link to={`/dashboard/${ projRef }`}> / { projRef } </Link> 
                 <Link to={`/ticket/${ ticket.projectReference }`}>/ { ticket.projectReference }</Link>
-                <button className='dangerButton' onClick={() => setShowModal(true) }>Delete</button>
+                <Button styles='dangerButton' function={() => setShowModal(true) }>Delete</Button>
             </div>
 
             <div className='TicketDetails__Container'>

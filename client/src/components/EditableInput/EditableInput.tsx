@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useContext } from 'react'
+import { UserContext } from '../../Context/User-Context';
+import { UserContextInterface } from '../../models/models';
 
 import './EditableInput.css'
 
@@ -14,6 +16,7 @@ const EditableInput = (props: PROPS) => {
 
     const [ fieldText, setFieldText ] = useState(props.text);
     const [ clicked, setClicked ] = useState(false);
+    const { user } = useContext(UserContext) as UserContextInterface;
 
     const inputRef = useRef<HTMLInputElement>(null);
     const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -28,9 +31,12 @@ const EditableInput = (props: PROPS) => {
     }
 
     const spanClickHandler = () => {
-        setClicked(true);
-        if(props.type === 'input') { setTimeout(() => inputRef.current?.focus(), 100 ) } else
-        if(props.type === 'textarea') { setTimeout(() => textAreaRef.current?.focus(), 100 ) }
+        //Add check to see if user is allowed to edit fields
+        if(!user.isGuest){
+            setClicked(true);
+            if(props.type === 'input') { setTimeout(() => inputRef.current?.focus(), 100 ) } else
+            if(props.type === 'textarea') { setTimeout(() => textAreaRef.current?.focus(), 100 ) }
+        }
     }
     
     let fieldToUse;

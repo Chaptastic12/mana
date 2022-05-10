@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react'
 import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import { useParams } from 'react-router-dom';
 
-import { Ticket, ProjectContextInterface } from '../../models/models';
+import { Ticket, ProjectContextInterface, UserContextInterface, User } from '../../models/models';
 import { moveTicketToCorrectArray } from './Util';
 import { ProjectTicketContext } from '../../Context/ProjectTicket-Context';
 import Columns from './Columns/Columns';
@@ -11,6 +11,7 @@ import SearchBar from './SearchBar/SearchBar';
 import './ProjectDashBoard.css';
 import Modal from '../../components/Modal/Modal';
 import AddTicketForm from './AddTicketForm/AddTicketForm';
+import { UserContext } from '../../Context/User-Context';
 
 const EMPTY_PROJECT = { 
     id: '0',
@@ -32,7 +33,8 @@ const ProjectDashBoard = () => {
     const [ refresh, setRefresh ] = useState<boolean>(false);
     const [ ticketSearch, setTicketSearch ] = useState<string>('');
     const { projectReference } = useParams();
-    const { getChosenproject, updateTicketStatus } = useContext(ProjectTicketContext) as ProjectContextInterface
+    const { getChosenproject, updateTicketStatus } = useContext(ProjectTicketContext) as ProjectContextInterface;
+    const { user } = useContext(UserContext) as UserContextInterface;
 
     useEffect(() => {
         const getProject = async () =>{
@@ -49,7 +51,7 @@ const ProjectDashBoard = () => {
     }
 
     const onDragEnd = async (result: DropResult) => {
-        if(chosenProject.tickets){
+        if(chosenProject.tickets && !user.isGuest){
             const { source, destination } = result;
             let copyProjectData = { ...chosenProject };
 

@@ -21,19 +21,26 @@ router.post('/registerUser', async (req, res) => {
       res.send("Improper Values");
       return;
     }
-
+    //Check if username exists
     User.findOne({ username }, async (err, foundUser) => {
       if (err) throw err;
       if (foundUser) res.send({success: false, msg: "User Already Exists" });
       if (!foundUser) {
-          let user = new User({
-            username: username,
-            email: email,
-            password: bcrypt.hashSync(password, 10)
-          });
-          user.save().then(user => console.log(user));
-          res.send({ success: true, msg: 'User successfully logged in', userInfo: { username: user.username, isAdmin: user.isAdmin, isRegUser: user.isRegUser, isGuest: user.isGuest } });
-      }
+          //Check if email exists or not
+          User.findOne({ email }, async (err, foundUserEmail) => {
+              if(err) throw err;
+              if(foundUserEmail) res.send({success: false, msg: 'User Already Exists'});
+              if(!foundUserEmail){
+                let user = new User({
+                    username: username,
+                    email: email,
+                    password: bcrypt.hashSync(password, 10)
+                  });
+                  user.save().then(user => console.log(user));
+                  res.send({ success: true, msg: 'User successfully logged in', userInfo: { username: user.username, isAdmin: user.isAdmin, isRegUser: user.isRegUser, isGuest: user.isGuest } });
+              }
+          })
+        }
     })
   });
 
@@ -89,11 +96,15 @@ router.post('/deleteUser', isUserAnAdminUser, async (req, res) => {
     res.send('User has been deleted.');
 })
 
-router.get('/getAllUsers', isUserRegularUser, (req, res) => {
-    console.log('getting all users')
-    User.find({}).select({'username': 1}).exec((err, foundUsers) => {
-        res.send(foundUsers)
-    })
+router.get('/getAllUsers', (req, res) => {
+    if(req.isAuthenticated()){
+        User.find({}).select({'username': 1}).exec((err, foundUsers) => {
+            res.send(foundUsers)
+        })
+    } else {
+        res.send({success: false, msg: 'Access prohibited'})
+    }
+
 
 })
 

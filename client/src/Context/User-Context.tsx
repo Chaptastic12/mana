@@ -57,7 +57,6 @@ const UserProvider = (props: Props) =>{
             if(response.data.success){
                 setUser({ username: response.data.userInfo.username, isAdmin: response.data.userInfo.isAdmin, isRegUser: response.data.userInfo.isRegUser, isGuest: response.data.userInfo.isGuest });
             } 
-            console.log(response)
             return { msg: response.data.msg, success: response.data.success };
         } catch (err) {
             return err;

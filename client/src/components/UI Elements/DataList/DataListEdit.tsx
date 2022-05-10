@@ -1,4 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { UserContext } from '../../../Context/User-Context';
+import { UserContextInterface } from '../../../models/models';
 
 import './DataList.css';
 
@@ -15,6 +17,7 @@ export interface PROPS {
 
 const DataListEdit = (props: PROPS) => {
     const [ clicked, setClicked ] = useState<boolean>(false);
+    const { user } = useContext(UserContext) as UserContextInterface;
 
     let options;
     if(props.name === 'status'){
@@ -26,7 +29,7 @@ const DataListEdit = (props: PROPS) => {
   return (
     <div className='DataList'>
         <div style={{marginRight: '5px'}}> { props.title }: </div>
-        { !clicked ? <div onClick={() => setClicked(true)}> { props.value } </div> : <>
+        { !clicked ? <div onClick={() => !user.isGuest && setClicked(true)}> { props.value } </div> : <>
             <input list={props.listName} name={props.name} id={props.id} placeholder={props.placeholder} onChange={(e) => props.setValue(e.target.value) } onBlur={() => setClicked(false)}/>
             <datalist id={props.listName}>
                 { options }

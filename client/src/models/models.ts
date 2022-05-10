@@ -49,7 +49,7 @@ export interface User {
 }
 
 export interface UserContextInterface {
-    user: { username: string };
+    user: { username: string, isAdmin: boolean, isRegUser: boolean, isGuest: boolean };
     loginUser: (username: string, password: string) => void;
     registerUser: (username: string, email: string, password: string) => void;
     logoutUser: () => void;
