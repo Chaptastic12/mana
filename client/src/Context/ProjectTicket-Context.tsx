@@ -174,12 +174,50 @@ const ProjectTicketProvider = (props: Props) =>{
         } catch(err) { return err }
     }
 
+    const addCommentToTicket = async (comment: string, id: string) => {
+        try {
+            const response = await Axios({
+                url: 'http://localhost:8081/api/tickets/addCommentToTicket/',
+                method: 'POST',
+                withCredentials: true,
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                data : JSON.stringify({
+                    comment, id
+                })
+            })
+            setRetrieveNewData(prev => !prev);
+            return response;
+        } catch(err) { return err }
+    }
+
+    const deleteCommentFromTicket = async (commentId: string, ticketId: string) => {
+        try {
+            const response = await Axios({
+                url: 'http://localhost:8081/api/tickets/deleteCommentFromTicket/',
+                method: 'POST',
+                withCredentials: true,
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                data : JSON.stringify({
+                    commentId, ticketId
+                })
+            })
+            setRetrieveNewData(prev => !prev);
+            return response;
+        } catch(err) { return err }
+    }
+
+
 
     return <ProjectTicketContext.Provider value={{
         addProjectToServer, addTicketToServer,
         allProjects, getChosenTicket, allTickets,
         getChosenproject, updateTicketStatus,
-        updateTicketInformation, deleteTicket
+        updateTicketInformation, deleteTicket,
+        addCommentToTicket, deleteCommentFromTicket
     }}>
         { props.children }
     </ProjectTicketContext.Provider>

@@ -38,3 +38,10 @@
     bottom: 10px;
     right: 15px;
 }
+
+.deleteIcon{
+    display: inline-block;
+    padding-left: 68%;
+    transform: scale(1.25);
+    cursor: pointer;
+}

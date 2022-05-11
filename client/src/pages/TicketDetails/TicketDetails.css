@@ -128,3 +128,8 @@
 .deleteWarning button {
     float: right
 }
+
+.TicketDetails___DeleteButton{
+    display: inline-block;
+    padding-left: 50px;
+}

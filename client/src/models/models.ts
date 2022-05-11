@@ -33,6 +33,7 @@ export interface Ticket {
 }
 
 export interface Comment {
+    _id?: string;
     id: string;
     comment: string;
     createdDate: string;
@@ -65,4 +66,6 @@ export interface ProjectContextInterface {
     updateTicketStatus: (source: {}, destination: {}, projRef: string) => any;
     updateTicketInformation: (ticket: Ticket) => any;
     deleteTicket: ( ticket: Ticket) => any;
+    addCommentToTicket: (comment: string, id: string) => any;
+    deleteCommentFromTicket: (commentId: string, ticketId: string) => any;
 }

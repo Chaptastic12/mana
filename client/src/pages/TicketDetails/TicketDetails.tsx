@@ -15,6 +15,8 @@ import ErrorBar from '../../components/ErrorBar/ErrorBar';
 import DataListEdit from '../../components/UI Elements/DataList/DataListEdit';
 import Modal from '../../components/Modal/Modal';
 import Button from '../../components/UI Elements/Button/Button';
+import { randomUUID } from 'crypto';
+
 const TicketDetails = () => {
 
     const { projectReference } = useParams();
@@ -24,8 +26,8 @@ const TicketDetails = () => {
     const [ users, setUsers ] = useState([BLANKUSER]);
     const [ error, setError ] = useState('');
     const [ showModal, setShowModal ] = useState(false);
-    const { getChosenTicket, updateTicketInformation, deleteTicket } = useContext(ProjectTicketContext) as ProjectContextInterface;
-    const { getAllUserNames } = useContext(UserContext) as UserContextInterface;
+    const { getChosenTicket, updateTicketInformation, deleteTicket, addCommentToTicket, deleteCommentFromTicket } = useContext(ProjectTicketContext) as ProjectContextInterface;
+    const { getAllUserNames, user } = useContext(UserContext) as UserContextInterface;
 
     const navigate = useNavigate();
 
@@ -48,27 +50,46 @@ const TicketDetails = () => {
         return <div>ERROR: UNABLE TO GET TICKET FROM SERVER</div>
     }
 
-    const ticketComments = ticket.comments.map( x => { return <CommentDiv key={x.id}comment={x} /> } );
+    const ticketComments = ticket.comments.map( x => { return <CommentDiv key={x._id }comment={x} deleteComment={() => deleteComment(x._id || '')} /> } );
+
+    const deleteComment = async (commentId: string) => {
+        const response = await deleteCommentFromTicket(commentId, ticket._id || '');
+
+        if(response.data.success){
+            setRefresh(prevState => !prevState);
+        } else {
+            setError(response.data.msg)
+        }
+    }
 
     //Will eventually need to be reworked once we are on a server
-    const addCommentToTicket = () => {
-        const date = new Date();
-        let payload: Comment = {
-            id: (Math.random() * Math.random() * 100 ).toString(),
-            comment: commentText,
-            createdDate: date.toLocaleDateString(),
-            author: BLANKUSER
+    const addComment = async () => {
+        // const date = new Date();
+        // let payload: Comment = {
+        //     id: (Math.random() * Math.random() * 100 ).toString(),
+        //     comment: commentText,
+        //     createdDate: date.toLocaleDateString(),
+        //     author: BLANKUSER
+        // }
+
+        const response = await addCommentToTicket(commentText, ticket._id || '');
+
+        if(response.data.success){
+            setCommentText('');
+            setRefresh(prevState => !prevState);
+        } else {
+            setError(response.data.msg);
         }
 
-        //Update our comments with the new payload
-        const length = ticket.comments.length;
-        ticket.comments[length] = payload;
+        // //Update our comments with the new payload
+        // const length = ticket.comments.length;
+        // ticket.comments[length] = payload;
 
-        //Update our ticket in the general Array
-        const ticketIndex = TICKETS.findIndex( x => x.projectReference === projectReference);
-        TICKETS[ticketIndex] = ticket;
-        setCommentText('')
-        setRefresh(prevState => !prevState)
+        // //Update our ticket in the general Array
+        // const ticketIndex = TICKETS.findIndex( x => x.projectReference === projectReference);
+        // TICKETS[ticketIndex] = ticket;
+        // setCommentText('')
+        // setRefresh(prevState => !prevState)
     }
 
     const editTicketInputField = async (newValue: string, field: string) => {
@@ -109,6 +130,11 @@ const TicketDetails = () => {
         }
     }
 
+    let hideCommentSection = ''
+    if(user.isGuest){
+        hideCommentSection = 'none'
+    }
+
   return (
     <div className='TicketDetails'>
         { showModal && <Modal closeModal={setShowModal} width='small'> 
@@ -131,7 +157,9 @@ const TicketDetails = () => {
                 ...
                 <Link to={`/dashboard/${ projRef }`}> / { projRef } </Link> 
                 <Link to={`/ticket/${ ticket.projectReference }`}>/ { ticket.projectReference }</Link>
-                <Button styles='dangerButton' function={() => setShowModal(true) }>Delete</Button>
+                <div className='TicketDetails___DeleteButton'>
+                    <Button styles='dangerButton' function={() => setShowModal(true) }>Delete</Button>
+                </div>
             </div>
 
             <div className='TicketDetails__Container'>
@@ -143,9 +171,11 @@ const TicketDetails = () => {
                         <div className='TicketDetails_Comments'>
                             <div style={{paddingBottom: '5px'}}><label>Comments</label></div>
                             { ticketComments.length !== 0 ? ticketComments : <div className='TicketDetails_NoComments'>No Comments / Changes for this ticket</div> }
-                            <textarea placeholder='Enter Comment' value={commentText} onChange={(e) => setCommentText(e.target.value)} />
-                            <div className='TicketDetails_CommentsButton'>
-                                <button onClick={() => addCommentToTicket()}> <BsPlusSquare /> Comment</button>
+                            <div style={{display: hideCommentSection }}>
+                                <textarea placeholder='Enter Comment' value={commentText} onChange={(e) => setCommentText(e.target.value)} />
+                                <div className='TicketDetails_CommentsButton'>
+                                    <Button function={() => addComment()}> <BsPlusSquare /> Comment</Button>
+                                </div>
                             </div>
                         </div>
                     </div>

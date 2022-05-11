@@ -2,15 +2,26 @@ const express = require('express');
 const router = express.Router();
 const Ticket = require('../models/ticket');
 const Project = require('../models/project');
+const Comment = require('../models/comment');
 const User = require('../models/user');
 const { isUserRegularUser } = require('../middleware/privilegeMiddlware');
+const { rawListeners } = require('../models/user');
+const comment = require('../models/comment');
 
 router.get('/getSpecificTicket/:projectReference', ( req, res ) => {
-    Ticket.findOne({projectReference: req.params.projectReference}).populate('ticketOwner').populate('ticketCreator').exec((err, foundTicket) => {
-        if (err) throw err;
-
-        res.send(foundTicket)
-    })
+    if(req.isAuthenticated()){
+        Ticket.findOne({projectReference: req.params.projectReference}).populate('ticketOwner').populate('ticketCreator').populate({
+            path: 'comments',
+            populate: {
+                path: 'author',
+                model: 'User'
+            }
+        }).exec((err, foundTicket) => {
+            if (err) throw err;
+    
+            res.send(foundTicket)
+        })
+    }
 })
 
 router.get('/getAllTickets', (req, res) => {
@@ -140,6 +151,40 @@ router.post('/deleteTicket', isUserRegularUser, (req, res) => {
         Ticket.findByIdAndDelete(ticket._id);
         res.send({success: true, msg: 'Ticket has been deleted'})
     });
+})
+
+router.post('/addCommentToTicket', isUserRegularUser, (req, res) => {
+    const { comment, id } = req.body;
+
+    Ticket.findById(id, (err, foundTicket) => {
+        if (err) throw err;
+
+        User.findById(req.user.id, (err, foundUser) => {
+            if (err) throw err;
+
+            const newComment = new Comment({ comment, author: foundUser._id });
+            newComment.save().then(result => {
+                foundTicket.comments.push(result._id);
+                foundTicket.save();
+                res.send({success: true, msg: 'Comment added'})
+            });
+        })
+
+    })
+})
+
+router.post('/deleteCommentFromTicket', isUserRegularUser, (req, res) => {
+    const { commentId, ticketId } = req.body;
+    Ticket.findById(ticketId, (err, foundTicket) =>{
+        if (err) throw err;
+        foundTicket.comments = foundTicket.comments.filter(x => x._id.toString() !== commentId);
+        foundTicket.save();
+
+        Comment.findByIdAndDelete(commentId, (err, foundComment) => {
+            if (err) throw err;
+            res.send({success: true, msg: 'Comment deleted'});
+        })
+    } )
 })
 
 //DroppablieId passes us the name of the column, which we need to convert to the status type
