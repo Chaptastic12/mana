@@ -40,6 +40,7 @@ app.use(session({
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized:true,
+    maxAge: Date.now() + (30 * 86400 * 1000)
 }));
 
 app.use(passport.initialize());
