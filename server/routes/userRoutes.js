@@ -98,7 +98,7 @@ router.post('/deleteUser', isUserAnAdminUser, async (req, res) => {
 
 router.get('/getAllUsers', (req, res) => {
     if(req.isAuthenticated()){
-        User.find({}).select({'username': 1}).exec((err, foundUsers) => {
+        User.find({isGuest: false}).select({'username': 1}).exec((err, foundUsers) => {
             res.send(foundUsers)
         })
     } else {
