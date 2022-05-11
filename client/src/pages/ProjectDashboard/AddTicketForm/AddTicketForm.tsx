@@ -22,7 +22,7 @@ const AddTicketForm = (props: Props) => {
     const [ allUsers, setAllUsers ] = useState<User[]>([]);
 
     const { addTicketToServer, allProjects, getChosenproject } = useContext(ProjectTicketContext) as ProjectContextInterface;
-    const { getAllUserNames } = useContext(UserContext) as UserContextInterface;
+    const { getAllUserNames, user } = useContext(UserContext) as UserContextInterface;
 
     useEffect(() =>{
         const getUsers = async () => {
@@ -31,6 +31,9 @@ const AddTicketForm = (props: Props) => {
         }
     
         getUsers();
+
+        setTempCreator(user.username);
+        setTempOwner(user.username);
     //eslint-disable-next-line
     },[])
     if(!allUsers[0]){
