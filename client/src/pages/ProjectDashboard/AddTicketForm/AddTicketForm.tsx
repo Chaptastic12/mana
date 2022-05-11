@@ -8,12 +8,15 @@ import { UserContext } from '../../../Context/User-Context'
 import { ProjectContextInterface, Project, Ticket, UserContextInterface, User } from '../../../models/models'
 
 import './AddTicketForm.css'
+import { useNavigate } from 'react-router'
 
 export interface Props {
     closeModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const AddTicketForm = (props: Props) => {
+
+    const navigate = useNavigate();
 
     const [ formData, setFormData ] = useState<Ticket>(DUMMY_TICKET);
     const [ tempCreator, setTempCreator ] = useState('')
@@ -129,6 +132,7 @@ const AddTicketForm = (props: Props) => {
             copyState.ticketCreator.username = tempCreator;
 
             addTicketToServer({...copyState});
+            setTimeout(() => navigate('/ticket/' + ticketNumber), 500);
             props.closeModal(false);
         }
     }

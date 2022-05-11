@@ -64,14 +64,6 @@ const TicketDetails = () => {
 
     //Will eventually need to be reworked once we are on a server
     const addComment = async () => {
-        // const date = new Date();
-        // let payload: Comment = {
-        //     id: (Math.random() * Math.random() * 100 ).toString(),
-        //     comment: commentText,
-        //     createdDate: date.toLocaleDateString(),
-        //     author: BLANKUSER
-        // }
-
         const response = await addCommentToTicket(commentText, ticket._id || '');
 
         if(response.data.success){
@@ -80,16 +72,6 @@ const TicketDetails = () => {
         } else {
             setError(response.data.msg);
         }
-
-        // //Update our comments with the new payload
-        // const length = ticket.comments.length;
-        // ticket.comments[length] = payload;
-
-        // //Update our ticket in the general Array
-        // const ticketIndex = TICKETS.findIndex( x => x.projectReference === projectReference);
-        // TICKETS[ticketIndex] = ticket;
-        // setCommentText('')
-        // setRefresh(prevState => !prevState)
     }
 
     const editTicketInputField = async (newValue: string, field: string) => {
