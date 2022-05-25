@@ -8,12 +8,16 @@ const session         = require('express-session');
 const projectRoutes   = require('./routes/projectRoutes');
 const ticketRoutes    = require('./routes/ticketRoutes');
 const userRoutes      = require('./routes/userRoutes');
+const path            = require('path');
 
 //Checkif production or not
 if(process.env.NODE_ENV !== 'production'){
     //Load  our .env variables
     require('dotenv').config();
 }
+
+const publicPath = path.join(__dirname, 'Client/build');
+
 ///////////
 //
 // CONNECT TO OUR DATABASE
@@ -27,6 +31,8 @@ connect
     .catch( err => { console.log('Error attempting to reach server' + err )})  
 
 const app = express();
+
+app.use(express.static(publicPath));
 
 ///////////
 //
@@ -80,6 +86,12 @@ app.use(cors(corOptions));
 app.use('/api/projects', projectRoutes);
 app.use('/api/tickets',  ticketRoutes);
 app.use('/api/auth',     userRoutes)
+
+if(process.env.NODE_ENV === 'production'){
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, "/Client/build", "index.html"));
+    });
+}
 
 ///////////
 //
